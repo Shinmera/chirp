@@ -44,10 +44,10 @@
 
 (defun generate-nonce ()
   "Generate a NONCE to use for requests. Currently this simply uses a v4-UUID."
-  (write-to-string (uuid:make-v4-uuid)))
+  (write-to-string (uuid:make-v4-uuid))
 
-(defun parse-boolean (value)
-  (when (string= value "true") T))
+  (defun parse-boolean (value)
+    (when (string= value "true") T)))
 
 (defun to-keyword (string)
   (intern (cl-ppcre:regex-replace-all "_" (string-upcase string) "-") "KEYWORD"))
@@ -179,7 +179,7 @@ According to spec https://dev.twitter.com/docs/auth/implementing-sign-twitter"
   (let ((data (request-token callback-url)))
     (setf *oauth-token* (cdr (assoc :oauth-token data))
           *oauth-token-secret* (cdr (assoc :oauth-token-secret data)))
-    (format NIL "~a?oauth_token=~a" *oauth/authorize* *oauth-token*)))
+    (format NIL "~a?oauth_token=~a" *oauth/authenticate* *oauth-token*)))
 
 (defun initiate-pin-authentication ()
   "Initiate the authentication through the PIN mechanism.
@@ -188,7 +188,10 @@ This page should, upon successful authentication, return a PIN
 that has to be initialized by passing it to COMPLETE-AUTHENTICATION.
 
 According to spec https://dev.twitter.com/docs/auth/pin-based-authorization"
-  (initiate-redirect-authentication "oob"))
+  (let ((data (pin-request-token)))
+    (setf *oauth-token* (cdr (assoc :oauth-token data))
+          *oauth-token-secret* (cdr (assoc :oauth-token-secret data)))
+    (format NIL "~a?oauth_token=~a" *oauth/authorize* *oauth-token*)))
 
 (defun initiate-server-authentication ()
   "Initiate the authentication through the server mechanism.
