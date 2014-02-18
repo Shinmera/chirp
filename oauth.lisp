@@ -8,6 +8,7 @@
 
 (defconstant +unix-epoch-difference+  (encode-universal-time 0 0 0 1 1 1970 0))
 
+(defvar *external-format* :utf-8)
 (defvar *oauth-consumer-key* NIL)
 (defvar *oauth-consumer-secret* NIL)
 (defvar *oauth-token* NIL)
@@ -16,6 +17,8 @@
 (defvar *oauth-version* "1.0")
 (defvar *oauth/request-token* "https://api.twitter.com/oauth/request_token")
 (defvar *oauth/authenticate* "https://api.twitter.com/oauth/authenticate")
+(defvar *oauth/authorize* "https://api.twitter.com/oauth/authorize")
+(defvar *oauth/access-token* "https://api.twitter.com/oauth/access_token")
 
 (define-condition oauth-error (error) ())
 
@@ -55,7 +58,7 @@
                 (cons key (if parser (funcall parser val) val))))
           (split-sequence #\& body)))
 
-(defun url-encode (string external-format)
+(defun url-encode (string &optional (external-format *external-format*))
   "Returns a URL-encoded version of the string STRING using the external format EXTERNAL-FORMAT.
 
 According to spec https://dev.twitter.com/docs/auth/percent-encoding-parameters"
@@ -71,8 +74,8 @@ According to spec https://dev.twitter.com/docs/auth/percent-encoding-parameters"
                    (t (format out "%~2,'0x" (char-code char)))))))
 
 (defun hmac (string keystring)
-  (let ((hmac (ironclad:make-hmac (flexi-streams:string-to-octets keystring :external-format :utf-8) :SHA1)))
-    (ironclad:update-hmac hmac (flexi-streams:string-to-octets string :external-format :utf-8))
+  (let ((hmac (ironclad:make-hmac (flexi-streams:string-to-octets keystring :external-format *external-format*) :SHA1)))
+    (ironclad:update-hmac hmac (flexi-streams:string-to-octets string :external-format *external-format*))
     (base64:usb8-array-to-base64-string
      (ironclad:hmac-digest hmac))))
 
@@ -89,12 +92,12 @@ According to spec https://dev.twitter.com/docs/auth/creating-signature"
   (assert (not (null *oauth-consumer-secret*)) (*oauth-consumer-secret*)
           'oauth-parameter-missing :parameter '*oauth-consumer-secret*)
   (let ((prepared-parameters (sort (loop for (key . val) in parameters
-                                         collect (cons (url-encode key :utf-8)
-                                                       (url-encode val :utf-8)))
+                                         collect (cons (url-encode key)
+                                                       (url-encode val)))
                                    #'string< :key #'car)))
     (let ((parameter-string (format NIL "~{~/chirp::signature-format-parameter/~^&~}" prepared-parameters)))
-      (let ((base (format NIL "~a&~a&~a" (string-upcase method) (url-encode url :utf-8) (url-encode parameter-string :utf-8)))
-            (signing-key (format NIL "~a&~a" *oauth-consumer-secret* *oauth-token-secret*)))
+      (let ((base (format NIL "~a&~a&~a" (string-upcase method) (url-encode url) (url-encode parameter-string)))
+            (signing-key (format NIL "~a&~a" *oauth-consumer-secret* (or *oauth-token-secret* ""))))
         (hmac base signing-key)))))
 
 (defun make-signed (method url parameters)
@@ -105,7 +108,7 @@ Simply generates a signature and appends the proper parameter."
 
 (defun authorization-format-parameter (s param &rest rest)
   (declare (ignore rest))
-  (format s "~a=\"~a\"" (url-encode (car param) :utf-8) (url-encode (cdr param) :utf-8)))
+  (format s "~a=~s" (url-encode (car param)) (url-encode (cdr param))))
 
 (defun create-authorization-header (parameters)
   ""
