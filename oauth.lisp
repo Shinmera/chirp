@@ -44,10 +44,10 @@
 
 (defun generate-nonce ()
   "Generate a NONCE to use for requests. Currently this simply uses a v4-UUID."
-  (write-to-string (uuid:make-v4-uuid))
+  (write-to-string (uuid:make-v4-uuid)))
 
-  (defun parse-boolean (value)
-    (when (string= value "true") T)))
+(defun parse-boolean (value)
+  (when (string= value "true") T))
 
 (defun to-keyword (string)
   (intern (cl-ppcre:regex-replace-all "_" (string-upcase string) "-") "KEYWORD"))
@@ -115,9 +115,13 @@ Simply generates a signature and appends the proper parameter."
   (format s "~a=~s" (url-encode (car param)) (url-encode (cdr param))))
 
 (defun create-authorization-header (parameters)
-  ""
+  "Turns the OAuth parameters into the correct header value."
   (format NIL "OAuth ~{~/chirp::authorization-format-parameter/~^, ~}"
           (sort parameters #'string< :key #'car)))
+
+(defun request-wrapper (uri &rest drakma-params)
+  (let ((drakma:*text-content-types* (cons '("application" . "json") (cons '("text" . "json") drakma:*text-content-types*))))
+    (apply #'drakma:http-request uri :external-format-in *external-format* :external-format-out *external-format* drakma-params)))
 
 (defun signed-request (request-url &key parameters oauth-parameters (method :POST))
   "Issue a signed request against the API.
@@ -143,8 +147,7 @@ According to spec https://dev.twitter.com/docs/auth/authorizing-request"
                             (when *oauth-token* `(("oauth_token" . ,*oauth-token*)))))
          (oauth-parameters (make-signed method request-url oauth-parameters))
          (headers `(("Authorization" . ,(create-authorization-header oauth-parameters)))))
-    (let ((result (multiple-value-list (drakma:http-request
-                                        request-url :method method :parameters parameters :additional-headers headers))))
+    (let ((result (multiple-value-list (request-wrapper request-url :method method :parameters parameters :additional-headers headers))))
       (if (= (second result) 200)
           (values-list result)
           (error 'oauth-request-error
@@ -228,7 +231,9 @@ METHOD can be one of :PIN :SERVER or a string designating a callback URL.
 See INITIATE-PIN-AUTHENTICATION, INITIATE-SERVER-AUTHENTICATION and
 INITIATE-REDIRECT-AUTHENTICATION respectively."
   (setf *oauth-consumer-key* consumer-key
-        *oauth-consumer-secret* consumer-secret)
+        *oauth-consumer-secret* consumer-secret
+        *oauth-token* NIL
+        *oauth-token-secret* NIL)
   (case method
     (:PIN (initiate-pin-authentication))
     (:SERVER (initiate-server-authentication))
