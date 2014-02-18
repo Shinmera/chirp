@@ -19,7 +19,8 @@
   :components ((:file "package")
                (:file "oauth"))
   :depends-on (:drakma
-               :yason))
+               :yason
+               :split-sequence))
 
 (defsystem chirp-doc
   :name "Chirp Doc"
