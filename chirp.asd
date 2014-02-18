@@ -17,7 +17,8 @@
   :description "Yet another twitter client trying to support the full API."
   :serial T
   :components ((:file "package")
-               (:file "oauth"))
+               (:file "oauth")
+               (:file "tweets"))
   :depends-on (:drakma
                :yason
                :split-sequence
