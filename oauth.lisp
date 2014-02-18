@@ -104,11 +104,11 @@ According to spec https://dev.twitter.com/docs/auth/creating-signature"
             (signing-key (format NIL "~a&~a" *oauth-consumer-secret* (or *oauth-token-secret* ""))))
         (hmac base signing-key)))))
 
-(defun make-signed (method url parameters)
-  "Returns the signed version of the parameters.
+(defun make-signed (method url oauth-parameters other-parameters)
+  "Returns the signed version of the oauth-parameters.
 Simply generates a signature and appends the proper parameter."
-  (cons (cons "oauth_signature" (create-signature method url parameters))
-        parameters))
+  (cons (cons "oauth_signature" (create-signature method url (append oauth-parameters other-parameters)))
+        oauth-parameters))
 
 (defun authorization-format-parameter (s param &rest rest)
   (declare (ignore rest))
@@ -145,7 +145,7 @@ According to spec https://dev.twitter.com/docs/auth/authorizing-request"
                               ("oauth_timestamp" . ,(write-to-string (get-unix-time)))
                               ("oauth_version" . ,*oauth-version*))
                             (when *oauth-token* `(("oauth_token" . ,*oauth-token*)))))
-         (oauth-parameters (make-signed method request-url oauth-parameters))
+         (oauth-parameters (make-signed method request-url oauth-parameters parameters))
          (headers `(("Authorization" . ,(create-authorization-header oauth-parameters)))))
     (let ((result (multiple-value-list (request-wrapper request-url :method method :parameters parameters :additional-headers headers))))
       (if (= (second result) 200)
