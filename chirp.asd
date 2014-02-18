@@ -20,7 +20,12 @@
                (:file "oauth"))
   :depends-on (:drakma
                :yason
-               :split-sequence))
+               :split-sequence
+               :uuid
+               :ironclad
+               :flexi-streams
+               :cl-base64
+               :cl-ppcre))
 
 (defsystem chirp-doc
   :name "Chirp Doc"
