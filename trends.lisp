@@ -10,14 +10,8 @@
 (defvar *trends/available* "https://api.twitter.com/1.1/trends/available.json")
 (defvar *trends/closest* "https://api.twitter.com/1.1/trends/closest.json")
 
-(defclass trend ()
-  ((%events :initarg :events :accessor events)
-   (%name :initarg :name :accessor name)
-   (%promoted-content :initarg :promoted-content :accessor promoted-content)
-   (%query :initarg :query :accessor query)
-   (%url :initarg :url :accessor url))
-  (:default-initargs :events NIL :name NIL :promoted-content NIL
-                     :query NIL :url NIL)
+(defclass* trend ()
+  (events name promoted-content query url)
   (:documentation "Class representation of a twitter trend object."))
 
 (defmethod print-object ((trend trend) stream)
@@ -25,17 +19,8 @@
     (format stream "~a" (name trend)))
   trend)
 
-(defclass trend-location ()
-  ((%country :initarg :country :accessor country)
-   (%country-code :initarg :country-code :accessor country-code)
-   (%name :initarg :name :accessor name)
-   (%parent :initarg :parent :accessor parent)
-   (%place-code :initarg :place-code :accessor place-code)
-   (%place-name :initarg :place-name :accessor place-name)
-   (%url :initarg :url :accessor url)
-   (%woeid :initarg :woeid :accessor woeid))
-  (:default-initargs :country NIL :country-code NIL :name NIL :parent NIL
-                     :place-code NIL :place-name NIL :url NIL :woeid NIL)
+(defclass* trend-location ()
+  (country country-code name parent place-code place-name url woeid)
   (:documentation "Class representation of a twitter trend location object."))
 
 (defmethod print-object ((trend-location trend-location) stream)

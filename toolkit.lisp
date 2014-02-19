@@ -9,6 +9,19 @@
 (defconstant +unix-epoch-difference+  (encode-universal-time 0 0 0 1 1 1970 0) "The universal to unix time difference in seconds.")
 (defvar *external-format* :utf-8 "The external format used for encoding/decoding.")
 
+(defmacro defclass* (name direct-superclasses direct-slots &rest options)
+  `(defclass ,name ,direct-superclasses
+     ,(mapcar #'(lambda (def)
+                  (if (listp def)
+                      def
+                      (list (intern (format NIL "%~a" def))
+                            :initarg (intern (string def) "KEYWORD")
+                            :accessor def
+                            :initform NIL)))
+       direct-slots)
+     ,@options))
+(define-indentation 'defclass* '(4 4 (&whole 2 &rest 1) &rest 2))
+
 (defun get-unix-time ()
   "Return the unix timestamp for GMT, as required by OAuth."
   (- (get-universal-time) +unix-epoch-difference+))
@@ -73,3 +86,15 @@ This function is DESTRUCTIVE."
             (unless (stringp (cdr pair))
               (setf (cdr pair) (write-to-string (cdr pair)))))
         (delete () parameters :key #'cdr)))
+
+(defun serialize-object (object)
+  "Turns all object slots into an ALIST.
+Requires CLOSER-MOP to be installed."
+  (assert (asdf:find-system "closer-mop") () "CLOSER-MOP system must be installed.")
+  (asdf:load-system "closer-mop")
+  (flet ((mop-func (func &rest args)
+           (apply (symbol-function (find-symbol func "CLOSER-MOP")) args)))
+    (loop for slot in (mop-func "CLASS-SLOTS" (class-of object))
+          for name = (mop-func "SLOT-DEFINITION-NAME" slot)
+          if (slot-boundp object name)
+            collect (cons name (slot-value object name)))))

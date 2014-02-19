@@ -11,23 +11,9 @@
 (defvar *geo/search* "https://api.twitter.com/1.1/geo/search.json")
 (defvar *geo/similar-places* "https://api.twitter.com/1.1/geo/similar_places.json")
 
-(defclass location ()
-  ((%id :initarg :id :accessor id)
-   (%name :initarg :name :accessor name)
-   (%full-name :initarg :full-name :accessor full-name)
-   (%location-type :initarg :location-type :accessor location-type)
-   (%latitude :initarg :latitude :accessor latitude)
-   (%longitude :initarg :longitude :accessor longitude)
-   (%url :initarg :url :accessor url)
-   (%country-name :initarg :country-name :accessor country-name)
-   (%country-code :initarg :country-code :accessor country-code)
-   (%bounding-box :initarg :bounding-box :accessor bounding-box)
-   (%poly-lines :initarg :poly-lines :accessor poly-lines)
-   (%contained-within :initarg :contained-within :accessor contained-within))
-  (:default-initargs :id NIL :name NIL :full-name NIL :location-type NIL
-                     :latitude NIL :longitude NIL :url NIL :country-name NIL
-                     :country-code NIL :bounding-box NIL :poly-lines NIL
-                     :contained-within NIL)
+(defclass* location ()
+  (id name full-name location-type latitude longitude url
+   country-name country-code bounding-box poly-lines contained-within)
   (:documentation "Twitter object containing Locational data. Used for the Places & Geo API."))
 
 (defmethod print-object ((location location) stream)
@@ -35,9 +21,8 @@
     (format stream "~a #~a" (name location)  (id location)))
   location)
 
-(defclass geometry ()
-  ((%shape :initarg :shape :accessor shape)
-   (%coordinates :initarg :coordinates :accessor coordinates))
+(defclass* geometry ()
+  (shape coordinates)
   (:default-initargs :shape (error "Shape type required") :coordinates NIL)
   (:documentation "Object for locations containing geometrical shape data."))
 

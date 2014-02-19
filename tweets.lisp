@@ -8,25 +8,10 @@
 
 (defvar *statuses/update* "https://api.twitter.com/1.1/statuses/update.json")
 
-(defclass tweet ()
-  ((%id :initarg :id :accessor id)
-   (%text :initarg :text :accessor text)
-   (%created :initarg :created :accessor created)
-   (%user :initarg :user :accessor user)
-   (%source :initarg :source :accessor source)
-   (%language :initarg :language :accessor language)
-   (%parent :initarg :parent :accessor parent)
-   (%parent-user :initarg :parent-user :accessor parent-user)
-   (%location :initarg :location :accessor location)
-   (%contributors :initarg :contributors :accessor contributors)
-   (%hashtags :initarg :hashtags :accessor hashtags)
-   (%urls :initarg :urls :accessor urls)
-   (%symbols :initarg :symbols :accessor symbols)
-   (%mentions :initarg :mentions :accessor mentions)
-   (%retweeted :initarg :retweeted :accessor retweeted)
-   (%favorited :initarg :favorited :accessor favorited)
-   (%favorite-count :initarg :favorite-count :accessor favorite-count)
-   (%retweet-count :initarg :retweet-count :accessor retweet-count))
+(defclass* tweet ()
+  (id text created user source language parent parent-user
+   location contributors hashtags urls symbols mentions
+   retweeted favorited favorite-count retweet-count)
   (:documentation ""))
 
 (defmethod print-object ((tweet tweet) stream)
