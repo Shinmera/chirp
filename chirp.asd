@@ -17,7 +17,10 @@
   :description "Yet another twitter client trying to support the full API."
   :serial T
   :components ((:file "package")
+               (:file "toolkit")
                (:file "oauth")
+               (:file "location")
+               (:file "user")
                (:file "tweets"))
   :depends-on (:drakma
                :yason
@@ -25,6 +28,7 @@
                :uuid
                :ironclad
                :flexi-streams
+               :local-time
                :cl-base64
                :cl-ppcre))
 
