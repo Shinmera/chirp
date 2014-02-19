@@ -8,18 +8,18 @@
 
 (defvar *statuses/update* "https://api.twitter.com/1.1/statuses/update.json")
 
-(defclass* tweet ()
+(defclass* status ()
   (id text created user source language parent parent-user
    location contributors hashtags urls symbols mentions
    retweeted favorited favorite-count retweet-count)
   (:documentation ""))
 
-(defmethod print-object ((tweet tweet) stream)
-  (print-unreadable-object (tweet stream :type T)
-    (format stream "~a #~d" (user tweet) (id tweet)))
-  tweet)
+(defmethod print-object ((status status) stream)
+  (print-unreadable-object (status stream :type T)
+    (format stream "~a #~d" (user status) (id status)))
+  status)
 
-(defun make-tweet (json-data)
+(defun make-status (parameters)
   )
 
 (defun statuses/update (status &key reply-to lat lng place display-coordinates)
@@ -30,4 +30,4 @@
                                ("place_id" . ,place)
                                ("display_coordinates" . ,display-coordinates)
                                ("trim_user" . "T")))))
-    (make-tweet (signed-request *statuses/update* :parameters parameters))))
+    (make-status (signed-request *statuses/update* :parameters parameters))))
