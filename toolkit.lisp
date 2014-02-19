@@ -22,6 +22,29 @@
      ,@options))
 (define-indentation 'defclass* '(4 4 (&whole 2 &rest 1) &rest 2))
 
+(defparameter *month->int-map*
+  (let ((table (make-hash-table :test 'equalp)))
+    (loop for month in '("jan" "feb" "mar" "apr" "may" "jun" "jul" "aug" "sep" "sept" "oct" "nov" "dec")
+          for num from 1 to 12
+          do (setf (gethash month table) num))
+    table))
+
+(defun parse-month (string)
+  (gethash string *month->int-map*))
+
+(defun parse-twitter-time (string)
+  "Parse a string returned by the twitter API that is of
+the form \"Fri Mar 26 15:36:12 +0000 2010\" to a local-time
+timestamp."
+  (destructuring-bind (dow month day h-m-s offset year)
+      (split-sequence #\Space (string-trim " " string))
+    (declare (ignore dow))
+    (destructuring-bind (h m s) (split-sequence #\: h-m-s)
+      (local-time:encode-timestamp
+       0 (parse-integer s) (parse-integer m) (parse-integer h)
+       (parse-integer day) (parse-month month) (parse-integer year)
+       :timezone local-time:+gmt-zone+ :offset (parse-integer offset)))))
+
 (defun get-unix-time ()
   "Return the unix timestamp for GMT, as required by OAuth."
   (- (get-universal-time) +unix-epoch-difference+))
