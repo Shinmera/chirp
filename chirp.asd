@@ -20,6 +20,7 @@
                (:file "toolkit")
                (:file "oauth")
                (:file "location")
+               (:file "trends")
                (:file "user")
                (:file "tweets"))
   :depends-on (:drakma
