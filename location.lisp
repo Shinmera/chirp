@@ -24,10 +24,10 @@
    (%bounding-box :initarg :bounding-box :accessor bounding-box)
    (%poly-lines :initarg :poly-lines :accessor poly-lines)
    (%contained-within :initarg :contained-within :accessor contained-within))
-  (:default-initargs
-   :id NIL :name NIL :full-name NIL :location-type NIL :latitude NIL :longitude NIL
-   :url NIL :country-name NIL :country-code NIL :bounding-box NIL :poly-lines NIL
-   :contained-within NIL)
+  (:default-initargs :id NIL :name NIL :full-name NIL :location-type NIL
+                     :latitude NIL :longitude NIL :url NIL :country-name NIL
+                     :country-code NIL :bounding-box NIL :poly-lines NIL
+                     :contained-within NIL)
   (:documentation "Twitter object containing Locational data. Used for the Places & Geo API."))
 
 (defmethod print-object ((location location) stream)
