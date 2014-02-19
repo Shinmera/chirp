@@ -22,6 +22,7 @@
                (:file "oauth")
                (:file "location")
                (:file "trends")
+               (:file "entities")
                (:file "user")
                (:file "tweets"))
   :depends-on (:drakma
