@@ -6,9 +6,6 @@
 
 (in-package #:org.tymoonnext.chirp)
 
-(defconstant +unix-epoch-difference+  (encode-universal-time 0 0 0 1 1 1970 0))
-
-(defvar *external-format* :utf-8)
 (defvar *oauth-consumer-key* NIL)
 (defvar *oauth-consumer-secret* NIL)
 (defvar *oauth-token* NIL)
@@ -38,20 +35,6 @@
   (:report (lambda (c s) (format s "OAuth Request Failed: Status code ~d when requesting ~a :~%~s"
                                  (http-status c) (target-url c) (http-body c)))))
 
-(defun get-unix-time ()
-  "Return the unix timestamp for GMT, as required by OAuth."
-  (- (get-universal-time) +unix-epoch-difference+))
-
-(defun generate-nonce ()
-  "Generate a NONCE to use for requests. Currently this simply uses a v4-UUID."
-  (write-to-string (uuid:make-v4-uuid)))
-
-(defun parse-boolean (value)
-  (when (string= value "true") T))
-
-(defun to-keyword (string)
-  (intern (cl-ppcre:regex-replace-all "_" (string-upcase string) "-") "KEYWORD"))
-
 (defun oauth-response->alist (body &optional spec)
   "Turn an oauth-response into an ALIST."
   (mapcar #'(lambda (assignment)
@@ -61,27 +44,6 @@
                      (parser (cdr (assoc key spec))))
                 (cons key (if parser (funcall parser val) val))))
           (split-sequence #\& body)))
-
-(defun url-encode (string &optional (external-format *external-format*))
-  "Returns a URL-encoded version of the string STRING using the external format EXTERNAL-FORMAT.
-
-According to spec https://dev.twitter.com/docs/auth/percent-encoding-parameters"
-  ;; Adapted from DRAKMA.
-  (with-output-to-string (out)
-    (loop for octet across (flexi-streams:string-to-octets (or string "") :external-format external-format)
-          for char = (code-char octet)
-          do (cond ((or (char<= #\0 char #\9)
-                        (char<= #\a char #\z)
-                        (char<= #\A char #\Z)
-                        (find char "-._~" :test #'char=))
-                    (write-char char out))
-                   (t (format out "%~2,'0x" (char-code char)))))))
-
-(defun hmac (string keystring)
-  (let ((hmac (ironclad:make-hmac (flexi-streams:string-to-octets keystring :external-format *external-format*) :SHA1)))
-    (ironclad:update-hmac hmac (flexi-streams:string-to-octets string :external-format *external-format*))
-    (base64:usb8-array-to-base64-string
-     (ironclad:hmac-digest hmac))))
 
 (defun signature-format-parameter (s param &rest rest)
   (declare (ignore rest))
@@ -119,9 +81,29 @@ Simply generates a signature and appends the proper parameter."
   (format NIL "OAuth ~{~/chirp::authorization-format-parameter/~^, ~}"
           (sort parameters #'string< :key #'car)))
 
+(defun parse-body (body headers)
+  (let ((type (cdr (assoc :content-type headers))))
+    (cond ((string= type "application/json;charset=utf-8")
+           (yason:parse body :object-as :alist :object-key-fn #'to-keyword))
+          ((string= type "text/plain;charset=utf-8")
+           body)
+          (T
+           (warn "Do not know how to handle content type: ~a" type)
+           body))))
+
 (defun request-wrapper (uri &rest drakma-params)
   (let ((drakma:*text-content-types* (cons '("application" . "json") (cons '("text" . "json") drakma:*text-content-types*))))
-    (apply #'drakma:http-request uri :external-format-in *external-format* :external-format-out *external-format* drakma-params)))
+    (let* ((vals (multiple-value-list (apply #'drakma:http-request uri :external-format-in *external-format* :external-format-out *external-format* drakma-params)))
+           (body (parse-body (nth 0 vals) (nth 2 vals))))
+      (setf (nth 0 vals) body)
+      (if (= (nth 1 vals) 200)
+          (values-list vals)
+          (error 'oauth-request-error
+                 :body body :status (second vals) :headers (third vals)
+                 :url uri
+                 :method (getf drakma-params :method)
+                 :parameters (getf drakma-params :parameters)
+                 :sent-headers (getf drakma-params :additional-headers))))))
 
 (defun signed-request (request-url &key parameters oauth-parameters (method :POST))
   "Issue a signed request against the API.
@@ -137,7 +119,7 @@ According to spec https://dev.twitter.com/docs/auth/authorizing-request"
           'oauth-parameter-missing :parameter '*oauth-signature-method*)
   (assert (not (null *oauth-version*)) (*oauth-version*)
           'oauth-parameter-missing :parameter '*oauth-version*)
-  (let* ((oauth-parameters (append
+  (let* ((oauth-parameters (append 
                             oauth-parameters
                             `(("oauth_consumer_key" . ,*oauth-consumer-key*)
                               ("oauth_nonce" . ,(generate-nonce))
@@ -147,12 +129,7 @@ According to spec https://dev.twitter.com/docs/auth/authorizing-request"
                             (when *oauth-token* `(("oauth_token" . ,*oauth-token*)))))
          (oauth-parameters (make-signed method request-url oauth-parameters parameters))
          (headers `(("Authorization" . ,(create-authorization-header oauth-parameters)))))
-    (let ((result (multiple-value-list (request-wrapper request-url :method method :parameters parameters :additional-headers headers))))
-      (if (= (second result) 200)
-          (values-list result)
-          (error 'oauth-request-error
-                 :body (first result) :status (second result) :headers (third result)
-                 :url request-url :method method :parameters parameters :sent-headers headers)))))
+    (request-wrapper request-url :method method :parameters parameters :additional-headers headers)))
 
 (defun request-token (callback)
   "Query for a request token using the specified callback.
