@@ -133,8 +133,8 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/geo/similar_places"
                                                                    ("contained_within" . ,contained-within)))) :method :GET)))
     (mapcar #'make-location (cdr (assoc :places (cdr (assoc :result data)))))))
 
-(defgeneric geo/similar (location)
+(defgeneric similar-locations (location)
   (:documentation "Performs a GEO/SIMILAR-PLACES request on a location object."))
 
-(defmethod geo/similar ((location location))
+(defmethod similar-locations ((location location))
   (geo/similar-places (latitude location) (longitude location) (name location)))
