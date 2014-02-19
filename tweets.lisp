@@ -37,7 +37,7 @@
 (defun make-tweet (json-data)
   )
 
-(defun status-update (status &key reply-to lat lng place display-coordinates)
+(defun statuses/update (status &key reply-to lat lng place display-coordinates)
   (let ((parameters (prepare `(("status" . ,status)
                                ("in_reply_to_status_id" . ,reply-to)
                                ("lat" . ,lat)

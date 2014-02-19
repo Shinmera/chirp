@@ -131,7 +131,7 @@ According to spec https://dev.twitter.com/docs/auth/authorizing-request"
          (headers `(("Authorization" . ,(create-authorization-header oauth-parameters)))))
     (request-wrapper request-url :method method :parameters parameters :additional-headers headers)))
 
-(defun request-token (callback)
+(defun oauth/request-token (callback)
   "Query for a request token using the specified callback.
 Returns an ALIST containing :OAUTH-TOKEN, :OAUTH-TOKEN-SECRET and 
 :OAUTH-CALLBACK-CONFIRMED, the first two being strings and the last a boolean.
@@ -146,9 +146,9 @@ According to spec https://dev.twitter.com/docs/auth/implementing-sign-twitter"
 Seee CALLBACK-REQUEST-TOKEN.
 
 According to spec https://dev.twitter.com/docs/auth/pin-based-authorization"
-  (request-token "oob"))
+  (oauth/request-token "oob"))
 
-(defun initiate-redirect-authentication (callback-url)
+(defun oauth/authenticate (callback-url)
   "Initiate the authentication through the redirect mechanism.
 Returns an URL that the user has to open in the browser.
 Upon successful authentication, the page should redirect back
@@ -156,12 +156,12 @@ to the specified callback url. This callback endpoint should then
 pass the proper parameters to COMPLETE-AUTHENTICATION.
 
 According to spec https://dev.twitter.com/docs/auth/implementing-sign-twitter"
-  (let ((data (request-token callback-url)))
+  (let ((data (oauth/request-token callback-url)))
     (setf *oauth-token* (cdr (assoc :oauth-token data))
           *oauth-token-secret* (cdr (assoc :oauth-token-secret data)))
     (format NIL "~a?oauth_token=~a" *oauth/authenticate* *oauth-token*)))
 
-(defun initiate-pin-authentication ()
+(defun oauth/authorize ()
   "Initiate the authentication through the PIN mechanism.
 Returns an URL that the user has to open in the browser.
 This page should, upon successful authentication, return a PIN
@@ -200,23 +200,22 @@ down automatically after a single request."
                      (format standard-output "CHIRP-OAUTH: Shutting down server.")
                      (ht-func "STOP" server))))))
         (push #'dispatcher (symbol-value (ht-symb "*DISPATCH-TABLE*")))
-        (initiate-redirect-authentication (format NIL "http://localhost:~d/callback" *server-port*))))))
+        (oauth/authenticate (format NIL "http://localhost:~d/callback" *server-port*))))))
 
 (defun initiate-authentication (&key (method :PIN) (consumer-key *oauth-consumer-key*) (consumer-secret *oauth-consumer-secret*))
   "Starts the authentication process and returns an URL that the user has to visit.
 METHOD can be one of :PIN :SERVER or a string designating a callback URL.
-See INITIATE-PIN-AUTHENTICATION, INITIATE-SERVER-AUTHENTICATION and
-INITIATE-REDIRECT-AUTHENTICATION respectively."
+See OAUTH/AUTHORIZE, INITIATE-SERVER-AUTHENTICATION and OAUTH/AUTHENTICATE respectively."
   (setf *oauth-consumer-key* consumer-key
         *oauth-consumer-secret* consumer-secret
         *oauth-token* NIL
         *oauth-token-secret* NIL)
   (case method
-    (:PIN (initiate-pin-authentication))
+    (:PIN (oauth/authorize))
     (:SERVER (initiate-server-authentication))
-    (T (initiate-redirect-authentication method))))
+    (T (oauth/authenticate method))))
 
-(defun access-token (verifier)
+(defun oauth/access-token (verifier)
   "Turn the tokens received through the authentication into an access token.
 
 According to spec https://dev.twitter.com/docs/auth/implementing-sign-twitter"
