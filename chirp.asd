@@ -17,6 +17,7 @@
   :description "Yet another twitter client trying to support the full API."
   :serial T
   :components ((:file "package")
+               (:file "indent")
                (:file "toolkit")
                (:file "oauth")
                (:file "location")
