@@ -90,3 +90,20 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/trends/closest"
   (let ((data (signed-request *trends/closest* :parameters `(("lat" . ,latitude)
                                                              ("long" . ,longitude)) :method :GET)))
     (mapcar #'make-trend-location data)))
+
+(defgeneric closest-trend-locations (location)
+  (:documentation "Performs a TRENDS/CLOSEST request on a location object."))
+
+(defmethod closest-trend-locations ((location location))
+  (trends/closest (latitude location) (longitude location)))
+
+(defgeneric closest-trends (location &key exclude-hashtags)
+  (:documentation "Performs a TRENDS/PLACE request on a location object."))
+
+(defmethod closest-trends ((location location) &key exclude-hashtags)
+  (loop with trends = ()
+        for location in (closest-trend-locations location)
+        do (setf trends (append trends (trends/place (woeid location) :exclude-hashtags exclude-hashtags)))))
+
+(defmethod closest-trends ((location trend-location) &key exclude-hashtags)
+  (trends/place (woeid location) :exclude-hashtags exclude-hashtags))
