@@ -9,14 +9,6 @@
 (defconstant +unix-epoch-difference+  (encode-universal-time 0 0 0 1 1 1970 0) "The universal to unix time difference in seconds.")
 (defvar *external-format* :utf-8 "The external format used for encoding/decoding.")
 
-(defun prepare (parameters)
-  "Filters out empty key-value pairs and turns all values
-into strings, ready to be sent out as request parameters."
-  (mapc #'(lambda (pair)
-            (unless (stringp (cdr pair))
-              (setf (cdr pair) (write-to-string (cdr pair)))))
-        (delete () parameters :key #'cdr)))
-
 (defun get-unix-time ()
   "Return the unix timestamp for GMT, as required by OAuth."
   (- (get-universal-time) +unix-epoch-difference+))
@@ -41,6 +33,13 @@ into the keyword package. This is useful to parse the request
 responses into an alist."
   (intern (cl-ppcre:regex-replace-all "_" (string-upcase string) "-") "KEYWORD"))
 
+(defun from-keyword (keyword)
+  "Turns a keyword into a key.
+Replaces - with _ and downcases the keyword as a string.
+This is useful to parse the request parameters from the
+lisp representation into the api representation."
+  (cl-ppcre:regex-replace-all "-" (string-downcase keyword) "_"))
+
 (defun url-encode (string &optional (external-format *external-format*))
   "Returns a URL-encoded version of the string STRING using the external format EXTERNAL-FORMAT.
 
@@ -64,3 +63,13 @@ throughout."
     (ironclad:update-hmac hmac (flexi-streams:string-to-octets string :external-format *external-format*))
     (base64:usb8-array-to-base64-string
      (ironclad:hmac-digest hmac))))
+
+(defun prepare (parameters)
+  "Filters out empty key-value pairs and turns all values
+into strings, ready to be sent out as request parameters.
+This function is DESTRUCTIVE."
+  (mapc #'(lambda (pair)
+            (setf (car pair) (from-keyword (car pair)))
+            (unless (stringp (cdr pair))
+              (setf (cdr pair) (write-to-string (cdr pair)))))
+        (delete () parameters :key #'cdr)))
