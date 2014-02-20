@@ -129,3 +129,11 @@ Requires CLOSER-MOP to be installed."
           for name = (mop-func "SLOT-DEFINITION-NAME" slot)
           if (slot-boundp object name)
             collect (cons name (slot-value object name)))))
+
+;; Extend missing function
+(defun file-to-base64-string (pathname)
+  (with-open-file (stream pathname :element-type '(unsigned-byte 8) :if-does-not-exist :error)
+    (base64:usb8-array-to-base64-string
+     (let ((seq (make-array (file-length stream) :element-type '(unsigned-byte 8) :fill-pointer t)))
+       (setf (fill-pointer seq) (read-sequence seq stream))
+       seq))))
