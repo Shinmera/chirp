@@ -23,6 +23,7 @@
                (:file "location")
                (:file "trends")
                (:file "entities")
+               (:file "help")
                (:file "user")
                (:file "tweets"))
   :depends-on (:drakma
