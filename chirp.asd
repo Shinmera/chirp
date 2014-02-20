@@ -24,6 +24,7 @@
                (:file "trends")
                (:file "entities")
                (:file "help")
+               (:file "cursor")
                (:file "user")
                (:file "tweets"))
   :depends-on (:drakma
@@ -34,7 +35,8 @@
                :flexi-streams
                :local-time
                :cl-base64
-               :cl-ppcre))
+               :cl-ppcre
+               :alexandria))
 
 (defsystem chirp-doc
   :name "Chirp Doc"
