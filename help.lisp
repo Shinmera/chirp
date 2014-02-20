@@ -106,3 +106,11 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/application/rate_limi
     (mapc #'(lambda (resource)
               (setf (cdr resource) (mapcar #'make-resource (cdr resource))))
           (cdr (assoc :resources data)))))
+
+(defun valid-language-p (language)
+  "Returns T if the given language code is a language covered by twitter.
+
+See HELP/LANGUAGES."
+  (loop for lang in (help/languages)
+        if (string-equal language (code lang))
+          return T))

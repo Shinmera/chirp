@@ -68,11 +68,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/geo/reverse_geocode"
   (when granularity (ecase granularity (:POI) (:NEIGHBORHOOD) (:CITY) (:ADMIN) (:COUNTRY)))
   (assert (numberp latitude) () "latitude must be a number.")
   (assert (numberp longitude) () "longitude must be a number.")
-  (let ((data (signed-request *geo/reverse-geocode* :parameters (prepare `(("lat" . ,latitude)
-                                                                           ("long" . ,longitude)
-                                                                           ("accuracy" . ,accuracy)
-                                                                           ("granularity" . ,granularity)
-                                                                           ("max_results" . ,max-results))) :method :GET)))
+  (let ((data (signed-request *geo/reverse-geocode* :parameters (prepare* (lat . latitude) (long . longitude) accuracy granularity max-results) :method :GET)))
     (mapcar #'make-location (cdr (assoc :places (cdr (assoc :result data)))))))
 
 (defun parse-geo-attributes (attributes)

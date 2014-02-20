@@ -110,6 +110,14 @@ This function is DESTRUCTIVE."
               (setf (cdr pair) (write-to-string (cdr pair)))))
         (delete () parameters :key #'cdr)))
 
+(defmacro prepare* (&rest parameter-names)
+  "Creates a PREPARE statement out of the provided variables."
+  `(prepare (list ,@(mapcar #'(lambda (a)
+                                (if (consp a)
+                                    `(cons ,(from-keyword (car a)) ,(cdr a))
+                                    `(cons ,(from-keyword a) ,a)))
+                            parameter-names))))
+
 (defun serialize-object (object)
   "Turns all object slots into an ALIST.
 Requires CLOSER-MOP to be installed."
