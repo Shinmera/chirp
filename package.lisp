@@ -6,7 +6,7 @@
 
 (defpackage #:org.tymoonnext.chirp
   (:nicknames #:chirp)
-  (:use #:cl #:split-sequence)
+  (:use #:cl #:split-sequence #:alexandria)
   ;; oauth.lisp
   (:export)
   ;;
