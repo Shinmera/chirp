@@ -19,6 +19,9 @@
     (format stream "~a" (name trend)))
   trend)
 
+(define-make-* trend parameters
+  :events :name  :promoted-content :query :url)
+
 (defclass* trend-location ()
   (country country-code name parent place-code place-name url woeid)
   (:documentation "Class representation of a twitter trend location object."))
@@ -28,28 +31,12 @@
     (format stream "~a #~d" (name trend-location) (woeid trend-location)))
   trend-location)
 
-(defun make-trend (parameters)
-  (flet ((param (place) (cdr (assoc place parameters))))
-    (make-instance
-     'trend
-     :events (param :events)
-     :name (param :name)
-     :promoted-content (param :promoted-content)
-     :query (param :query)
-     :url (param :url))))
-
-(defun make-trend-location (parameters)
-  (flet ((param (place) (cdr (assoc place parameters))))
-    (make-instance
-     'trend-location
-     :country (param :country)
-     :country-code (param :countrycode)
-     :name (param :name)
-     :parent (param :parentid)
-     :place-code (cdr (assoc :code (param :placetype)))
-     :place-name (cdr (assoc :name (param :placetype)))
-     :url (param :url)
-     :woeid (param :woeid))))
+(define-make-* trend-location parameters
+  :country :name :url :woeid
+  (:country-code . :countrycode)
+  (:parent . :parentid)
+  (:place-code (cdr (assoc :code (cdr (assoc :placetype parameters)))))
+  (:place-name (cdr (assoc :name (cdr (assoc :placetype parameters))))))
 
 (defun trends/place (woeid &key exclude-hashtags)
   "Returns the top 10 trending topics for a specific WOEID, if trending information is available for it.

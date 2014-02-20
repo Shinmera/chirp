@@ -21,6 +21,16 @@
     (format stream "~a #~a" (name location)  (id location)))
   location)
 
+(define-make-* location parameters
+  :id :name :full-name :url :poly-lines
+  (:location-type . :place-type)
+  (:latitude . :lat) (:longitude . :long)
+  (:country-name . :country) :country-code
+  (:bounding-box (when-let ((a (cdr (assoc :bounding-box parameters))))
+                   (make-geometry a)))
+  (:contained-within (when-let ((a (cdr (assoc :contained-within parameters))))
+                       (make-location a))))
+
 (defclass* geometry ()
   (shape coordinates)
   (:default-initargs :shape (error "Shape type required") :coordinates NIL)
@@ -30,30 +40,8 @@
   (print-unreadable-object (geometry stream :type T :identity T)
     (format stream "~a" (shape geometry))))
 
-(defun make-geometry (parameters)
-  (make-instance
-   'geometry
-   :shape (cdr (assoc :type parameters))
-   :coordinates (cdr (assoc :coordinates parameters))))
-
-(defun make-location (parameters)
-  (flet ((param (place) (cdr (assoc place parameters))))
-    (make-instance
-     'location
-     :id (param :id)
-     :name (param :name)
-     :full-name (param :full-name)
-     :location-type (param :place-type)
-     :latitude (param :lat)
-     :longitude (param :long)
-     :url (param :url)
-     :country-name (param :country)
-     :country-code (param :country-code)
-     :bounding-box (when (param :bounding-box)
-                     (make-geometry (param :bounding-box)))
-     :poly-lines (param :poly-lines)
-     :contained-within (when (param :contained-within)
-                         (make-location (param :contained-wihtin))))))
+(define-make-* geometry parameters
+  (:shape . :type) :coordinates)
 
 (defun geo/id (place-id)
   "Returns a location object containing all the information about a known place.

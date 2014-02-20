@@ -19,18 +19,11 @@
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/help/configuration"))
 
-(defun make-configuration (parameters)
-  (flet ((param (place) (cdr (assoc place parameters))))
-    (make-instance
-     'configuration
-     :photo-size-limit (param :photo-size-limit)
-     :photo-sizes (loop for (type . params) in (param :photo-sizes)
-                        collect (cons type (make-entity type params)))
-     :short-url-length (param :short-url-length)
-     :short-url-length-https (param :short-url-length-https)
-     :non-username-paths (param :non-username-paths)
-     :max-media-per-upload (param :max-media-per-upload)
-     :characters-reserved-per-media (param :characters-reserved-per-media))))
+(define-make-* configuration parameters
+  :photo-size-limit :short-url-length :short-url-length-https
+  :non-username-paths :max-media-per-upload :characters-reserved-per-media
+  (:photo-sizes (loop for (type . params) in (cdr (assoc :photo-sizes parameters))
+                      collect (cons type (make-entity type params)))))
 
 (defclass* language ()
   (name code status)
@@ -43,13 +36,8 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/help/languages"))
     (format stream "~a" (name language)))
   language)
 
-(defun make-language (parameters)
-  (flet ((param (place) (cdr (assoc place parameters))))
-    (make-instance
-     'language
-     :name (param :name)
-     :code (param :code)
-     :status (param :status))))
+(define-make-* language parameters
+  :name :code :status)
 
 (defclass* resource ()
   (address remaining reset limit)

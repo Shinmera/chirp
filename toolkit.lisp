@@ -10,6 +10,8 @@
 (defvar *external-format* :utf-8 "The external format used for encoding/decoding.")
 
 (defmacro defclass* (name direct-superclasses direct-slots &rest options)
+  "DEFCLASS wrapper that sets an automatic INITARG, ACCESSOR and INITFORM (NIL) to
+slots that are only a symbol. Slot lists are still treated the same."
   `(defclass ,name ,direct-superclasses
      ,(mapcar #'(lambda (def)
                   (if (listp def)
@@ -21,6 +23,30 @@
        direct-slots)
      ,@options))
 (define-indentation 'defclass* '(4 4 (&whole 2 &rest 1) &rest 2))
+
+(defmacro define-make-* (class parametervar &body assignments)
+  "(DEFUN MAKE-* (PARAMETERS) (MAKE-INSTANCE * ..)) wrapper.
+Depending on what type the body assignment is, it is expanded into a different
+class-slot assignment:
+
+ATOM  ==> ATOM (cdr (assoc ATOM parametervar))
+CONS  ==> CAR (cdr (assoc CDR parametervar))
+LIST  ==> LIST-ITEMS"
+  `(defun ,(intern (format NIL "MAKE-~a" class)) (,parametervar)
+     (make-instance
+      ',class
+      ,@(loop with forms = ()
+              for assignment in assignments
+              do (setf forms
+                       (append forms
+                               (if (consp assignment)
+                                   (if (consp (cdr assignment))
+                                       assignment
+                                       (list (car assignment)
+                                             `(cdr (assoc ,(cdr assignment) ,parametervar))))
+                                   (list assignment
+                                         `(cdr (assoc ,assignment ,parametervar))))))
+              finally (return forms)))))
 
 (defparameter *month->int-map*
   (let ((table (make-hash-table :test 'equalp)))
