@@ -83,9 +83,13 @@ Simply generates a signature and appends the proper parameter."
 
 (defun parse-body (body headers)
   (let ((type (cdr (assoc :content-type headers))))
-    (cond ((string= type "application/json;charset=utf-8")
+    (cond ((or (string= type "application/json;charset=utf-8")
+               (string= type "application/json; charset=utf-8"))
            (yason:parse body :object-as :alist :object-key-fn #'to-keyword))
-          ((string= type "text/plain;charset=utf-8")
+          ((or (string= type "text/plain;charset=utf-8")
+               (string= type "text/plain; charset=utf-8")
+               (string= type "text/html;charset=utf-8")
+               (string= type "text/html; charset=utf-8"))
            body)
           (T
            (warn "Do not know how to handle content type: ~a" type)
