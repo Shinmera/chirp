@@ -7,7 +7,7 @@
 (defpackage #:org.tymoonnext.chirp
   (:nicknames #:chirp)
   (:use #:cl #:split-sequence #:alexandria)
-  (:shadowing-import-from #:alexandria #:parse-body)
+  (:shadow #:parse-body)
   ;; account.lisp
   (:export
    #:settings
