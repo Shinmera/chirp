@@ -104,19 +104,14 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/update"
   "Updates the authenticating user's current status and attaches media for upload. In other words, it creates a Tweet with a picture attached. MEDIA is either a pathname, usb-8 array or a base64-encoded string, or a list thereof.
 
 According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/update_with_media"
-  (setf media (mapcar #'(lambda (medium)
-                          `("media[]". ,(etypecase medium
-                                          (pathname (file-to-base64-string medium))
-                                          ((array (unsigned-byte 8) (*)) (base64:usb8-array-to-base64-string medium))
-                                          (string medium))))
+  (setf media (mapcar #'(lambda (medium) `("media[]". ,medium))
                       (if (listp media) media (list media))))
   (when display-coordinates (setf display-coordinates "true"))
   (when possibly-sensitive (setf possibly-sensitive "true"))
   (when trim-user (setf trim-user "true"))
-  (let ((parameters (append (prepare* status possibly-sensitive (in-reply-to-status-id . reply-to)
-                                      (lat . latitude) (long . longitude) place-id display-coordinates trim-user)
-                            media)))
-    (make-status (signed-request *statuses/update-with-media* :parameters parameters :method :POST))))
+  (let ((parameters (prepare* status possibly-sensitive (in-reply-to-status-id . reply-to)
+                              (lat . latitude) (long . longitude) place-id display-coordinates trim-user)))
+    (make-status (signed-data-request *statuses/update-with-media* :data-parameters media :parameters parameters :method :POST))))
 
 (defun statuses/oembed (id url &key max-width hide-media hide-thread omit-script (align :none) related language)
   "Returns information allowing the creation of an embedded representation of a Tweet on third party sites. See the oEmbed specification for information about the response format.
