@@ -187,6 +187,18 @@
    #:oauth/access-token
    #:complete-authentication
    #:initiate-authentication)
+  ;; search.lisp
+  (:export
+   #:search-metadata
+   #:max-id
+   #:since-id
+   #:refresh-url
+   #:next-results
+   #:result-count
+   #:completed-in
+   #:query
+   
+   #:search/tweets)
   ;; statuses.lisp
   (:export
    #:status
@@ -239,6 +251,12 @@
    #:users/suggestions/slug
    #:users/suggestions
    #:users/suggestions/slug/members)
+  ;; timelines.lisp
+  (:export
+   #:statuses/mentions-timeline
+   #:statuses/user-timeline
+   #:statuses/home-timeline
+   #:statuses/retweets-of-me)
   ;; toolkit.lisp
   (:export
    #:parse-month
