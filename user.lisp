@@ -14,6 +14,16 @@
 (defvar *account/update-profile-image* "https://api.twitter.com/1.1/account/update_profile_image.json")
 (defvar *account/update-profile-banner* "https://api.twitter.com/1.1/account/update_profile_banner.json")
 (defvar *account/remove-profile-banner* "https://api.twitter.com/1.1/account/remove_profile_banner.json")
+(defvar *blocks/list* "https://api.twitter.com/1.1/blocks/list.json")
+(defvar *blocks/ids* "https://api.twitter.com/1.1/blocks/ids.json")
+(defvar *blocks/create* "https://api.twitter.com/1.1/blocks/create.json")
+(defvar *blocks/destroy* "https://api.twitter.com/1.1/blocks/destroy.json")
+(defvar *users/lookup* "https://api.twitter.com/1.1/users/lookup.json")
+(defvar *users/show* "https://api.twitter.com/1.1/users/show.json")
+(defvar *users/search* "https://api.twitter.com/1.1/users/search.json")
+(defvar *users/contributees* "https://api.twitter.com/1.1/users/contributees.json")
+(defvar *users/contributors* "https://api.twitter.com/1.1/users/contributors.json")
+(defvar *users/profile-banner* "https://api.twitter.com/1.1/users/profile_banner.json")
 
 (defclass* user ()
   (id screen-name contributors created-at
@@ -123,6 +133,21 @@
      :trend (when (param :trend-location)
               (make-trend-location (param :trend-location))))))
 
+(defclass* banner ()
+  (size width height url)
+  (:documentation "Class representation of a banner as returned by users/profile-banner."))
+
+(defmethod print-object ((banner banner) stream)
+  (print-unreadable-object (banner stream :type T)
+    (format stream "~a (~dx~d)" (size banner) (width banner) (height banner)))
+  banner)
+
+(define-make-* (banner parameters)
+  (:size (car parameters))
+  (:width  (cdr (assoc :w (cdr parameters))))
+  (:height (cdr (assoc :h (cdr parameters))))
+  (:url (cdr (assoc :url (cdr parameters)))))
+
 (defun account/settings ()
   "Returns settings (including current trend, geo and sleep time information) for the authenticating user.
 
@@ -229,6 +254,95 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/account/update_profi
                 (pathname (file-to-base64-string image))))
   (signed-request *account/update-profile-banner* :parameters (prepare* (banner . image) width height offset-left offset-top) :method :POST)
   T)
+
+(defun blocks/list (&key include-entities (skip-status T))
+  "Returns a list of user objects that the authenticating user is blocking.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/blocks/list"
+  (setf include-entities (when include-entities "true"))
+  (setf skip-status (when skip-status "true"))
+  (map-cursor #'make-user :users *blocks/list* :parameters (prepare* include-entities skip-status)))
+
+(defun blocks/ids ()
+  "Returns a list of numeric user ids the authenticating user is blocking.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/blocks/ids"
+  (cursor-collect :ids *blocks/ids*))
+
+(defun blocks/create (&key screen-name user-id include-entities (skip-status T))
+  "Blocks the specified user from following the authenticating user. In addition the blocked user will not show in the authenticating users mentions or timeline (unless retweeted by another user). If a follow or friend relationship exists it is destroyed.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/blocks/create"
+  (assert (or screen-name user-id) () "Either SCREEN-NAME or USER-ID are required.")
+  (when user-id (assert (numberp user-id) () "USER-ID must be a number."))
+  (setf include-entities (when include-entities "true"))
+  (setf skip-status (when skip-status "true"))
+  (make-user (signed-request *blocks/create* :parameters (prepare* screen-name user-id include-entities skip-status) :method :POST)))
+
+(defun blocks/destroy (&key screen-name user-id include-entities (skip-status T))
+  "Un-blocks the user specified in the ID parameter for the authenticating user. Returns the un-blocked user in the requested format when successful. If relationships existed before the block was instated, they will not be restored.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/blocks/destroy"
+  (assert (or screen-name user-id) () "Either SCREEN-NAME or USER-ID are required.")
+  (when user-id (assert (numberp user-id) () "USER-ID must be a number."))
+  (setf include-entities (when include-entities "true"))
+  (setf skip-status (when skip-status "true"))
+  (make-user (signed-request *blocks/create* :parameters (prepare* screen-name user-id include-entities skip-status) :method :POST)))
+
+(defun users/lookup (&key screen-names user-ids include-entities)
+  "Returns fully-hydrated user objects for up to 100 users per request, as specified by the lists passed to the user_id and/or screen_name parameters.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/users/lookup"
+  (assert (or screen-names user-ids) () "Either SCREEN-NAMES or USER-IDS are required.")
+  (setf user-ids (format NIL "~{~a~^,~}" user-ids))
+  (setf screen-names (format NIL "~{~a~^,~}" screen-names))
+  (map-cursor #'make-user NIL *users/lookup* :parameters (prepare* user-ids screen-names include-entities) :method :POST))
+
+(defun users/show (&key screen-name user-id include-entities)
+  "Returns a variety of information about the user specified by the required user_id or screen_name parameter. The author's most recent Tweet will be returned inline when possible.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/users/show"
+  (assert (or screen-name user-id) () "Either SCREEN-NAME or USER-ID are required.")
+  (when user-id (assert (numberp user-id) () "USER-ID must be a number."))
+  (setf include-entities (when include-entities "true"))
+  (make-user (signed-request *users/show* :parameters (prepare* screen-name user-id include-entities) :method :GET)))
+
+(defun users/search (query &key (page 1) (count 5) include-entities)
+  "Provides a simple, relevance-based search interface to public user accounts on Twitter. Try querying by topical interest, full name, company name, location, or other criteria. Exact match searches are not supported.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/users/search"
+  (assert (< (* page count) 1000) () "Only the first 1000 results are available.")
+  (setf include-entities (when include-entities "true"))
+  (mapcar #'make-user (signed-request *users/search* :parameters (prepare* (q . query) page count include-entities) :method :GET)))
+
+(defun users/contributees (&key user-id screen-name include-entities (skip-status T))
+  "Returns a list of users that the specified user can \"contribute\" to.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/users/contributees"
+  (assert (or screen-name user-id) () "Either SCREEN-NAME or USER-ID are required.")
+  (when user-id (assert (numberp user-id) () "USER-ID must be a number."))
+  (setf include-entities (when include-entities "true"))
+  (setf skip-status (when skip-status "true"))
+  (mapcar #'make-user (signed-request *users/contributees* :parameters (prepare* user-id screen-name include-entities skip-status) :method :GET)))
+
+(defun users/contributors (&key user-id screen-name include-entities (skip-status T))
+  "Returns a list of users who can contribute to the specified account.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/users/contributors"
+  (assert (or screen-name user-id) () "Either SCREEN-NAME or USER-ID are required.")
+  (when user-id (assert (numberp user-id) () "USER-ID must be a number."))
+  (setf include-entities (when include-entities "true"))
+  (setf skip-status (when skip-status "true"))
+  (mapcar #'make-user (signed-request *users/contributors* :parameters (prepare* user-id screen-name include-entities skip-status) :method :GET)))
+
+(defun users/profile-banner (&key user-id screen-name)
+  "Returns a map of the available size variations of the specified user's profile banner. If the user has not uploaded a profile banner, a HTTP 404 will be served instead. This method can be used instead of string manipulation on the profile_banner_url returned in user objects as described in User Profile Images and Banners.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/users/profile_banner"
+  (assert (or screen-name user-id) () "Either SCREEN-NAME or USER-ID are required.")
+  (when user-id (assert (numberp user-id) () "USER-ID must be a number."))
+  (mapc #'(lambda (size) (setf (cdr size) (make-banner size)))
+        (cdr (assoc :sizes (signed-request *users/profile-banner* :parameters (prepare* user-id screen-name) :method :GET)))))
 
 (defgeneric save (object)
   (:documentation "Save the given object to twitter. 
