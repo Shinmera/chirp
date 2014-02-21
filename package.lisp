@@ -103,6 +103,8 @@
    #:end)
   ;; help.lisp
   (:export
+   #:*cached-languages*
+   
    #:configuration
    #:photo-size-limit
    #:photo-sizes

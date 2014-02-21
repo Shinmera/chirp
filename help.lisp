@@ -11,6 +11,7 @@
 (defvar *help/privacy* "https://api.twitter.com/1.1/help/privacy.json")
 (defvar *help/tos* "https://api.twitter.com/1.1/help/tos.json")
 (defvar *application/rate-limit-status* "https://api.twitter.com/1.1/application/rate_limit_status.json")
+(defvar *cached-languages* ())
 
 (defclass* configuration ()
   (photo-size-limit photo-sizes short-url-length short-url-length-https
@@ -69,7 +70,8 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/help/configuration"
   "Returns the list of languages supported by Twitter along with their ISO 639-1 code. The ISO 639-1 code is the two letter value to use if you include lang with any of your requests.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/help/languages"
-  (mapcar #'make-language (signed-request *help/languages* :method :GET)))
+  (setf *cached-languages*
+        (mapcar #'make-language (signed-request *help/languages* :method :GET))))
 
 (defun help/privacy ()
   "Returns Twitter's Privacy Policy.
@@ -95,10 +97,12 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/application/rate_limi
               (setf (cdr resource) (mapcar #'make-resource (cdr resource))))
           (cdr (assoc :resources data)))))
 
-(defun valid-language-p (language)
+(defun valid-language-p (language &key refresh-cache)
   "Returns T if the given language code is a language covered by twitter.
 
 See HELP/LANGUAGES."
-  (loop for lang in (help/languages)
+  (when (or refresh-cache (not *cached-languages*))
+    (help/languages))
+  (loop for lang in *cached-languages*
         if (string-equal language (code lang))
           return T))
