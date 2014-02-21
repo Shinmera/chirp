@@ -92,15 +92,13 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/account/update_profi
   "Updates the authenticating user's profile background image. This method can also be used to enable or disable the profile background image.
 
 According to spec https://dev.twitter.com/docs/api/1.1/post/account/update_profile_background_image"
-  (setf image (etypecase image
-                (null)
-                ((array (unsigned-byte 8) (*)) (base64:usb8-array-to-base64-string image))
-                (pathname (file-to-base64-string image))))
   (when t-v-p (setf tile (if tile "true" "false")))
   (when i-v-p (setf use-image (if use-image "true" "false")))
   (setf include-entities (when include-entities "true"))
   (setf skip-status (when skip-status "true"))
-  (make-user (signed-request *account/update-profile-background-image* :parameters (prepare* image tile use-image include-entities skip-status) :method :POST)))
+  (make-user (signed-data-request *account/update-profile-background-image* 
+                                  :data-parameters `(("image" . ,image)) :method :POST
+                                  :parameters (prepare* tile use-image include-entities skip-status))))
 
 (defun account/update-profile-colors (&key background-color link-color sidebar-border-color sidebar-fill-color text-color include-entities (skip-status T))
   "Sets one or more hex values that control the color scheme of the authenticating user's profile page on twitter.com. Each parameter's value must be a valid hexidecimal value, and may be either three or six characters (ex: #fff or #ffffff).
@@ -114,20 +112,18 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/account/update_profi
     (assert-color text-color))
   (setf include-entities (when include-entities "true"))
   (setf skip-status (when skip-status "true"))
-  (make-user (signed-request *account/update-profile-colors* :parameters (prepare* background-color link-color sidebar-border-color
-                                                                                   sidebar-fill-color text-color
-                                                                                   include-entities skip-status) :method :POST)))
+  (make-user (signed-request *account/update-profile-colors* :method :POST
+                             :parameters (prepare* background-color link-color sidebar-border-color sidebar-fill-color text-color include-entities skip-status))))
 
 (defun account/update-profile-image (image &key include-entities (skip-status T))
   "Updates the authenticating user's profile image. Note that this method expects raw multipart data, not a URL to an image.
 
 According to spec https://dev.twitter.com/docs/api/1.1/post/account/update_profile_image"
-  (setf image (etypecase image
-                ((array (unsigned-byte 8) (*)) (base64:usb8-array-to-base64-string image))
-                (pathname (file-to-base64-string image))))
   (setf include-entities (when include-entities "true"))
   (setf skip-status (when skip-status "true"))
-  (make-user (signed-request *account/update-profile-image* :parameters (prepare* image include-entities skip-status) :method :POST)))
+  (make-user (signed-data-request *account/update-profile-image*
+                                  :data-parameters `(("image" . ,image)) :method :POST
+                                  :parameters (prepare* image include-entities skip-status))))
 
 (defun account/remove-profile-banner ()
   "Removes the uploaded profile banner for the authenticating user. Returns T on success.
@@ -143,8 +139,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/account/update_profi
   (assert (or (not (or width height offset-left offset-top))
               (and width height offset-left offset-top))
           () "You must either provide all of the keyword parameters or none.")
-  (setf image (etypecase image
-                ((array (unsigned-byte 8) (*)) (base64:usb8-array-to-base64-string image))
-                (pathname (file-to-base64-string image))))
-  (signed-request *account/update-profile-banner* :parameters (prepare* (banner . image) width height offset-left offset-top) :method :POST)
+  (signed-data-request *account/update-profile-banner*
+                       :data-parameters `(("image" . ,image)) :method :POST
+                       :parameters (prepare* (banner . image) width height offset-left offset-top))
   T)
