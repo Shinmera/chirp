@@ -43,13 +43,3 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/users/suggestions"
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/users/suggestions/%3Aslug/members"
   (mapcar #'make-user (signed-request (format NIL *users/suggestions/slug/members* slug) :method :GET)))
-
-(defgeneric save (object)
-  (:documentation "Save the given object to twitter. 
-Does not guarantee to save every attribute, see the individual functions."))
-
-(defmethod save ((settings settings))
-  "Save the account settings. Returns a new settings object as per ACCOUNT/SETTINGS/POST."
-  (account/settings/post (when (trend settings) (woeid (trend settings)))
-                         (sleep-time settings) (sleep-time-start settings) (sleep-time-end settings)
-                         (time-zone settings) (language settings)))
