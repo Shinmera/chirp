@@ -29,7 +29,8 @@
                (:file "account")
                (:file "blocks")
                (:file "suggestions")
-               (:file "statuses"))
+               (:file "statuses")
+               (:file "timelines"))
   :depends-on (:drakma
                :yason
                :split-sequence
