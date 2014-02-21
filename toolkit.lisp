@@ -50,9 +50,10 @@ LIST  ==> LIST-ITEMS"
 
 (defparameter *month->int-map*
   (let ((table (make-hash-table :test 'equalp)))
-    (loop for month in '("jan" "feb" "mar" "apr" "may" "jun" "jul" "aug" "sep" "sept" "oct" "nov" "dec")
+    (loop for month in '("jan" "feb" "mar" "apr" "may" "jun" "jul" "aug" "sep" "oct" "nov" "dec")
           for num from 1 to 12
           do (setf (gethash month table) num))
+    (setf (gethash "sept" table) 9) ;; special handling
     table))
 
 (defun parse-month (string)
