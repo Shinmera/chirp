@@ -163,3 +163,12 @@ Requires CLOSER-MOP to be installed."
      (let ((seq (make-array (file-length stream) :element-type '(unsigned-byte 8) :fill-pointer t)))
        (setf (fill-pointer seq) (read-sequence seq stream))
        seq))))
+
+(defmacro parse-when-param (parameter function)
+  "Helps shorten the writing of conditional object parameters.
+
+Horrible macro, uses implicit PARAMETERS symbol by default."
+  (destructuring-bind (param params) (if (listp parameter) parameter (list parameter 'parameters))
+    (let ((gensym (gensym)))
+      `(when-let ((,gensym (cdr (assoc ,param ,params))))
+         (funcall ,function ,gensym)))))
