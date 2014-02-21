@@ -132,8 +132,10 @@ into strings, ready to be sent out as request parameters.
 This function is DESTRUCTIVE."
   (mapc #'(lambda (pair)
             (setf (car pair) (from-keyword (car pair)))
-            (unless (stringp (cdr pair))
-              (setf (cdr pair) (write-to-string (cdr pair)))))
+            (setf (cdr pair) (typecase (cdr pair)
+                               (string (cdr pair))
+                               (boolean "true") 
+                               (t (write-to-string (cdr pair))))))
         (delete () parameters :key #'cdr)))
 
 (defmacro prepare* (&rest parameter-names)
