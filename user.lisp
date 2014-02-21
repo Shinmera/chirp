@@ -24,6 +24,10 @@
 (defvar *users/contributees* "https://api.twitter.com/1.1/users/contributees.json")
 (defvar *users/contributors* "https://api.twitter.com/1.1/users/contributors.json")
 (defvar *users/profile-banner* "https://api.twitter.com/1.1/users/profile_banner.json")
+(defvar *users/report-spam* "https://api.twitter.com/1.1/users/report_spam.json")
+(defvar *users/suggestions/slug* "https://api.twitter.com/1.1/users/suggestions/~a.json")
+(defvar *users/suggestions* "https://api.twitter.com/1.1/users/suggestions.json")
+(defvar *users/suggestions/slug/members* "https://api.twitter.com/1.1/users/suggestions/~a/members.json")
 
 (defclass* user ()
   (id screen-name contributors created-at
@@ -112,6 +116,20 @@
   (:height (cdr (assoc :h (cdr parameters))))
   (:url (cdr (assoc :url (cdr parameters)))))
 
+(defclass* slug ()
+  (name slug size users)
+  (:documentation "Class representation of a twitter suggestion (slug) object."))
+
+(defmethod print-object ((slug slug) stream)
+  (print-unreadable-object (slug stream :type T)
+    (format stream "~a" (name slug)))
+  slug)
+
+(define-make-* (slug parameters)
+  :name :slug :size
+  (:users (when-let ((users (cdr (assoc :users parameters))))
+            (mapcar #'make-user users))))
+
 (defun account/settings ()
   "Returns settings (including current trend, geo and sleep time information) for the authenticating user.
 
@@ -128,7 +146,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/account/verify_creden
   "Alias for ACCOUNT/VERIFY-CREDENTIALS."
   (account/verify-credentials :include-entities include-entities :skip-status skip-status))
 
-(defun account/settings/post (trend-woeid sleep-time sleep-time-start sleep-time-end time-zone language)
+(defun account/settings/post (&key trend-woeid sleep-time sleep-time-start sleep-time-end time-zone language)
   "Updates the authenticating user's settings. Returns a new settings object.
 
 According to spec https://dev.twitter.com/docs/api/1.1/post/account/settings"
@@ -139,7 +157,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/account/settings"
     (when sleep-time (setf sleep-time "true"))
     (when sleep-time-start (setf sleep-time-start (format-time sleep-time-start)))
     (when sleep-time-end (setf sleep-time-end (format-time sleep-time-end)))
-    (assert (valid-language-p language) () "~a is not a supported language." language)
+    (when language (assert (valid-language-p language) () "~a is not a supported language." language))
     (make-settings (signed-request *account/settings* :parameters (prepare* (trend-location-woeid . trend-woeid)
                                                                             (sleep-time-enabled . sleep-time)
                                                                             (start-sleep-time . sleep-time-start)
@@ -307,6 +325,34 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/users/profile_banner"
   (when user-id (assert (numberp user-id) () "USER-ID must be a number."))
   (mapc #'(lambda (size) (setf (cdr size) (make-banner size)))
         (cdr (assoc :sizes (signed-request *users/profile-banner* :parameters (prepare* user-id screen-name) :method :GET)))))
+
+(defun users/report-spam (&key user-id screen-name)
+  "Report the specified user as a spam account to Twitter. Additionally performs the equivalent of POST blocks/create on behalf of the authenticated user.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/users/report_spam"
+  (assert (or screen-name user-id) () "Either SCREEN-NAME or USER-ID are required.")
+  (when user-id (assert (numberp user-id) () "USER-ID must be a number."))
+  (make-user (signed-request *users/report-spam* :parameters (prepare* user-id screen-name) :method :GET)))
+
+(defun users/suggestions/slug (slug &key language)
+  "Access the users in a given category of the Twitter suggested user list.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/users/suggestions/%3Aslug"
+  (when language (assert (valid-language-p language) () "~a is not a supported language." language))
+  (make-slug (signed-request (format NIL *users/suggestions/slug* slug) :parameters (prepare* (lang . language)) :method :GET)))
+
+(defun users/suggestions (&key language)
+  "Access to Twitter's suggested user list. This returns the list of suggested user categories. The category can be used in GET users/suggestions/:slug to get the users in that category.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/users/suggestions"
+  (when language (assert (valid-language-p language) () "~a is not a supported language." language))
+  (mapcar #'make-slug (signed-request *users/suggestions* :parameters (prepare* (lang . language)) :method :GET)))
+
+(defun users/suggestions/slug/members (slug)
+  "Access the users in a given category of the Twitter suggested user list and return their most recent status if they are not a protected user.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/users/suggestions/%3Aslug/members"
+  (mapcar #'make-user (signed-request (format NIL *users/suggestions/slug/members* slug) :method :GET)))
 
 (defgeneric save (object)
   (:documentation "Save the given object to twitter. 
