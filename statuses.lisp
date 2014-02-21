@@ -27,9 +27,9 @@
 
 (defmethod print-object ((status status) stream)
   (print-unreadable-object (status stream :type T)
-    (cond ((retweeted-status status) (format stream "RT~a " (id (retweeted-status status))))
-          ((in-reply-to status) (format stream "@~a " (cdr (assoc :screen-name (in-reply-to status))))))
-    (format stream "~a #~d" (user status) (id status)))
+    (format stream "~a #~d" (screen-name (user status)) (id status))
+    (when (in-reply-to status) (format stream " @~a" (cdr (assoc :screen-name (in-reply-to status)))))
+    (when (retweeted-status status) (format stream " RT~a" (retweeted-status status))))
   status)
 
 (define-make-* (status parameters)
@@ -64,38 +64,30 @@
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweets/%3Aid"
   (assert (<= count 100) () "Count must be less than or equal to 100.")
-  (when trim-user (setf trim-user "true"))
   (mapcar #'make-status (signed-request (format NIL *statuses/retweets* id) :parameters (prepare* count trim-user) :method :GET)))
 
 (defun statuses/show (id &key (trim-user T) include-my-retweet include-entities)
   "Returns a single Tweet, specified by the id parameter. The Tweet's author will also be embedded within the tweet.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/show/%3Aid"
-  (when trim-user (setf trim-user "true"))
-  (when include-my-retweet (setf include-my-retweet "true"))
-  (when include-entities (setf include-entities "true"))
   (make-status (signed-request (format NIL *statuses/show* id) :parameters (prepare* trim-user include-my-retweet include-entities) :method :GET)))
 
 (defun statuses/destroy (id &key (trim-user T))
   "Destroys the status specified by the required ID parameter. The authenticating user must be the author of the specified status. Returns the destroyed status if successful.
 
 According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/destroy/%3Aid"
-  (when trim-user (setf trim-user "true"))
   (make-status (signed-request (format NIL *statuses/destroy* id) :parameters (prepare* trim-user) :method :POST)))
 
 (defun statuses/retweet (id &key (trim-user T))
   "Retweets a tweet. Returns the original tweet with retweet details embedded.
 
 According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/retweet/%3Aid"
-  (when trim-user (setf trim-user "true"))
   (make-status (signed-request (format NIL *statuses/retweet* id) :parameters (prepare* trim-user) :method :POST)))
 
 (defun statuses/update (status &key reply-to latitude longitude place-id display-coordinates trim-user)
   "Updates the authenticating user's current status, also known as tweeting. To upload an image to accompany the tweet, use POST statuses/update_with_media.
 
 According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/update"
-  (when display-coordinates (setf display-coordinates "true"))
-  (when trim-user (setf trim-user "true"))
   (let ((parameters (prepare* status (in-reply-to-status-id . reply-to) (lat . latitude)
                               (long . longitude) place-id display-coordinates trim-user)))
     (make-status (signed-request *statuses/update* :parameters parameters :method :POST))))
@@ -106,9 +98,6 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/update"
 According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/update_with_media"
   (setf media (mapcar #'(lambda (medium) `("media[]". ,medium))
                       (if (listp media) media (list media))))
-  (when display-coordinates (setf display-coordinates "true"))
-  (when possibly-sensitive (setf possibly-sensitive "true"))
-  (when trim-user (setf trim-user "true"))
   (let ((parameters (prepare* status possibly-sensitive (in-reply-to-status-id . reply-to)
                               (lat . latitude) (long . longitude) place-id display-coordinates trim-user)))
     (make-status (signed-data-request *statuses/update-with-media* :data-parameters media :parameters parameters :method :POST))))
@@ -120,9 +109,6 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/oembed"
   (when language (assert (valid-language-p language) () "~a is not a supported language." language))
   (assert (and (<= 250 max-width) (<= max-width 550)) () "MAX-WIDTH must be between 250 and 550.")
   (assert (member align '(:left :right :center :none)) () "ALIGN must be one of :LEFT :RIGHT :CENTER :NONE")
-  (when hide-media (setf hide-media "true"))
-  (when hide-thread (setf hide-thread "true"))
-  (when omit-script (setf omit-script "true"))
   (make-oembed (signed-request *statuses/oembed* :parameters (prepare* id url max-width hide-media hide-thread omit-script align related (lang . language)) :method :GET)))
 
 (defun statuses/retweeters/ids (id)

@@ -66,7 +66,6 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/account/settings"
            (etypecase a
              (string a)
              (local-time:timestamp (local-time:format-timestring NIL a :format '((:hour 2) #\- (:min 2)))))))
-    (when sleep-time (setf sleep-time "true"))
     (when sleep-time-start (setf sleep-time-start (format-time sleep-time-start)))
     (when sleep-time-end (setf sleep-time-end (format-time sleep-time-end)))
     (when language (assert (valid-language-p language) () "~a is not a supported language." language))
@@ -94,8 +93,6 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/account/update_profi
 According to spec https://dev.twitter.com/docs/api/1.1/post/account/update_profile_background_image"
   (when t-v-p (setf tile (if tile "true" "false")))
   (when i-v-p (setf use-image (if use-image "true" "false")))
-  (setf include-entities (when include-entities "true"))
-  (setf skip-status (when skip-status "true"))
   (make-user (signed-data-request *account/update-profile-background-image* 
                                   :data-parameters `(("image" . ,image)) :method :POST
                                   :parameters (prepare* tile use-image include-entities skip-status))))
@@ -110,8 +107,6 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/account/update_profi
     (assert-color sidebar-border-color)
     (assert-color sidebar-fill-color)
     (assert-color text-color))
-  (setf include-entities (when include-entities "true"))
-  (setf skip-status (when skip-status "true"))
   (make-user (signed-request *account/update-profile-colors* :method :POST
                              :parameters (prepare* background-color link-color sidebar-border-color sidebar-fill-color text-color include-entities skip-status))))
 

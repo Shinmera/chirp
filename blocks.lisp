@@ -15,8 +15,6 @@
   "Returns a list of user objects that the authenticating user is blocking.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/blocks/list"
-  (setf include-entities (when include-entities "true"))
-  (setf skip-status (when skip-status "true"))
   (map-cursor #'make-user :users *blocks/list* :parameters (prepare* include-entities skip-status)))
 
 (defun blocks/ids ()
@@ -31,8 +29,6 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/blocks/ids"
 According to spec https://dev.twitter.com/docs/api/1.1/post/blocks/create"
   (assert (or screen-name user-id) () "Either SCREEN-NAME or USER-ID are required.")
   (when user-id (assert (numberp user-id) () "USER-ID must be a number."))
-  (setf include-entities (when include-entities "true"))
-  (setf skip-status (when skip-status "true"))
   (make-user (signed-request *blocks/create* :parameters (prepare* screen-name user-id include-entities skip-status) :method :POST)))
 
 (defun blocks/destroy (&key screen-name user-id include-entities (skip-status T))
@@ -41,6 +37,4 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/blocks/create"
 According to spec https://dev.twitter.com/docs/api/1.1/post/blocks/destroy"
   (assert (or screen-name user-id) () "Either SCREEN-NAME or USER-ID are required.")
   (when user-id (assert (numberp user-id) () "USER-ID must be a number."))
-  (setf include-entities (when include-entities "true"))
-  (setf skip-status (when skip-status "true"))
   (make-user (signed-request *blocks/create* :parameters (prepare* screen-name user-id include-entities skip-status) :method :POST)))

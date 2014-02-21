@@ -86,7 +86,6 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/users/lookup"
 According to spec https://dev.twitter.com/docs/api/1.1/get/users/show"
   (assert (or screen-name user-id) () "Either SCREEN-NAME or USER-ID are required.")
   (when user-id (assert (numberp user-id) () "USER-ID must be a number."))
-  (setf include-entities (when include-entities "true"))
   (make-user (signed-request *users/show* :parameters (prepare* screen-name user-id include-entities) :method :GET)))
 
 (defun users/search (query &key (page 1) (count 5) include-entities)
@@ -94,7 +93,6 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/users/show"
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/users/search"
   (assert (< (* page count) 1000) () "Only the first 1000 results are available.")
-  (setf include-entities (when include-entities "true"))
   (mapcar #'make-user (signed-request *users/search* :parameters (prepare* (q . query) page count include-entities) :method :GET)))
 
 (defun users/contributees (&key user-id screen-name include-entities (skip-status T))
@@ -103,8 +101,6 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/users/search"
 According to spec https://dev.twitter.com/docs/api/1.1/get/users/contributees"
   (assert (or screen-name user-id) () "Either SCREEN-NAME or USER-ID are required.")
   (when user-id (assert (numberp user-id) () "USER-ID must be a number."))
-  (setf include-entities (when include-entities "true"))
-  (setf skip-status (when skip-status "true"))
   (mapcar #'make-user (signed-request *users/contributees* :parameters (prepare* user-id screen-name include-entities skip-status) :method :GET)))
 
 (defun users/contributors (&key user-id screen-name include-entities (skip-status T))
@@ -113,8 +109,6 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/users/contributees"
 According to spec https://dev.twitter.com/docs/api/1.1/get/users/contributors"
   (assert (or screen-name user-id) () "Either SCREEN-NAME or USER-ID are required.")
   (when user-id (assert (numberp user-id) () "USER-ID must be a number."))
-  (setf include-entities (when include-entities "true"))
-  (setf skip-status (when skip-status "true"))
   (mapcar #'make-user (signed-request *users/contributors* :parameters (prepare* user-id screen-name include-entities skip-status) :method :GET)))
 
 (defun users/profile-banner (&key user-id screen-name)

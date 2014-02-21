@@ -147,6 +147,10 @@ According to spec https://dev.twitter.com/docs/auth/authorizing-request"
         parameters))
 
 (defun signed-data-request (request-url &key data-parameters parameters oauth-parameters (method :POST) drakma-params)
+  "Issue a signed data request against the API.
+See SIGNED-REQUEST.
+
+According to spec https://dev.twitter.com/docs/uploading-media"
   (assert (not (null *oauth-consumer-key*)) (*oauth-consumer-key*)
           'oauth-parameter-missing :parameter '*oauth-consumer-key*)
   (assert (not (null *oauth-signature-method*)) (*oauth-signature-method*)
