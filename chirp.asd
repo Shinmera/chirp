@@ -29,7 +29,7 @@
                (:file "account")
                (:file "blocks")
                (:file "suggestions")
-               (:file "tweets"))
+               (:file "statuses"))
   :depends-on (:drakma
                :yason
                :split-sequence
