@@ -19,7 +19,7 @@
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/help/configuration"))
 
-(define-make-* configuration parameters
+(define-make-* (configuration parameters)
   :photo-size-limit :short-url-length :short-url-length-https
   :non-username-paths :max-media-per-upload :characters-reserved-per-media
   (:photo-sizes (loop for (type . params) in (cdr (assoc :photo-sizes parameters))
@@ -36,7 +36,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/help/languages"))
     (format stream "~a" (name language)))
   language)
 
-(define-make-* language parameters
+(define-make-* (language)
   :name :code :status)
 
 (defclass* resource ()

@@ -19,7 +19,7 @@
     (format stream "~a" (name trend)))
   trend)
 
-(define-make-* trend parameters
+(define-make-* (trend)
   :events :name  :promoted-content :query :url)
 
 (defclass* trend-location ()
@@ -31,7 +31,7 @@
     (format stream "~a #~d" (name trend-location) (woeid trend-location)))
   trend-location)
 
-(define-make-* trend-location parameters
+(define-make-* (trend-location parameters)
   :country :name :url :woeid
   (:country-code . :countrycode)
   (:parent . :parentid)

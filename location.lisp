@@ -21,7 +21,7 @@
     (format stream "~a #~a" (name location)  (id location)))
   location)
 
-(define-make-* location parameters
+(define-make-* (location parameters)
   :id :name :full-name :url :poly-lines
   (:location-type . :place-type)
   (:latitude . :lat) (:longitude . :long)
@@ -40,7 +40,7 @@
   (print-unreadable-object (geometry stream :type T :identity T)
     (format stream "~a" (shape geometry))))
 
-(define-make-* geometry parameters
+(define-make-* (geometry)
   (:shape . :type) :coordinates)
 
 (defun geo/id (place-id)

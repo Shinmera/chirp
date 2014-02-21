@@ -24,7 +24,7 @@ slots that are only a symbol. Slot lists are still treated the same."
      ,@options))
 (define-indentation 'defclass* '(4 4 (&whole 2 &rest 1) &rest 2))
 
-(defmacro define-make-* (class parametervar &body assignments)
+(defmacro define-make-* ((class &optional (parametervar (gensym "PARAMS"))) &body assignments)
   "(DEFUN MAKE-* (PARAMETERS) (MAKE-INSTANCE * ..)) wrapper.
 Depending on what type the body assignment is, it is expanded into a different
 class-slot assignment:
