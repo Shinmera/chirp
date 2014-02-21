@@ -66,7 +66,7 @@ According to spec https://dev.twitter.com/docs/auth/creating-signature"
             (signing-key (format NIL "~a&~a" *oauth-consumer-secret* (or *oauth-token-secret* ""))))
         (hmac base signing-key)))))
 
-(defun make-signed (method url oauth-parameters other-parameters)
+(defun make-signed (method url oauth-parameters &optional other-parameters)
   "Returns the signed version of the oauth-parameters.
 Simply generates a signature and appends the proper parameter."
   (cons (cons "oauth_signature" (create-signature method url (append oauth-parameters other-parameters)))
@@ -109,7 +109,7 @@ Simply generates a signature and appends the proper parameter."
                  :parameters (getf drakma-params :parameters)
                  :sent-headers (getf drakma-params :additional-headers))))))
 
-(defun signed-request (request-url &key parameters oauth-parameters (method :POST))
+(defun signed-request (request-url &key parameters oauth-parameters (method :POST) drakma-params)
   "Issue a signed request against the API.
 This requires the *oauth-consumer-key*, *oauth-signature-method*,
 *oauth-version* and at least *oauth-consumer-secret* to be set.
@@ -133,7 +133,40 @@ According to spec https://dev.twitter.com/docs/auth/authorizing-request"
                             (when *oauth-token* `(("oauth_token" . ,*oauth-token*)))))
          (oauth-parameters (make-signed method request-url oauth-parameters parameters))
          (headers `(("Authorization" . ,(create-authorization-header oauth-parameters)))))
-    (request-wrapper request-url :method method :parameters parameters :additional-headers headers)))
+    (apply #'request-wrapper request-url
+           :method method :parameters parameters :additional-headers headers
+           drakma-params)))
+
+(defun prepare-data-parameters (parameters)
+  (mapc #'(lambda (param)
+            (setf (cdr param)
+                  (list (etypecase (cdr param)
+                          (pathname (cdr param))
+                          ((array (unsigned-byte 8) (*)) (cdr param)))
+                        :content-type "application/octet-stream")))
+        parameters))
+
+(defun signed-data-request (request-url &key data-parameters parameters oauth-parameters (method :POST) drakma-params)
+  (assert (not (null *oauth-consumer-key*)) (*oauth-consumer-key*)
+          'oauth-parameter-missing :parameter '*oauth-consumer-key*)
+  (assert (not (null *oauth-signature-method*)) (*oauth-signature-method*)
+          'oauth-parameter-missing :parameter '*oauth-signature-method*)
+  (assert (not (null *oauth-version*)) (*oauth-version*)
+          'oauth-parameter-missing :parameter '*oauth-version*)
+  (let* ((oauth-parameters (append 
+                            oauth-parameters
+                            `(("oauth_consumer_key" . ,*oauth-consumer-key*)
+                              ("oauth_nonce" . ,(generate-nonce))
+                              ("oauth_signature_method" . ,*oauth-signature-method*)
+                              ("oauth_timestamp" . ,(write-to-string (get-unix-time)))
+                              ("oauth_version" . ,*oauth-version*))
+                            (when *oauth-token* `(("oauth_token" . ,*oauth-token*)))))
+         (oauth-parameters (make-signed method request-url oauth-parameters))
+         (headers `(("Authorization" . ,(create-authorization-header oauth-parameters))))
+         (parameters (append parameters (prepare-data-parameters data-parameters))))
+    (apply #'request-wrapper request-url
+           :method method :parameters parameters :additional-headers headers :form-data T
+           drakma-params)))
 
 (defun oauth/request-token (callback)
   "Query for a request token using the specified callback.
