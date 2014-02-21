@@ -27,10 +27,12 @@
 
 (defclass* user ()
   (id screen-name contributors created-at
-   counts language location notifications status profile
+   counts language location notifications status
    follow-request-sent following entities
    geo translator protected verified
-   time-zone url utc-offset)
+   time-zone url utc-offset
+   default name description show-inline-media
+   background avatar colors)
   (:documentation "Class representation of a user."))
 
 (defmethod print-object ((user user) stream)
@@ -38,73 +40,35 @@
     (format stream "~a #~d" (screen-name user) (id user)))
   user)
 
-(defun make-user (parameters)
-  (flet ((param (place) (cdr (assoc place parameters))))
-    (let ((user (make-instance
-                 'user
-                 :id (param :id)
-                 :screen-name (param :screen-name)
-                 :contributors (param :contributors)
-                 :created-at (parse-twitter-time (param :created-at))
-                 :counts (list :statuses (param :statuses-count)
-                               :listed (param :listed-count)
-                               :friends (param :friends-count)
-                               :followers (param :followers-count)
-                               :favorites (param :favourites-count))
-                 :language (param :lang)
-                 :location (param :location)
-                 :notifications (param :notifications)
-                 :status (when (param :status)
-                           (make-status (param :status)))
-                 :entities (when (param :entities)
-                             (make-entities (param :entities)))
-                 :profile (make-profile parameters)
-                 :follow-request-sent (param :follow-request-sent)
-                 :following (param :following)
-                 :geo (param :geo-enabled)
-                 :translator (param :is-translator)
-                 :protected (param :protected)
-                 :verified (param :verified)
-                 :time-zone (param :time-zone)
-                 :utc-offset (param :utf-offset)
-                 :url (param :url))))
-      (setf (user (profile user)) user)
-      user)))
-
-(defclass* profile ()
-  (user default name description show-inline-media
-   background avatar colors location)
-  (:documentation "Class representation of the profile related settings of a user (avatar, background, colors)."))
-
-(defmethod print-object ((profile profile) stream)
-  (print-unreadable-object (profile stream :type T)
-    (format stream "~a" (user profile)))
-  profile)
-
-(defun make-profile (parameters)
-  (flet ((param (place) (cdr (assoc place parameters))))
-    (make-instance
-     'profile
-     :default (param :default-profile)
-     :name (param :name)
-     :location (param :location)
-     :description (param :description)
-     :show-inline-media (param :show-inline-media)
-     :background (list
-                  :color (param :profile-background-color)
-                  :use-image (param :profile-use-background-image)
-                  :image-url (param :profile-background-image-url)
-                  :image-url-https (param :profile-background-image-url-https)
-                  :image-tile (param :profile-background-image-tile))
-     :avatar (list
-              :default (param :default-profile-image)
-              :image-url (param :profile-image-url)
-              :image-url-https (param :profile-image-url-https))
-     :colors (list
-              :link (param :profile-link-color)
-              :text (param :profile-text-color)
-              :sidebar-border (param :profile-sidebar-border-color)
-              :sidebar-fill (param :profile-sidebar-fill-color)))))
+(define-make-* (user parameters)
+  :id :screen-name :contributors :location :notifications 
+  :follow-request-sent :following :protected :verified 
+  :time-zone :utc-offset :url :name :location :description 
+  :show-inline-media (:language . :lang) (:geo . :geo-enabled)
+  (:translator . :is-translator) (:default . :default-profile)
+  (:status (when-let ((param (cdr (assoc :status parameters)))) (make-status param)))
+  (:entities (when-let ((param (cdr (assoc :entities parameters)))) (make-entities param)))
+  (:created-at (parse-twitter-time (cdr (assoc :created-at parameters))))
+  (:counts (list :statuses (cdr (assoc :statuses-count parameters))
+                 :listed (cdr (assoc :listed-count parameters))
+                 :friends (cdr (assoc :friends-count parameters))
+                 :followers (cdr (assoc :followers-count parameters))
+                 :favorites (cdr (assoc :favourites-count parameters))))
+  (:background (list
+                :color (cdr (assoc :profile-background-color parameters))
+                :use-image (cdr (assoc :profile-use-background-image parameters))
+                :image-url (cdr (assoc :profile-background-image-url parameters))
+                :image-url-https (cdr (assoc :profile-background-image-url-https parameters))
+                :image-tile (cdr (assoc :profile-background-image-tile parameters))))
+  (:avatar (list
+            :default (cdr (assoc :default-profile-image parameters))
+            :image-url (cdr (assoc :profile-image-url parameters))
+            :image-url-https (cdr (assoc :profile-image-url-https parameters))))
+  (:colors (list
+            :link (cdr (assoc :profile-link-color parameters))
+            :text (cdr (assoc :profile-text-color parameters))
+            :sidebar-border (cdr (assoc :profile-sidebar-border-color parameters))
+            :sidebar-fill (cdr (assoc :profile-sidebar-fill-color parameters))))))
 
 (defclass* settings ()
   (force-https email-discoverable geo language protected screen-name
@@ -353,10 +317,3 @@ Does not guarantee to save every attribute, see the individual functions."))
   (account/settings/post (when (trend settings) (woeid (trend settings)))
                          (sleep-time settings) (sleep-time-start settings) (sleep-time-end settings)
                          (time-zone settings) (language settings)))
-
-(defmethod save ((profile profile))
-  "Save the profile settings including profile theming. Returns a new profile object as per ACCOUNT/UPDATE-PROFILE."
-  (profile (account/update-profile :name (name profile) :url (url profile) :location (location profile) :description (description profile))))
-
-(defmethod save ((user user))
-  "Save the account and profile settings. Returns a new profile object as per ACCOUNT/UPDATE-PROFILE.")
