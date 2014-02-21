@@ -105,10 +105,10 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/update"
 
 According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/update_with_media"
   (setf media (mapcar #'(lambda (medium)
-                          `(("media[]". ,(etypecase medium
-                                           (pathname (file-to-base64-string medium))
-                                           ((array (unsigned-byte 8) (*)) (base64:usb8-array-to-base64-string medium))
-                                           (string medium)))))
+                          `("media[]". ,(etypecase medium
+                                          (pathname (file-to-base64-string medium))
+                                          ((array (unsigned-byte 8) (*)) (base64:usb8-array-to-base64-string medium))
+                                          (string medium))))
                       (if (listp media) media (list media))))
   (when display-coordinates (setf display-coordinates "true"))
   (when possibly-sensitive (setf possibly-sensitive "true"))
