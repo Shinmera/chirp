@@ -1,0 +1,79 @@
+<!DOCTYPE html><!--
+  This file is a part of Chirp
+  (c) 2013 TymoonNET/NexT http://tymoon.eu (shinmera@tymoon.eu)
+  Author: Nicolas Hafner <shinmera@tymoon.eu>
+  !--><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Chirp - About</title>
+    <style type="text/css">
+      code{font-family: Consolas, Inconsolata, monospace;}
+      h3{display: inline-block;margin:0;padding:0;}
+      .docs{list-style: none;}
+      .docs li{margin-bottom: 20px;}
+      .docs pre{margin: 0 0 0 10px; white-space: pre-wrap;}
+    </style>
+  </head>
+  <body>
+    <header>
+      <img src="http://shinmera.tymoon.eu/public/chirp-logo.png" alt="Piping"/>
+      <h1>v0.0.1</h1>
+    </header>
+    <div id="content">
+      <article>
+        <header><h2>What is Chirp?</h2></header>
+        <p>Chirp is a twitter client library for Common Lisp. It aims to provide full coverage of the Twitter REST API.</p>
+      </article>
+      <article>
+        <header><h2>How To</h2></header>
+        <p>
+          Load Chirp through Quicklisp or ASDF:
+        </p>
+        <code>(ql:quickload :chirp)</code>
+        <p>
+          Next you need to authorize an account through twitter. By default this happens through the PIN method, though others are available as well. Retrieve your <a href="https://apps.twitter.com/">twitter application</a>'s consumer key and secret and invoke the following function:
+        </p>
+        <code>(initiate-authentication :consumer-key "&lt;app consumer key&gt;" :consumer-secret "&lt;app consumer secret&gt;"</code>
+        <p>
+          If the first OAuth step is successful, it should return an URL that you have to visit. This will then prompt you to authorize the application and present a PIN. Copy this pin and complete the authentication process:
+        </p>
+        <code>(complete-authentication "&lt;pin&gt;")</code>
+        <p>
+          If the function returns successfully, you are ready to use the twitter API:
+        </p>
+        <code>(account/verify-credentials)</code>
+        <p>
+          If you do not want to repeat the authentication process, you can save and later set the <code>*oauth-consumer-key*</code>, <code>*oauth-consumer-secret*</code>, <code>*oauth-token*</code> and <code>*oauth-token-secret*</code> variables manually. That's all the information it takes to authenticate over twitter. Make sure to keep these tokens secret.
+        </p>
+        <code>(statuses/update "Hooray, I successfully used the Chirp Common Lisp library to tweet!")</code>
+      </article>
+      <article>
+        <header><h2>Other Guff</h2></header>
+        <p>
+          Chirp is licensed under the <a href="http://opensource.org/licenses/Artistic-2.0">Artistic License 2.0</a> and ©2013 TymoonNET/NexT, <a href="http://shinmera.com">Nicolas Hafner</a>.<br/>
+          This library can be obtained via git on <a href="https://github.com/Shinmera/chirp.git">https://github.com/Shinmera/chirp.git</a>. For questions, patches or suggestions, please contact me via <a href="mailto:shinmera@tymoon.eu">email</a> or write a <a href="https://github.com/Shinmera/chirp/issues/new">github issue</a>.
+        </p>
+      </article>
+      <article>
+        <header><h2>Chirp Package Index</h2></header>
+        <ul id="docs" class="docs">
+          <li id="template">
+            <a name="" class="anchor"></a>
+            <article>
+              <header>
+                <span class="functype">test</span>
+                <code>
+                  <h3 class="funcname">Foo</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">
+                Foobar
+              </pre>
+            </article>
+          </li>
+        </ul>
+      </article>
+    </div>
+  </body>
+</html>
