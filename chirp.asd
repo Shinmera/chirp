@@ -26,6 +26,9 @@
                (:file "help")
                (:file "cursor")
                (:file "user")
+               (:file "account")
+               (:file "blocks")
+               (:file "suggestions")
                (:file "tweets"))
   :depends-on (:drakma
                :yason
