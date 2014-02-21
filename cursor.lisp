@@ -8,7 +8,9 @@
 
 (defclass* cursor ()
   (id url parameters data)
-  (:documentation "Cursor object to traverse cursored sets."))
+  (:documentation "Cursor object to traverse cursored sets.
+
+According to https://dev.twitter.com/docs/misc/cursoring"))
 
 (defun cursored-request (uri &key parameters)
   "Performs a signed-request returning a cursor instance tailored for it."
@@ -58,9 +60,17 @@ Returns the cursor at its end position. "
          while (cursor-next ,cursor-var)
          finally (return ,cursor-var)))
 
+(defun map-cursor (function parameter uri &key parameters)
+  "Applies FUNCTION to each element of the designated parameter while going through the cursor.
+Returns the collected return values of the FUNCTION calls."
+  (let ((result ()))
+    (do-cursor (data uri :parameters parameters)
+      (appendf result (mapcar function (cdr (assoc parameter data)))))
+    result))
+
 (defun cursor-collect (parameter uri &key parameters)
   "Collects the given parameter into one list by APPEND."
-  (let ((data ()))
+  (let ((result ()))
     (do-cursor (data uri :parameters parameters)
-      (appendf data (cdr (assoc parameter data))))
-    data))
+      (appendf result (cdr (assoc parameter data))))
+    result))
