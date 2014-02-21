@@ -35,8 +35,8 @@
   :time-zone :utc-offset :url :name :location :description 
   :show-inline-media (:language . :lang) (:geo . :geo-enabled)
   (:translator . :is-translator) (:default . :default-profile)
-  (:status (when-let ((param (cdr (assoc :status parameters)))) (make-status param)))
-  (:entities (when-let ((param (cdr (assoc :entities parameters)))) (make-entities param)))
+  (:status (parse-when-param :status #'make-status))
+  (:entities (parse-when-param :entities #'make-entities))
   (:created-at (parse-twitter-time (cdr (assoc :created-at parameters))))
   (:counts `((:statuses . ,(cdr (assoc :statuses-count parameters)))
              (:listed . ,(cdr (assoc :listed-count parameters)))

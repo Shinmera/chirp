@@ -26,10 +26,8 @@
   (:location-type . :place-type)
   (:latitude . :lat) (:longitude . :long)
   (:country-name . :country) :country-code
-  (:bounding-box (when-let ((a (cdr (assoc :bounding-box parameters))))
-                   (make-geometry a)))
-  (:contained-within (when-let ((a (cdr (assoc :contained-within parameters))))
-                       (make-location a))))
+  (:bounding-box (parse-when-param :bounding-box #'make-geometry))
+  (:contained-within (parse-when-param :contained-wihtin #'make-location)))
 
 (defclass* geometry ()
   (shape coordinates)
