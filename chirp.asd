@@ -30,7 +30,8 @@
                (:file "blocks")
                (:file "suggestions")
                (:file "statuses")
-               (:file "timelines"))
+               (:file "timelines")
+               (:file "stream"))
   :depends-on (:drakma
                :yason
                :split-sequence
