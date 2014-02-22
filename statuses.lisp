@@ -18,12 +18,15 @@
 (defclass* status ()
   (id text entities created-at
    user contributors source
-   coordinates geo place
-   retweeted-status
+   coordinates place
+   retweeted-status filter-level scopes
    counts ;favorite-count retweet-count
    in-reply-to ;in-reply-to-status-id in-reply-to-user-id in-reply-to-screen-name
-   possibly-sensitive retweeted favorited truncated)
-  (:documentation "Class representation of a twitter status (tweet)."))
+   possibly-sensitive retweeted favorited truncated
+   withheld-copyright withheld-in-countries withheld-scope)
+  (:documentation "Class representation of a twitter status (tweet).
+
+According to spec https://dev.twitter.com/docs/platform-objects/tweets"))
 
 (defmethod print-object ((status status) stream)
   (print-unreadable-object (status stream :type T)
@@ -33,15 +36,17 @@
   status)
 
 (define-make-* (status parameters)
-  :id :text :contributors :source :place
+  :id :text :source :filter-level :scopes
   :possibly-sensitive :retweeted :favorited :truncated
+  :withheld-copyright :withheld-in-countries :withheld-scope
   (:counts `((:favorites . ,(cdr (assoc :favorites parameters)))
              (:retweets . ,(cdr (assoc :retweets parameters)))))
   (:in-reply-to (when (cdr (assoc :in-reply-to-status-id parameters))
                   `((:id . ,(cdr (assoc :in-reply-to-status-id parameters)))
                     (:user-id . ,(cdr (assoc :in-reply-to-user-id parameters)))
                     (:screen-name . ,(cdr (assoc :in-reply-to-screen-name parameters))))))
-  (:geo (parse-when-param :geo #'make-geometry))
+  (:place (parse-when-param :place #'make-location))
+  (:contributors (parse-when-param :place #'(lambda (list) (mapcar #'make-user list))))
   (:coordinates (parse-when-param :coordinates #'make-geometry))
   (:user (parse-when-param :user #'make-user))
   (:retweeted-status (parse-when-param :retweeted-status #'make-status))
