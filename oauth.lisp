@@ -76,7 +76,7 @@ Simply generates a signature and appends the proper parameter."
   (declare (ignore rest))
   (format s "~a=~s" (url-encode (car param)) (url-encode (cdr param))))
 
-(defun create-authorization-header (parameters)
+(defun create-authorization-header-value (parameters)
   "Turns the OAuth parameters into the correct header value."
   (format NIL "OAuth ~{~/chirp::authorization-format-parameter/~^, ~}"
           (sort parameters #'string< :key #'car)))
@@ -95,6 +95,23 @@ Simply generates a signature and appends the proper parameter."
            (warn "Do not know how to handle content type: ~a" type)
            body))))
 
+(defun create-authorization-header (method request-url parameters)
+  (assert (not (null *oauth-consumer-key*)) (*oauth-consumer-key*)
+          'oauth-parameter-missing :parameter '*oauth-consumer-key*)
+  (assert (not (null *oauth-signature-method*)) (*oauth-signature-method*)
+          'oauth-parameter-missing :parameter '*oauth-signature-method*)
+  (assert (not (null *oauth-version*)) (*oauth-version*)
+          'oauth-parameter-missing :parameter '*oauth-version*)
+  (let* ((oauth-parameters (append
+                            `(("oauth_consumer_key" . ,*oauth-consumer-key*)
+                              ("oauth_nonce" . ,(generate-nonce))
+                              ("oauth_signature_method" . ,*oauth-signature-method*)
+                              ("oauth_timestamp" . ,(write-to-string (get-unix-time)))
+                              ("oauth_version" . ,*oauth-version*))
+                            (when *oauth-token* `(("oauth_token" . ,*oauth-token*)))))
+         (oauth-parameters (make-signed method request-url oauth-parameters parameters)))
+    `(("Authorization" . ,(create-authorization-header-value oauth-parameters)))))
+
 (defun request-wrapper (uri &rest drakma-params)
   (let ((drakma:*text-content-types* (cons '("application" . "json") (cons '("text" . "json") drakma:*text-content-types*))))
     (let* ((vals (multiple-value-list (apply #'drakma:http-request uri :external-format-in *external-format* :external-format-out *external-format* drakma-params)))
@@ -109,7 +126,7 @@ Simply generates a signature and appends the proper parameter."
                  :parameters (getf drakma-params :parameters)
                  :sent-headers (getf drakma-params :additional-headers))))))
 
-(defun signed-request (request-url &key parameters oauth-parameters (method :POST) drakma-params)
+(defun signed-request (request-url &key parameters oauth-parameters additional-headers (method :POST) drakma-params)
   "Issue a signed request against the API.
 This requires the *oauth-consumer-key*, *oauth-signature-method*,
 *oauth-version* and at least *oauth-consumer-secret* to be set.
@@ -117,25 +134,11 @@ See CREATE-SIGNATURE.
 For return values see DRAKMA:HTTP-REQUEST
 
 According to spec https://dev.twitter.com/docs/auth/authorizing-request"
-  (assert (not (null *oauth-consumer-key*)) (*oauth-consumer-key*)
-          'oauth-parameter-missing :parameter '*oauth-consumer-key*)
-  (assert (not (null *oauth-signature-method*)) (*oauth-signature-method*)
-          'oauth-parameter-missing :parameter '*oauth-signature-method*)
-  (assert (not (null *oauth-version*)) (*oauth-version*)
-          'oauth-parameter-missing :parameter '*oauth-version*)
-  (let* ((oauth-parameters (append 
-                            oauth-parameters
-                            `(("oauth_consumer_key" . ,*oauth-consumer-key*)
-                              ("oauth_nonce" . ,(generate-nonce))
-                              ("oauth_signature_method" . ,*oauth-signature-method*)
-                              ("oauth_timestamp" . ,(write-to-string (get-unix-time)))
-                              ("oauth_version" . ,*oauth-version*))
-                            (when *oauth-token* `(("oauth_token" . ,*oauth-token*)))))
-         (oauth-parameters (make-signed method request-url oauth-parameters parameters))
-         (headers `(("Authorization" . ,(create-authorization-header oauth-parameters)))))
-    (apply #'request-wrapper request-url
-           :method method :parameters parameters :additional-headers headers
-           drakma-params)))
+  (apply #'request-wrapper request-url
+         :method method :parameters parameters
+         :additional-headers (append additional-headers
+                                     (create-authorization-header method request-url (append parameters oauth-parameters)))
+         drakma-params))
 
 (defun prepare-data-parameters (parameters)
   (mapc #'(lambda (param)
@@ -146,31 +149,26 @@ According to spec https://dev.twitter.com/docs/auth/authorizing-request"
                         :content-type "application/octet-stream")))
         parameters))
 
-(defun signed-data-request (request-url &key data-parameters parameters oauth-parameters (method :POST) drakma-params)
+(defun signed-data-request (request-url &key data-parameters parameters oauth-parameters additional-headers (method :POST) drakma-params)
   "Issue a signed data request against the API.
 See SIGNED-REQUEST.
 
-According to spec https://dev.twitter.com/docs/uploading-media"
-  (assert (not (null *oauth-consumer-key*)) (*oauth-consumer-key*)
-          'oauth-parameter-missing :parameter '*oauth-consumer-key*)
-  (assert (not (null *oauth-signature-method*)) (*oauth-signature-method*)
-          'oauth-parameter-missing :parameter '*oauth-signature-method*)
-  (assert (not (null *oauth-version*)) (*oauth-version*)
-          'oauth-parameter-missing :parameter '*oauth-version*)
-  (let* ((oauth-parameters (append 
-                            oauth-parameters
-                            `(("oauth_consumer_key" . ,*oauth-consumer-key*)
-                              ("oauth_nonce" . ,(generate-nonce))
-                              ("oauth_signature_method" . ,*oauth-signature-method*)
-                              ("oauth_timestamp" . ,(write-to-string (get-unix-time)))
-                              ("oauth_version" . ,*oauth-version*))
-                            (when *oauth-token* `(("oauth_token" . ,*oauth-token*)))))
-         (oauth-parameters (make-signed method request-url oauth-parameters))
-         (headers `(("Authorization" . ,(create-authorization-header oauth-parameters))))
-         (parameters (append parameters (prepare-data-parameters data-parameters))))
+According to spec https://dev.twitter.com/docs/uploading-media"  
+  (let ((parameters (append parameters (prepare-data-parameters data-parameters))))
     (apply #'request-wrapper request-url
-           :method method :parameters parameters :additional-headers headers :form-data T
+           :method method :parameters parameters :form-data T
+           :additional-headers (append additional-headers
+                                       (create-authorization-header method request-url oauth-parameters))
            drakma-params)))
+
+(defun signed-stream-request (request-url &key parameters oauth-parameters additional-headers (method :POST) drakma-params)
+  "Issue a signed data request against the API.
+See SIGNED-REQUEST. Returns values according to DRAKMA:HTTP-REQUEST with :WANT-STREAM T"
+  (apply #'drakma:http-request request-url
+         :method method :parameters parameters :want-stream T
+         :additional-headers (append additional-headers
+                                     (create-authorization-header method request-url (append parameters oauth-parameters)))
+         drakma-params))
 
 (defun oauth/request-token (callback)
   "Query for a request token using the specified callback.

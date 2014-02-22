@@ -180,6 +180,8 @@
    #:target-headers
 
    #:signed-request
+   #:signed-data-request
+   #:signed-stream-request
    #:oauth/request-token
    #:pin-request-token
    #:oauth/authenticate
