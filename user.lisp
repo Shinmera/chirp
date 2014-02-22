@@ -18,11 +18,14 @@
   (id screen-name contributors created-at
    counts language location notifications status
    follow-request-sent following entities
-   geo translator protected verified
+   geo-enabled translator protected verified contributors-enabled
    time-zone url utc-offset
    default name description show-inline-media
-   background avatar colors)
-  (:documentation "Class representation of a user."))
+   background avatar colors
+   withheld-in-countries withheld-scope)
+  (:documentation "Class representation of a user.
+
+According to spec https://dev.twitter.com/docs/platform-objects/users"))
 
 (defmethod print-object ((user user) stream)
   (print-unreadable-object (user stream :type T)
@@ -30,10 +33,11 @@
   user)
 
 (define-make-* (user parameters)
-  :id :screen-name :contributors :location :notifications 
-  :follow-request-sent :following :protected :verified 
+  :id :screen-name :contributors :location :notifications
+  :follow-request-sent :following :protected :verified :contributors-enabled
   :time-zone :utc-offset :url :name :location :description 
-  :show-inline-media (:language . :lang) (:geo . :geo-enabled)
+  :show-inline-media (:language . :lang) :geo-enabled
+  :withheld-in-countries :withheld-scope
   (:translator . :is-translator) (:default . :default-profile)
   (:status (parse-when-param :status #'make-status))
   (:entities (parse-when-param :entities #'make-entities))
