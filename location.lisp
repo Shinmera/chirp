@@ -12,9 +12,11 @@
 (defvar *geo/similar-places* "https://api.twitter.com/1.1/geo/similar_places.json")
 
 (defclass* location ()
-  (id name full-name location-type latitude longitude url
+  (id name full-name location-type latitude longitude url attributes
    country-name country-code bounding-box poly-lines contained-within)
-  (:documentation "Twitter object containing Locational data. Used for the Places & Geo API."))
+  (:documentation "Twitter object containing Locational data. Used for the Places & Geo API.
+
+According to spec https://dev.twitter.com/docs/platform-objects/places"))
 
 (defmethod print-object ((location location) stream)
   (print-unreadable-object (location stream :type T)
@@ -22,7 +24,7 @@
   location)
 
 (define-make-* (location parameters)
-  :id :name :full-name :url :poly-lines
+  :id :name :full-name :url :poly-lines :attributes
   (:location-type . :place-type)
   (:latitude . :lat) (:longitude . :long)
   (:country-name . :country) :country-code
