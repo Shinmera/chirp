@@ -23,7 +23,7 @@ According to https://dev.twitter.com/docs/misc/cursoring"))
 
 (defmethod cursor-request ((cursor cursor))
   (let ((data (signed-request (url cursor) :parameters (append (parameters cursor)
-                                                               `(("cursor" . ,(id cursor)))) :method (request-method cursor))))
+                                                               `(("cursor" . ,(write-to-string (id cursor))))) :method (request-method cursor))))
     (setf (data cursor) data)
     (values cursor data)))
 
