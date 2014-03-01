@@ -57,6 +57,21 @@
    #:do-cursor
    #:map-cursor
    #:cursor-collect)
+  ;; directmessages.lisp
+  (:export
+   #:direct-message
+   #:id
+   #:text
+   #:recipient
+   #:sender
+   #:created-at
+   #:entities
+   
+   #:direct-messages
+   #:direct-messages/sent
+   #:direct-messages/show
+   #:direct-messages/destroy
+   #:direct-messages/new)
   ;; entities.lisp
   (:export
    #:entity
@@ -101,6 +116,38 @@
    #:text
    #:start
    #:end)
+  ;; friends.lisp
+  (:export
+   #:*connection-values
+   
+   #:relationship
+   #:id
+   #:screen-name
+   #:name
+   #:followed-by
+   #:following
+   #:can-dm
+   #:blocking
+   #:all-replies
+   #:want-retweets
+   #:marked-spam
+   #:notifications-enabled
+   #:connections
+   
+   #:friends/ids
+   #:friends/list
+   
+   #:followers/ids
+   #:followers/list
+   
+   #:friendships/incoming
+   #:friendships/outgoing
+   #:friendships/create
+   #:friendships/destroy
+   #:friendships/update
+   #:friendships/show
+   #:friendships/lookup
+   #:friendships/no-retweets/ids)
   ;; help.lisp
   (:export
    #:*cached-languages*
