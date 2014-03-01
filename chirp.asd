@@ -31,6 +31,7 @@
                (:file "suggestions")
                (:file "statuses")
                (:file "timelines")
+               (:file "directmessages")
                (:file "stream"))
   :depends-on (:drakma
                :yason
