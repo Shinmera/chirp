@@ -57,6 +57,18 @@
       <article>
         <header><h2>Chirp Package Index</h2></header>
         <ul id="docs" class="docs"><li id="template">
+            <a class="anchor" name="*CACHED-LANGUAGES*"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL SPECIAL</span>
+                <code>
+                  <h3 class="funcname">*CACHED-LANGUAGES*</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="*OAUTH-CONSUMER-KEY*"/>
             <article>
               <header>
@@ -279,6 +291,18 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/account/verify_creden
               <pre class="funcdesc"></pre>
             </article>
           </li><li id="template">
+            <a class="anchor" name="ALL-REPLIES"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">ALL-REPLIES</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="APPLICATION/RATE-LIMIT-STATUS"/>
             <article>
               <header>
@@ -351,6 +375,18 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/application/rate_limi
                 </code>
               </header>
               <pre class="funcdesc">Class representation of a banner as returned by users/profile-banner.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="BLOCKING"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">BLOCKING</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="BLOCKS/CREATE"/>
@@ -433,6 +469,18 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/blocks/list</pre>
               <pre class="funcdesc"></pre>
             </article>
           </li><li id="template">
+            <a class="anchor" name="CAN-DM"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">CAN-DM</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="CHARACTERS-RESERVED-PER-MEDIA"/>
             <article>
               <header>
@@ -494,6 +542,18 @@ Sets the *OAUTH-TOKEN* and *OAUTH-TOKEN-SECRET* to their respective values.</pre
               <pre class="funcdesc">Class representation of the twitter configuration object.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/help/configuration</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="CONNECTIONS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">CONNECTIONS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="CONTAINED-WITHIN"/>
@@ -716,6 +776,88 @@ If no additional data is available, NIL is returned instead.</pre>
               <pre class="funcdesc"></pre>
             </article>
           </li><li id="template">
+            <a class="anchor" name="DIRECT-MESSAGE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">DIRECT-MESSAGE</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of a twitter direct-message object.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="DIRECT-MESSAGES"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">DIRECT-MESSAGES</h3>
+                  <span class="funcargs">(&amp;KEY SINCE-ID MAX-ID (COUNT 20) (INCLUDE-ENTITIES T) SKIP-STATUS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the 20 most recent direct messages sent to the authenticating user. Includes detailed information about the sender and recipient user. You can request up to 200 direct messages per call, up to a maximum of 800 incoming DMs.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/direct_messages</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="DIRECT-MESSAGES/DESTROY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">DIRECT-MESSAGES/DESTROY</h3>
+                  <span class="funcargs">(ID &amp;KEY (INCLUDE-ENTITIES T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Destroys the direct message specified in the required ID parameter. The authenticating user must be the recipient of the specified direct message.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/direct_messages/destroy</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="DIRECT-MESSAGES/NEW"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">DIRECT-MESSAGES/NEW</h3>
+                  <span class="funcargs">(TEXT &amp;KEY USER-ID SCREEN-NAME)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Sends a new direct message to the specified user from the authenticating user. Requires both the user and text parameters and must be a POST. Returns the sent message in the requested format if successful.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/direct_messages/new</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="DIRECT-MESSAGES/SENT"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">DIRECT-MESSAGES/SENT</h3>
+                  <span class="funcargs">(&amp;KEY SINCE-ID MAX-ID (COUNT 20) (PAGE 0) (INCLUDE-ENTITIES T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the 20 most recent direct messages sent by the authenticating user. Includes detailed information about the sender and recipient user. You can request up to 200 direct messages per call, up to a maximum of 800 outgoing DMs.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/direct_messages/sent</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="DIRECT-MESSAGES/SHOW"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">DIRECT-MESSAGES/SHOW</h3>
+                  <span class="funcargs">(ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a single direct message, specified by an id parameter. Like the direct-messages request, this method will include the user objects of the sender and recipient.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/direct_messages/show</pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="DISPLAY-URL"/>
             <article>
               <header>
@@ -828,6 +970,48 @@ According to spec https://dev.twitter.com/docs/entities</pre>
               <pre class="funcdesc"></pre>
             </article>
           </li><li id="template">
+            <a class="anchor" name="FAVORITES/CREATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FAVORITES/CREATE</h3>
+                  <span class="funcargs">(ID &amp;KEY (INCLUDE-ENTITIES T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Favorites the status specified in the ID parameter as the authenticating user. Returns the favorite status when successful.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/favorites/create</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FAVORITES/DESTROY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FAVORITES/DESTROY</h3>
+                  <span class="funcargs">(ID &amp;KEY (INCLUDE-ENTITIES T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Un-favorites the status specified in the ID parameter as the authenticating user. Returns the un-favorited status in the requested format when successful.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/favorites/destroy</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FAVORITES/LIST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FAVORITES/LIST</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME (COUNT 20) SINCE-ID MAX-ID (INCLUDE-ENTITIES T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the 20 most recent Tweets favorited by the authenticating or specified user.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/favorites/list</pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="FILE-TO-BASE64-STRING"/>
             <article>
               <header>
@@ -852,6 +1036,46 @@ According to spec https://dev.twitter.com/docs/entities</pre>
               <pre class="funcdesc"></pre>
             </article>
           </li><li id="template">
+            <a class="anchor" name="FOLLOWED-BY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">FOLLOWED-BY</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FOLLOWERS/IDS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FOLLOWERS/IDS</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a list of user IDs for every user following the specified user.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/followers/ids</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FOLLOWERS/LIST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FOLLOWERS/LIST</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME (SKIP-STATUS T) (INCLUDE-USER-ENTITIES T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a list of user objects for users following the specified user.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/followers/list</pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="FOLLOWING"/>
             <article>
               <header>
@@ -874,6 +1098,148 @@ According to spec https://dev.twitter.com/docs/entities</pre>
                 </code>
               </header>
               <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDS/IDS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDS/IDS</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a list of user IDs for every user the specified user is following (otherwise known as their "friends").
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/friends/ids</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDS/LIST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDS/LIST</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME (SKIP-STATUS T) (INCLUDE-USER-ENTITIES T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a list of user objects for every user the specified user is following (otherwise known as their "friends").
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/friends/list</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDSHIPS/CREATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDSHIPS/CREATE</h3>
+                  <span class="funcargs">(&amp;KEY SCREEN-NAME USER-ID FOLLOW)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Allows the authenticating users to follow the user specified in the ID parameter.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/friendships/create</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDSHIPS/DESTROY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDSHIPS/DESTROY</h3>
+                  <span class="funcargs">(&amp;KEY SCREEN-NAME USER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Allows the authenticating user to unfollow the user specified in the ID parameter.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/friendships/destroy</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDSHIPS/INCOMING"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDSHIPS/INCOMING</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a collection of numeric IDs for every user who has a pending request to follow the authenticating user.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/friendships/incoming</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDSHIPS/LOOKUP"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDSHIPS/LOOKUP</h3>
+                  <span class="funcargs">(&amp;KEY SCREEN-NAMES USER-IDS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the relationships of the authenticating user to the list of up to 100 screen-names or user-ids provided.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/friendships/lookup</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDSHIPS/NO-RETWEETS/IDS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDSHIPS/NO-RETWEETS/IDS</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a collection of user_ids that the currently authenticated user does not want to receive retweets from.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/friendships/no_retweets/ids</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDSHIPS/OUTGOING"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDSHIPS/OUTGOING</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a collection of numeric IDs for every protected user for whom the authenticating user has a pending follow request.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/friendships/outgoing</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDSHIPS/SHOW"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDSHIPS/SHOW</h3>
+                  <span class="funcargs">(&amp;KEY SOURCE-SCREEN-NAME SOURCE-USER-ID TARGET-SCREEN-NAME TARGET-USER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns detailed information about the relationship between two arbitrary users.
+The first return value is the relationship object "target", the second "source".
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/friendships/show</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDSHIPS/UPDATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDSHIPS/UPDATE</h3>
+                  <span class="funcargs">(&amp;KEY SCREEN-NAME USER-ID (DEVICE NIL D-P) (RETWEETS NIL R-P))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Allows one to enable or disable retweets and device notifications from the specified user.
+The first return value is the relationship object "target", the second "source".
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/friendships/update</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="FROM-KEYWORD"/>
@@ -1238,7 +1604,9 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/help/languages</pre>
                   <span class="funcargs"></span>
                 </code>
               </header>
-              <pre class="funcdesc">Twitter object containing Locational data. Used for the Places &amp; Geo API.</pre>
+              <pre class="funcdesc">Twitter object containing Locational data. Used for the Places &amp; Geo API.
+
+According to spec https://dev.twitter.com/docs/platform-objects/places</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="LOCATION"/>
@@ -1288,6 +1656,18 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/help/languages</pre>
               </header>
               <pre class="funcdesc">Applies FUNCTION to each element of the designated parameter while going through the cursor.
 Returns the collected return values of the FUNCTION calls.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="MARKED-SPAM"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">MARKED-SPAM</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="MAX-MEDIA-PER-UPLOAD"/>
@@ -1396,6 +1776,18 @@ According to spec https://dev.twitter.com/docs/entities#The_user_mentions_entity
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
                   <h3 class="funcname">NOTIFICATIONS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="NOTIFICATIONS-ENABLED"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">NOTIFICATIONS-ENABLED</h3>
                   <span class="funcargs">(SB-PCL::OBJECT)</span>
                 </code>
               </header>
@@ -1788,6 +2180,30 @@ This function is DESTRUCTIVE.</pre>
               <pre class="funcdesc"></pre>
             </article>
           </li><li id="template">
+            <a class="anchor" name="RECIPIENT"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">RECIPIENT</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="RELATIONSHIP"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">RELATIONSHIP</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of a relationship (target or source) to a user.</pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="REMAINING"/>
             <article>
               <header>
@@ -1874,12 +2290,104 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/application/rate_limi
               <pre class="funcdesc"></pre>
             </article>
           </li><li id="template">
+            <a class="anchor" name="SAVED-SEARCH"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">SAVED-SEARCH</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of a twitter saved-search object.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SAVED-SEARCHES/CREATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">SAVED-SEARCHES/CREATE</h3>
+                  <span class="funcargs">(QUERY)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Create a new saved search for the authenticated user. A user may only have 25 saved searches.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/saved_searches/create</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SAVED-SEARCHES/DESTROY/ID"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">SAVED-SEARCHES/DESTROY/ID</h3>
+                  <span class="funcargs">(ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Destroys a saved search for the authenticating user. The authenticating user must be the owner of saved search id being destroyed.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/saved_searches/destroy/%3Aid</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SAVED-SEARCHES/LIST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">SAVED-SEARCHES/LIST</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the authenticated user's saved search queries.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/saved_searches/list</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SAVED-SEARCHES/SHOW/ID"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">SAVED-SEARCHES/SHOW/ID</h3>
+                  <span class="funcargs">(ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Retrieve the information for the saved search represented by the given id. The authenticating user must be the owner of saved search ID being requested.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/saved_searches/show/%3Aid</pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="SCREEN-NAME"/>
             <article>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
                   <h3 class="funcname">SCREEN-NAME</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SEARCH-POSITION"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">SEARCH-POSITION</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SENDER"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">SENDER</h3>
                   <span class="funcargs">(SB-PCL::OBJECT)</span>
                 </code>
               </header>
@@ -1959,13 +2467,30 @@ Requires CLOSER-MOP to be installed.</pre>
               <pre class="funcdesc"></pre>
             </article>
           </li><li id="template">
+            <a class="anchor" name="SIGNED-DATA-REQUEST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">SIGNED-DATA-REQUEST</h3>
+                  <span class="funcargs">(REQUEST-URL &amp;KEY DATA-PARAMETERS PARAMETERS OAUTH-PARAMETERS
+ ADDITIONAL-HEADERS (METHOD :POST) DRAKMA-PARAMS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Issue a signed data request against the API.
+See SIGNED-REQUEST.
+
+According to spec https://dev.twitter.com/docs/uploading-media</pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="SIGNED-REQUEST"/>
             <article>
               <header>
                 <span class="functype">EXTERNAL FUNCTION</span>
                 <code>
                   <h3 class="funcname">SIGNED-REQUEST</h3>
-                  <span class="funcargs">(REQUEST-URL &amp;KEY PARAMETERS OAUTH-PARAMETERS (METHOD :POST))</span>
+                  <span class="funcargs">(REQUEST-URL &amp;KEY PARAMETERS OAUTH-PARAMETERS ADDITIONAL-HEADERS (METHOD :POST)
+ DRAKMA-PARAMS)</span>
                 </code>
               </header>
               <pre class="funcdesc">Issue a signed request against the API.
@@ -1975,6 +2500,20 @@ See CREATE-SIGNATURE.
 For return values see DRAKMA:HTTP-REQUEST
 
 According to spec https://dev.twitter.com/docs/auth/authorizing-request</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SIGNED-STREAM-REQUEST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">SIGNED-STREAM-REQUEST</h3>
+                  <span class="funcargs">(REQUEST-URL &amp;KEY PARAMETERS OAUTH-PARAMETERS ADDITIONAL-HEADERS (METHOD :POST)
+ DRAKMA-PARAMS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Issue a signed data request against the API.
+See SIGNED-REQUEST. Returns values according to DRAKMA:HTTP-REQUEST with :WANT-STREAM T</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="SIZE"/>
@@ -2118,7 +2657,9 @@ According to spec https://dev.twitter.com/docs/auth/authorizing-request</pre>
                   <span class="funcargs"></span>
                 </code>
               </header>
-              <pre class="funcdesc">Class representation of a twitter status (tweet).</pre>
+              <pre class="funcdesc">Class representation of a twitter status (tweet).
+
+According to spec https://dev.twitter.com/docs/platform-objects/tweets</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="STATUS"/>
@@ -2145,6 +2686,36 @@ According to spec https://dev.twitter.com/docs/auth/authorizing-request</pre>
               <pre class="funcdesc">Destroys the status specified by the required ID parameter. The authenticating user must be the author of the specified status. Returns the destroyed status if successful.
 
 According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/destroy/%3Aid</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="STATUSES/HOME-TIMELINE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">STATUSES/HOME-TIMELINE</h3>
+                  <span class="funcargs">(&amp;KEY (COUNT 20) SINCE-ID MAX-ID TRIM-USER EXCLUDE-REPLIES (INCLUDE-ENTITIES T)
+ CONTRIBUTOR-DETAILS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a collection of the most recent Tweets and retweets posted by the authenticating user and the users they follow. The home timeline is central to how most users interact with the Twitter service.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/home_timeline</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="STATUSES/MENTIONS-TIMELINE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">STATUSES/MENTIONS-TIMELINE</h3>
+                  <span class="funcargs">(&amp;KEY (COUNT 20) SINCE-ID MAX-ID TRIM-USER (INCLUDE-ENTITIES T)
+ CONTRIBUTOR-DETAILS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the 20 most recent mentions (tweets containing a users's @screen_name) for the authenticating user.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/mentions_timeline</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="STATUSES/OEMBED"/>
@@ -2204,13 +2775,28 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweeters/i
 According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweets/%3Aid</pre>
             </article>
           </li><li id="template">
+            <a class="anchor" name="STATUSES/RETWEETS-OF-ME"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">STATUSES/RETWEETS-OF-ME</h3>
+                  <span class="funcargs">(&amp;KEY (COUNT 20) SINCE-ID MAX-ID TRIM-USER (INCLUDE-ENTITIES T)
+ (INCLUDE-USER-ENTITIES T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the most recent tweets authored by the authenticating user that have been retweeted by others. This timeline is a subset of the user's GET statuses/user_timeline.
+
+According to spec </pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="STATUSES/SHOW"/>
             <article>
               <header>
                 <span class="functype">EXTERNAL FUNCTION</span>
                 <code>
                   <h3 class="funcname">STATUSES/SHOW</h3>
-                  <span class="funcargs">(ID &amp;KEY (TRIM-USER T) INCLUDE-MY-RETWEET INCLUDE-ENTITIES)</span>
+                  <span class="funcargs">(ID &amp;KEY (TRIM-USER T) INCLUDE-MY-RETWEET (INCLUDE-ENTITIES T))</span>
                 </code>
               </header>
               <pre class="funcdesc">Returns a single Tweet, specified by the id parameter. The Tweet's author will also be embedded within the tweet.
@@ -2245,6 +2831,21 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/update</pre
               <pre class="funcdesc">Updates the authenticating user's current status and attaches media for upload. In other words, it creates a Tweet with a picture attached. MEDIA is either a pathname, usb-8 array or a base64-encoded string, or a list thereof.
 
 According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/update_with_media</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="STATUSES/USER-TIMELINE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">STATUSES/USER-TIMELINE</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME (COUNT 20) SINCE-ID MAX-ID TRIM-USER EXCLUDE-REPLIES
+ (INCLUDE-ENTITIES T) CONTRIBUTOR-DETAILS (INCLUDE-RTS T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a collection of the most recent Tweets posted by the user indicated by the screen_name or user_id parameters.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/user_timeline</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="T-SYMBOL"/>
@@ -2535,7 +3136,9 @@ According to spec https://dev.twitter.com/docs/auth/percent-encoding-parameters<
                   <span class="funcargs"></span>
                 </code>
               </header>
-              <pre class="funcdesc">Class representation of a user.</pre>
+              <pre class="funcdesc">Class representation of a user.
+
+According to spec https://dev.twitter.com/docs/platform-objects/users</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="USER"/>
@@ -2720,7 +3323,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/users/suggestions/%3A
                 <span class="functype">EXTERNAL FUNCTION</span>
                 <code>
                   <h3 class="funcname">VALID-LANGUAGE-P</h3>
-                  <span class="funcargs">(LANGUAGE)</span>
+                  <span class="funcargs">(LANGUAGE &amp;KEY REFRESH-CACHE)</span>
                 </code>
               </header>
               <pre class="funcdesc">Returns T if the given language code is a language covered by twitter.
@@ -2746,6 +3349,18 @@ See HELP/LANGUAGES.</pre>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
                   <h3 class="funcname">VERSION</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="WANT-RETWEETS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">WANT-RETWEETS</h3>
                   <span class="funcargs">(SB-PCL::OBJECT)</span>
                 </code>
               </header>
