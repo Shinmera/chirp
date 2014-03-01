@@ -18,6 +18,12 @@
 (defvar *oauth/access-token* "https://api.twitter.com/oauth/access_token")
 (defvar *server-port* 8989)
 
+(defun oauth-reset ()
+  (setf *oauth-consumer-key* NIL
+        *oauth-consumer-secret* NIL
+        *oauth-token* NIL
+        *oauth-token-secret* NIL))
+
 (define-condition oauth-error (error) ())
 
 (define-condition oauth-parameter-missing (oauth-error)
