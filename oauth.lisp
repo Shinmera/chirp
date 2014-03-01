@@ -101,7 +101,7 @@ Simply generates a signature and appends the proper parameter."
            (warn "Do not know how to handle content type: ~a" type)
            body))))
 
-(defun create-authorization-header (method request-url parameters)
+(defun create-authorization-header (method request-url oauth-parameters parameters)
   (assert (not (null *oauth-consumer-key*)) (*oauth-consumer-key*)
           'oauth-parameter-missing :parameter '*oauth-consumer-key*)
   (assert (not (null *oauth-signature-method*)) (*oauth-signature-method*)
@@ -109,6 +109,7 @@ Simply generates a signature and appends the proper parameter."
   (assert (not (null *oauth-version*)) (*oauth-version*)
           'oauth-parameter-missing :parameter '*oauth-version*)
   (let* ((oauth-parameters (append
+                            oauth-parameters
                             `(("oauth_consumer_key" . ,*oauth-consumer-key*)
                               ("oauth_nonce" . ,(generate-nonce))
                               ("oauth_signature_method" . ,*oauth-signature-method*)
@@ -143,7 +144,7 @@ According to spec https://dev.twitter.com/docs/auth/authorizing-request"
   (apply #'request-wrapper request-url
          :method method :parameters parameters
          :additional-headers (append additional-headers
-                                     (create-authorization-header method request-url (append parameters oauth-parameters)))
+                                     (create-authorization-header method request-url oauth-parameters parameters))
          drakma-params))
 
 (defun prepare-data-parameters (parameters)
@@ -173,7 +174,7 @@ See SIGNED-REQUEST. Returns values according to DRAKMA:HTTP-REQUEST with :WANT-S
   (apply #'drakma:http-request request-url
          :method method :parameters parameters :want-stream T
          :additional-headers (append additional-headers
-                                     (create-authorization-header method request-url (append parameters oauth-parameters)))
+                                     (create-authorization-header method request-url oauth-parameters parameters))
          drakma-params))
 
 (defun oauth/request-token (callback)
@@ -271,7 +272,7 @@ According to spec https://dev.twitter.com/docs/auth/implementing-sign-twitter"
   "Finishes the authentication procedure by retrieving the access token.
 Sets the *OAUTH-TOKEN* and *OAUTH-TOKEN-SECRET* to their respective values."
   (setf *oauth-token* token)
-  (let ((data (access-token verifier)))
+  (let ((data (oauth/access-token verifier)))
     (setf *oauth-token* (cdr (assoc :oauth-token data))
           *oauth-token-secret* (cdr (assoc :oauth-token-secret data)))
     (values *oauth-token* *oauth-token-secret*)))
