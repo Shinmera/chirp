@@ -241,6 +241,19 @@
    #:oauth/access-token
    #:complete-authentication
    #:initiate-authentication)
+  ;; saved-searches.lisp
+  (:export
+   #:saved-search
+   #:id
+   #:created-at
+   #:name
+   #:search-position
+   #:query
+   
+   #:saved-searches/list
+   #:saved-searches/show/id
+   #:saved-searches/create
+   #:saved-searches/destroy/id)
   ;; search.lisp
   (:export
    #:search-metadata

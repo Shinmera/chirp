@@ -34,6 +34,7 @@
                (:file "directmessages")
                (:file "friends")
                (:file "favorites")
+               (:file "saved-searches")
                (:file "stream"))
   :depends-on (:drakma
                :yason
