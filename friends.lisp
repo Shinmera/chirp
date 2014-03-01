@@ -6,6 +6,9 @@
 
 (in-package #:org.tymoonnext.chirp)
 
+(defvar *connection-values* '(:following :following-requested :followed-by :blocking :none)
+  "Possible values for the connections field in a relationship object.")
+
 (defvar *friends/ids* "https://api.twitter.com/1.1/friends/ids.json")
 (defvar *friends/list* "https://api.twitter.com/1.1/friends/list.json")
 (defvar *followers/ids* "https://api.twitter.com/1.1/followers/ids.json")
@@ -28,7 +31,6 @@
     (format stream "~a ~@[(~{~a~^, ~})~]" (screen-name relationship) (connections relationship)))
   relationship)
 
-(defvar *connections* '(:following :following-requested :followed-by :blocking :none))
 (define-make-* (relationship parameters)
   :id :followed-by :screen-name :following :can-dm :blocking :all-replies :want-retweets :marked-spam :notifications-enabled
   (:connections (when-let ((connections (cdr (assoc :connections parameters))))
