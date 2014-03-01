@@ -71,10 +71,11 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweets/%3A
   (assert (<= count 100) () "Count must be less than or equal to 100.")
   (mapcar #'make-status (signed-request (format NIL *statuses/retweets* id) :parameters (prepare* count trim-user) :method :GET)))
 
-(defun statuses/show (id &key (trim-user T) include-my-retweet include-entities)
+(defun statuses/show (id &key (trim-user T) include-my-retweet (include-entities T))
   "Returns a single Tweet, specified by the id parameter. The Tweet's author will also be embedded within the tweet.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/show/%3Aid"
+  (unless include-entities (setf include-entities "false"))
   (make-status (signed-request (format NIL *statuses/show* id) :parameters (prepare* trim-user include-my-retweet include-entities) :method :GET)))
 
 (defun statuses/destroy (id &key (trim-user T))
