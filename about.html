@@ -1595,6 +1595,275 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/help/languages</pre>
               <pre class="funcdesc"></pre>
             </article>
           </li><li id="template">
+            <a class="anchor" name="LISTS/CREATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/CREATE</h3>
+                  <span class="funcargs">(NAME &amp;KEY (MODE :PUBLIC) DESCRIPTION)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Creates a new list for the authenticated user. Note that you can't create more than 20 lists per account.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/create</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/DESTROY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/DESTROY</h3>
+                  <span class="funcargs">(&amp;KEY LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Deletes the specified list. The authenticated user must own the list to be able to destroy it.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/destroy</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/LIST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/LIST</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME REVERSE)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns all lists the authenticating or specified user subscribes to, including their own. The user is specified using the user_id or screen_name parameters. If no user is given, the authenticating user is used.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/list</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/MEMBERS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/MEMBERS</h3>
+                  <span class="funcargs">(&amp;KEY LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID (INCLUDE-ENTITIES T) SKIP-STATUS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the members of the specified list. Private list members will only be shown if the authenticated user owns the specified list.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/members</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/MEMBERS/CREATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/MEMBERS/CREATE</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Add a member to a list. The authenticated user must own the list to be able to add members to it. Note that lists can't have more than 500 members.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/members/create</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/MEMBERS/CREATE-ALL"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/MEMBERS/CREATE-ALL</h3>
+                  <span class="funcargs">(&amp;KEY USER-IDS SCREEN-NAMES LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Adds multiple members to a list, by specifying a comma-separated list of member ids or screen names. The authenticated user must own the list to be able to add members to it. Note that lists can't have more than 5,000 members, and you are limited to adding up to 100 members to a list at a time with this method.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/members/create_all</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/MEMBERS/DESTROY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/MEMBERS/DESTROY</h3>
+                  <span class="funcargs">(&amp;KEY LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Unsubscribes the authenticated user from the specified list.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/subscribers/destroy</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/MEMBERS/DESTROY-ALL"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/MEMBERS/DESTROY-ALL</h3>
+                  <span class="funcargs">(&amp;KEY USER-IDS SCREEN-NAMES LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Removes multiple members from a list, by specifying a comma-separated list of member ids or screen names. The authenticated user must own the list to be able to remove members from it. Note that lists can't have more than 500 members, and you are limited to removing up to 100 members to a list at a time with this method.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/members/destroy_all</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/MEMBERS/SHOW"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/MEMBERS/SHOW</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID
+ (INCLUDE-ENTITIES T) SKIP-STATUS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Check if the specified user is a member of the specified list.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/members/show</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/MEMBERSHIPS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/MEMBERSHIPS</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the lists the specified user has been added to. If user_id or screen_name are not provided the memberships for the authenticating user are returned.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/memberships</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/OWNERSHIPS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/OWNERSHIPS</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the lists owned by the specified Twitter user. Private lists will only be shown if the authenticated user is also the owner of the lists.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/ownerships</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/SHOW"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/SHOW</h3>
+                  <span class="funcargs">(&amp;KEY LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the specified list. Private lists will only be shown if the authenticated user owns the specified list.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/show</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/STATUSES"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/STATUSES</h3>
+                  <span class="funcargs">(&amp;KEY LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID SINCE-ID MAX-ID (COUNT 20)
+ (INCLUDE-ENTITIES T) INCLUDE-RTS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a timeline of tweets authored by members of the specified list. Retweets are included by default. Use the include_rts=false parameter to omit retweets.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/statuses</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/SUBSCRIBERS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/SUBSCRIBERS</h3>
+                  <span class="funcargs">(&amp;KEY LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID (INCLUDE-ENTITIES T) SKIP-STATUS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the subscribers of the specified list. Private list subscribers will only be shown if the authenticated user owns the specified list.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/subscribers</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/SUBSCRIBERS/CREATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/SUBSCRIBERS/CREATE</h3>
+                  <span class="funcargs">(&amp;KEY LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Subscribes the authenticated user to the specified list.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/subscribers/create</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/SUBSCRIBERS/DESTROY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/SUBSCRIBERS/DESTROY</h3>
+                  <span class="funcargs">(&amp;KEY LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Unsubscribes the authenticated user from the specified list.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/subscribers/destroy</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/SUBSCRIBERS/SHOW"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/SUBSCRIBERS/SHOW</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID
+ (INCLUDE-ENTITIES T) SKIP-STATUS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Check if the specified user is a subscriber of the specified list. Returns the user if they are subscriber.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/subscribers/show</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/SUBSCRIPTIONS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/SUBSCRIPTIONS</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Obtain a collection of the lists the specified user is subscribed to, 20 lists per page by default. Does not include the user's own lists.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/subscriptions</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/UPDATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/UPDATE</h3>
+                  <span class="funcargs">(&amp;KEY LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID NAME MODE DESCRIPTION)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Updates the specified list. The authenticated user must own the list to be able to update it.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/update</pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="LOCATION"/>
             <article>
               <header>
@@ -1744,6 +2013,18 @@ According to spec https://dev.twitter.com/docs/entities#The_media_entity</pre>
               <pre class="funcdesc">Twitter mention entity.
 
 According to spec https://dev.twitter.com/docs/entities#The_user_mentions_entity</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="MODE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">MODE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="NAME"/>
@@ -3087,6 +3368,18 @@ According to spec https://api.twitter.com/1.1/trends/place.json</pre>
               <pre class="funcdesc"></pre>
             </article>
           </li><li id="template">
+            <a class="anchor" name="URI"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">URI</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="URL"/>
             <article>
               <header>
@@ -3151,6 +3444,18 @@ According to spec https://dev.twitter.com/docs/platform-objects/users</pre>
                 </code>
               </header>
               <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="USER-LIST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">USER-LIST</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of a twitter list object.</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="USERS"/>
