@@ -94,7 +94,8 @@ The check is case-insensitive."
 Replaces _ with - and uppercases the string, then interns it
 into the keyword package. This is useful to parse the request
 responses into an alist."
-  (intern (cl-ppcre:regex-replace-all "_" (string-upcase string) "-") "KEYWORD"))
+  (let ((name (cl-ppcre:regex-replace-all "_" (string-upcase string) "-")))
+    (or (find-symbol name "KEYWORD") (intern name "KEYWORD"))))
 
 (defun from-keyword (keyword)
   "Turns a keyword into a key.
