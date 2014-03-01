@@ -32,6 +32,7 @@
                (:file "statuses")
                (:file "timelines")
                (:file "directmessages")
+               (:file "friends")
                (:file "stream"))
   :depends-on (:drakma
                :yason
