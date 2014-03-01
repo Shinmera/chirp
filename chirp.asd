@@ -33,6 +33,7 @@
                (:file "timelines")
                (:file "directmessages")
                (:file "friends")
+               (:file "favorites")
                (:file "stream"))
   :depends-on (:drakma
                :yason

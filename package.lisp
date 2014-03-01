@@ -116,6 +116,11 @@
    #:text
    #:start
    #:end)
+  ;; favorites.lisp
+  (:export
+   #:favorites/list
+   #:favorites/destroy
+   #:favorites/create)
   ;; friends.lisp
   (:export
    #:*connection-values
