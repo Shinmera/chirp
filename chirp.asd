@@ -35,6 +35,7 @@
                (:file "friends")
                (:file "favorites")
                (:file "saved-searches")
+               (:file "lists")
                (:file "stream"))
   :depends-on (:drakma
                :yason

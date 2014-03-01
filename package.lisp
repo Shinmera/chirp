@@ -183,6 +183,40 @@
    #:help/tos
    #:application/rate-limit-status
    #:valid-language-p)
+  ;; lists.lisp
+  (:export
+   #:user-list
+   #:id
+   #:user
+   #:name
+   #:full-name
+   #:description
+   #:created-at
+   #:uri
+   #:counts
+   #:mode
+   #:following
+   #:slug
+   
+   #:lists/list
+   #:lists/statuses
+   #:lists/show
+   #:lists/create
+   #:lists/update
+   #:lists/destroy
+   #:lists/members
+   #:lists/members/show
+   #:lists/members/create
+   #:lists/members/create-all
+   #:lists/members/destroy
+   #:lists/members/destroy-all
+   #:lists/subscribers
+   #:lists/subscribers/show
+   #:lists/subscribers/create
+   #:lists/subscribers/destroy
+   #:lists/subscriptions
+   #:lists/memberships
+   #:lists/ownerships)
   ;; location.lisp
   (:export
    #:location
