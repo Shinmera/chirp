@@ -1,0 +1,3702 @@
+<!DOCTYPE html><!--
+  This file is a part of Chirp
+  (c) 2013 TymoonNET/NexT http://tymoon.eu (shinmera@tymoon.eu)
+  Author: Nicolas Hafner <shinmera@tymoon.eu>
+  !--><html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Chirp - About</title>
+    <style type="text/css">
+      code{font-family: Consolas, Inconsolata, monospace;}
+      h3{display: inline-block;margin:0;padding:0;}
+      .docs{list-style: none;}
+      .docs li{margin-bottom: 20px;}
+      .docs pre{margin: 0 0 0 10px; white-space: pre-wrap;}
+    </style>
+  </head>
+  <body>
+    <header>
+      <img src="chirp-logo.png" alt="Chirp"/>
+      <h1>v0.0.1</h1>
+    </header>
+    <div id="content">
+      <article>
+        <header><h2>What is Chirp?</h2></header>
+        <p>Chirp is a twitter client library for Common Lisp. It aims to provide full coverage of the Twitter REST API.</p>
+      </article>
+      <article>
+        <header><h2>How To</h2></header>
+        <p>
+          Load Chirp through Quicklisp or ASDF:
+        </p>
+        <code>(ql:quickload :chirp)</code>
+        <p>
+          Next you need to authorize an account through twitter. By default this happens through the PIN method, though others are available as well. Retrieve your <a href="https://apps.twitter.com/">twitter application</a>'s consumer key and secret and invoke the following function:
+        </p>
+        <code>(initiate-authentication :consumer-key "&lt;app consumer key&gt;" :consumer-secret "&lt;app consumer secret&gt;"</code>
+        <p>
+          If the first OAuth step is successful, it should return an URL that you have to visit. This will then prompt you to authorize the application and present a PIN. Copy this pin and complete the authentication process:
+        </p>
+        <code>(complete-authentication "&lt;pin&gt;")</code>
+        <p>
+          If the function returns successfully, you are ready to use the twitter API:
+        </p>
+        <code>(account/verify-credentials)</code>
+        <p>
+          If you do not want to repeat the authentication process, you can save and later set the <code>*oauth-consumer-key*</code>, <code>*oauth-consumer-secret*</code>, <code>*oauth-token*</code> and <code>*oauth-token-secret*</code> variables manually. That's all the information it takes to authenticate over twitter. Make sure to keep these tokens secret.
+        </p>
+        <code>(statuses/update "Hooray, I successfully used the Chirp Common Lisp library to tweet!")</code>
+      </article>
+      <article>
+        <header><h2>Other Guff</h2></header>
+        <p>
+          Chirp is licensed under the <a href="http://opensource.org/licenses/Artistic-2.0">Artistic License 2.0</a> and ©2013 TymoonNET/NexT, <a href="http://shinmera.com">Nicolas Hafner</a>.<br/>
+          This library can be obtained via git on <a href="https://github.com/Shinmera/chirp.git">https://github.com/Shinmera/chirp.git</a>. For questions, patches or suggestions, please contact me via <a href="mailto:shinmera@tymoon.eu">email</a> or write a <a href="https://github.com/Shinmera/chirp/issues/new">github issue</a>.
+        </p>
+      </article>
+      <article>
+        <header><h2>Chirp Package Index</h2></header>
+        <ul id="docs" class="docs"><li id="template">
+            <a class="anchor" name="*CACHED-LANGUAGES*"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL SPECIAL</span>
+                <code>
+                  <h3 class="funcname">*CACHED-LANGUAGES*</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="*OAUTH-CONSUMER-KEY*"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL SPECIAL</span>
+                <code>
+                  <h3 class="funcname">*OAUTH-CONSUMER-KEY*</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="*OAUTH-CONSUMER-SECRET*"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL SPECIAL</span>
+                <code>
+                  <h3 class="funcname">*OAUTH-CONSUMER-SECRET*</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="*OAUTH-SIGNATURE-METHOD*"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL SPECIAL</span>
+                <code>
+                  <h3 class="funcname">*OAUTH-SIGNATURE-METHOD*</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="*OAUTH-TOKEN*"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL SPECIAL</span>
+                <code>
+                  <h3 class="funcname">*OAUTH-TOKEN*</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="*OAUTH-TOKEN-SECRET*"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL SPECIAL</span>
+                <code>
+                  <h3 class="funcname">*OAUTH-TOKEN-SECRET*</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="*OAUTH-VERSION*"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL SPECIAL</span>
+                <code>
+                  <h3 class="funcname">*OAUTH-VERSION*</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="*SERVER-PORT*"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL SPECIAL</span>
+                <code>
+                  <h3 class="funcname">*SERVER-PORT*</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="ACCOUNT/REMOVE-PROFILE-BANNER"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">ACCOUNT/REMOVE-PROFILE-BANNER</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Removes the uploaded profile banner for the authenticating user. Returns T on success.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/account/remove_profile_banner</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="ACCOUNT/SELF"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">ACCOUNT/SELF</h3>
+                  <span class="funcargs">(&amp;KEY INCLUDE-ENTITIES (SKIP-STATUS T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Alias for ACCOUNT/VERIFY-CREDENTIALS.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="ACCOUNT/SETTINGS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">ACCOUNT/SETTINGS</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns settings (including current trend, geo and sleep time information) for the authenticating user.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/account/settings</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="ACCOUNT/UPDATE-PROFILE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">ACCOUNT/UPDATE-PROFILE</h3>
+                  <span class="funcargs">(&amp;KEY NAME URL LOCATION DESCRIPTION INCLUDE-ENTITIES (SKIP-STATUS T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Sets values that users are able to set under the "Account" tab of their settings page. Only the parameters specified will be updated.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/account/update_profile</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="ACCOUNT/UPDATE-PROFILE-BACKGROUND-IMAGE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">ACCOUNT/UPDATE-PROFILE-BACKGROUND-IMAGE</h3>
+                  <span class="funcargs">(&amp;KEY IMAGE (TILE NIL T-V-P) (USE-IMAGE NIL I-V-P) INCLUDE-ENTITIES
+ (SKIP-STATUS T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Updates the authenticating user's profile background image. This method can also be used to enable or disable the profile background image.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/account/update_profile_background_image</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="ACCOUNT/UPDATE-PROFILE-BANNER"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">ACCOUNT/UPDATE-PROFILE-BANNER</h3>
+                  <span class="funcargs">(IMAGE &amp;KEY WIDTH HEIGHT OFFSET-LEFT OFFSET-TOP)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Uploads a profile banner on behalf of the authenticating user. For best results, upload an &lt;3MB image that is exactly 1252px by 626px. Returns T on success.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/account/update_profile_banner</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="ACCOUNT/UPDATE-PROFILE-COLORS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">ACCOUNT/UPDATE-PROFILE-COLORS</h3>
+                  <span class="funcargs">(&amp;KEY BACKGROUND-COLOR LINK-COLOR SIDEBAR-BORDER-COLOR SIDEBAR-FILL-COLOR
+ TEXT-COLOR INCLUDE-ENTITIES (SKIP-STATUS T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Sets one or more hex values that control the color scheme of the authenticating user's profile page on twitter.com. Each parameter's value must be a valid hexidecimal value, and may be either three or six characters (ex: #fff or #ffffff).
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/account/update_profile_colors</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="ACCOUNT/UPDATE-PROFILE-IMAGE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">ACCOUNT/UPDATE-PROFILE-IMAGE</h3>
+                  <span class="funcargs">(IMAGE &amp;KEY INCLUDE-ENTITIES (SKIP-STATUS T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Updates the authenticating user's profile image. Note that this method expects raw multipart data, not a URL to an image.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/account/update_profile_image</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="ACCOUNT/VERIFY-CREDENTIALS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">ACCOUNT/VERIFY-CREDENTIALS</h3>
+                  <span class="funcargs">(&amp;KEY INCLUDE-ENTITIES (SKIP-STATUS T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns an HTTP 200 OK response code and a representation of the requesting user if authentication was successful; returns a 401 status code and an error message if not. Use this method to test if supplied user credentials are valid.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/account/verify_credentials</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="ADDRESS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">ADDRESS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="ALL-REPLIES"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">ALL-REPLIES</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="APPLICATION/RATE-LIMIT-STATUS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">APPLICATION/RATE-LIMIT-STATUS</h3>
+                  <span class="funcargs">(RESOURCES)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the current rate limits for methods belonging to the specified resource families.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/application/rate_limit_status</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="AUTHOR-NAME"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">AUTHOR-NAME</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="AUTHOR-URL"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">AUTHOR-URL</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="AVATAR"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">AVATAR</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="BACKGROUND"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">BACKGROUND</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="BANNER"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">BANNER</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of a banner as returned by users/profile-banner.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="BLOCKING"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">BLOCKING</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="BLOCKS/CREATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">BLOCKS/CREATE</h3>
+                  <span class="funcargs">(&amp;KEY SCREEN-NAME USER-ID INCLUDE-ENTITIES (SKIP-STATUS T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Blocks the specified user from following the authenticating user. In addition the blocked user will not show in the authenticating users mentions or timeline (unless retweeted by another user). If a follow or friend relationship exists it is destroyed.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/blocks/create</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="BLOCKS/DESTROY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">BLOCKS/DESTROY</h3>
+                  <span class="funcargs">(&amp;KEY SCREEN-NAME USER-ID INCLUDE-ENTITIES (SKIP-STATUS T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Un-blocks the user specified in the ID parameter for the authenticating user. Returns the un-blocked user in the requested format when successful. If relationships existed before the block was instated, they will not be restored.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/blocks/destroy</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="BLOCKS/IDS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">BLOCKS/IDS</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a list of numeric user ids the authenticating user is blocking.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/blocks/ids</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="BLOCKS/LIST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">BLOCKS/LIST</h3>
+                  <span class="funcargs">(&amp;KEY INCLUDE-ENTITIES (SKIP-STATUS T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a list of user objects that the authenticating user is blocking.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/blocks/list</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="BOUNDING-BOX"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">BOUNDING-BOX</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="CACHE-AGE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">CACHE-AGE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="CAN-DM"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">CAN-DM</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="CHARACTERS-RESERVED-PER-MEDIA"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">CHARACTERS-RESERVED-PER-MEDIA</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="CODE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">CODE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="COLORS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">COLORS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="COMPLETE-AUTHENTICATION"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">COMPLETE-AUTHENTICATION</h3>
+                  <span class="funcargs">(VERIFIER &amp;OPTIONAL (TOKEN *OAUTH-TOKEN*))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Finishes the authentication procedure by retrieving the access token.
+Sets the *OAUTH-TOKEN* and *OAUTH-TOKEN-SECRET* to their respective values.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="CONFIGURATION"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">CONFIGURATION</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of the twitter configuration object.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/help/configuration</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="CONNECTIONS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">CONNECTIONS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="CONTAINED-WITHIN"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">CONTAINED-WITHIN</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="CONTRIBUTORS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">CONTRIBUTORS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="COOKIE-PERSONALIZATION"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">COOKIE-PERSONALIZATION</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="COORDINATES"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">COORDINATES</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="COUNTRY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">COUNTRY</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="COUNTRY-CODE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">COUNTRY-CODE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="COUNTRY-NAME"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">COUNTRY-NAME</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="COUNTS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">COUNTS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="CREATED-AT"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">CREATED-AT</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="CURSOR"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">CURSOR</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Cursor object to traverse cursored sets.
+
+According to https://dev.twitter.com/docs/misc/cursoring</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="CURSOR-COLLECT"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">CURSOR-COLLECT</h3>
+                  <span class="funcargs">(PARAMETER URI &amp;KEY PARAMETERS (METHOD :GET))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Collects the given parameter into one list by APPEND.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="CURSOR-NEXT"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">CURSOR-NEXT</h3>
+                  <span class="funcargs">(CURSOR)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Moves the cursor to the next iteration if possible and saves the data in the cursor object.
+If no additional data is available, NIL is returned instead.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="CURSOR-PREVIOUS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">CURSOR-PREVIOUS</h3>
+                  <span class="funcargs">(CURSOR)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Moves the cursor to the previous iteration if possible and saves the data in the cursor object.
+If no additional data is available, NIL is returned instead.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="CURSOR-REQUEST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">CURSOR-REQUEST</h3>
+                  <span class="funcargs">(CURSOR)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Perform the currently stored cursor request and save the data in the cursor object.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="CURSORED-REQUEST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">CURSORED-REQUEST</h3>
+                  <span class="funcargs">(URI &amp;KEY PARAMETERS (METHOD :GET))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Performs a signed-request returning a cursor instance tailored for it.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="DATA"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">DATA</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="DEFAULT"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">DEFAULT</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="DESCRIPTION"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">DESCRIPTION</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="DIRECT-MESSAGE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">DIRECT-MESSAGE</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of a twitter direct-message object.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="DIRECT-MESSAGES"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">DIRECT-MESSAGES</h3>
+                  <span class="funcargs">(&amp;KEY SINCE-ID MAX-ID (COUNT 20) (INCLUDE-ENTITIES T) SKIP-STATUS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the 20 most recent direct messages sent to the authenticating user. Includes detailed information about the sender and recipient user. You can request up to 200 direct messages per call, up to a maximum of 800 incoming DMs.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/direct_messages</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="DIRECT-MESSAGES/DESTROY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">DIRECT-MESSAGES/DESTROY</h3>
+                  <span class="funcargs">(ID &amp;KEY (INCLUDE-ENTITIES T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Destroys the direct message specified in the required ID parameter. The authenticating user must be the recipient of the specified direct message.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/direct_messages/destroy</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="DIRECT-MESSAGES/NEW"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">DIRECT-MESSAGES/NEW</h3>
+                  <span class="funcargs">(TEXT &amp;KEY USER-ID SCREEN-NAME)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Sends a new direct message to the specified user from the authenticating user. Requires both the user and text parameters and must be a POST. Returns the sent message in the requested format if successful.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/direct_messages/new</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="DIRECT-MESSAGES/SENT"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">DIRECT-MESSAGES/SENT</h3>
+                  <span class="funcargs">(&amp;KEY SINCE-ID MAX-ID (COUNT 20) (PAGE 0) (INCLUDE-ENTITIES T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the 20 most recent direct messages sent by the authenticating user. Includes detailed information about the sender and recipient user. You can request up to 200 direct messages per call, up to a maximum of 800 outgoing DMs.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/direct_messages/sent</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="DIRECT-MESSAGES/SHOW"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">DIRECT-MESSAGES/SHOW</h3>
+                  <span class="funcargs">(ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a single direct message, specified by an id parameter. Like the direct-messages request, this method will include the user objects of the sender and recipient.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/direct_messages/show</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="DISPLAY-URL"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">DISPLAY-URL</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="DO-CURSOR"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL MACRO</span>
+                <code>
+                  <h3 class="funcname">DO-CURSOR</h3>
+                  <span class="funcargs">((DATA-VAR URI &amp;KEY PARAMETERS (METHOD :GET) (CURSOR-VAR (GENSYM "CURSOR")))
+ &amp;BODY BODY)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Iterates over all data sets of a cursor, binding the request data to DATA-VAR on each iteration.
+Returns the cursor at its end position. </pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="EMAIL-DISCOVERABLE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">EMAIL-DISCOVERABLE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="END"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">END</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="ENTITIES"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">ENTITIES</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="ENTITY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">ENTITY</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Base class for twitter entity objects.
+
+According to spec https://dev.twitter.com/docs/entities</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="EVENTS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">EVENTS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="EXPANDED-URL"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">EXPANDED-URL</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FAVORITED"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">FAVORITED</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FAVORITES/CREATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FAVORITES/CREATE</h3>
+                  <span class="funcargs">(ID &amp;KEY (INCLUDE-ENTITIES T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Favorites the status specified in the ID parameter as the authenticating user. Returns the favorite status when successful.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/favorites/create</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FAVORITES/DESTROY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FAVORITES/DESTROY</h3>
+                  <span class="funcargs">(ID &amp;KEY (INCLUDE-ENTITIES T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Un-favorites the status specified in the ID parameter as the authenticating user. Returns the un-favorited status in the requested format when successful.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/favorites/destroy</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FAVORITES/LIST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FAVORITES/LIST</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME (COUNT 20) SINCE-ID MAX-ID (INCLUDE-ENTITIES T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the 20 most recent Tweets favorited by the authenticating or specified user.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/favorites/list</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FILE-TO-BASE64-STRING"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FILE-TO-BASE64-STRING</h3>
+                  <span class="funcargs">(PATHNAME)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FOLLOW-REQUEST-SENT"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">FOLLOW-REQUEST-SENT</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FOLLOWED-BY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">FOLLOWED-BY</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FOLLOWERS/IDS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FOLLOWERS/IDS</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a list of user IDs for every user following the specified user.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/followers/ids</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FOLLOWERS/LIST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FOLLOWERS/LIST</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME (SKIP-STATUS T) (INCLUDE-USER-ENTITIES T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a list of user objects for users following the specified user.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/followers/list</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FOLLOWING"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">FOLLOWING</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FORCE-HTTPS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">FORCE-HTTPS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDS/IDS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDS/IDS</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a list of user IDs for every user the specified user is following (otherwise known as their "friends").
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/friends/ids</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDS/LIST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDS/LIST</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME (SKIP-STATUS T) (INCLUDE-USER-ENTITIES T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a list of user objects for every user the specified user is following (otherwise known as their "friends").
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/friends/list</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDSHIPS/CREATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDSHIPS/CREATE</h3>
+                  <span class="funcargs">(&amp;KEY SCREEN-NAME USER-ID FOLLOW)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Allows the authenticating users to follow the user specified in the ID parameter.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/friendships/create</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDSHIPS/DESTROY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDSHIPS/DESTROY</h3>
+                  <span class="funcargs">(&amp;KEY SCREEN-NAME USER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Allows the authenticating user to unfollow the user specified in the ID parameter.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/friendships/destroy</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDSHIPS/INCOMING"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDSHIPS/INCOMING</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a collection of numeric IDs for every user who has a pending request to follow the authenticating user.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/friendships/incoming</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDSHIPS/LOOKUP"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDSHIPS/LOOKUP</h3>
+                  <span class="funcargs">(&amp;KEY SCREEN-NAMES USER-IDS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the relationships of the authenticating user to the list of up to 100 screen-names or user-ids provided.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/friendships/lookup</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDSHIPS/NO-RETWEETS/IDS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDSHIPS/NO-RETWEETS/IDS</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a collection of user_ids that the currently authenticated user does not want to receive retweets from.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/friendships/no_retweets/ids</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDSHIPS/OUTGOING"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDSHIPS/OUTGOING</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a collection of numeric IDs for every protected user for whom the authenticating user has a pending follow request.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/friendships/outgoing</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDSHIPS/SHOW"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDSHIPS/SHOW</h3>
+                  <span class="funcargs">(&amp;KEY SOURCE-SCREEN-NAME SOURCE-USER-ID TARGET-SCREEN-NAME TARGET-USER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns detailed information about the relationship between two arbitrary users.
+The first return value is the relationship object "target", the second "source".
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/friendships/show</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FRIENDSHIPS/UPDATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FRIENDSHIPS/UPDATE</h3>
+                  <span class="funcargs">(&amp;KEY SCREEN-NAME USER-ID (DEVICE NIL D-P) (RETWEETS NIL R-P))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Allows one to enable or disable retweets and device notifications from the specified user.
+The first return value is the relationship object "target", the second "source".
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/friendships/update</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FROM-KEYWORD"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">FROM-KEYWORD</h3>
+                  <span class="funcargs">(KEYWORD)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Turns a keyword into a key.
+Replaces - with _ and downcases the keyword as a string.
+This is useful to parse the request parameters from the
+lisp representation into the api representation.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FULL-NAME"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">FULL-NAME</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="GENERATE-NONCE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">GENERATE-NONCE</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Generate a NONCE to use for requests. Currently this simply uses a v4-UUID.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="GEO"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">GEO</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="GEO/ID"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">GEO/ID</h3>
+                  <span class="funcargs">(PLACE-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a location object containing all the information about a known place.
+
+According to spec https://dev.twitter.com/docs/api/1.1/param/geo/id/%3Aplace_id</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="GEO/REVERSE-GEOCODE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">GEO/REVERSE-GEOCODE</h3>
+                  <span class="funcargs">(LATITUDE LONGITUDE &amp;KEY ACCURACY GRANULARITY MAX-RESULTS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Given a latitude and a longitude, searches for up to 20 places that can be used as a place_id when updating a status.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/geo/reverse_geocode</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="GEO/SEARCH"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">GEO/SEARCH</h3>
+                  <span class="funcargs">(&amp;KEY LATITUDE LONGITUDE QUERY IP ACCURACY GRANULARITY MAX-RESULTS
+ CONTAINED-WITHIN ATTRIBUTES)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Search for places that can be attached to a statuses/update. Given a latitude and a longitude pair, an IP address, or a name, this request will return a list of all the valid places that can be used as the place_id when updating a status.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/geo/search</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="GEO/SIMILAR-PLACES"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">GEO/SIMILAR-PLACES</h3>
+                  <span class="funcargs">(LATITUDE LONGITUDE NAME &amp;KEY CONTAINED-WITHIN ATTRIBUTES)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Locates places near the given coordinates which are similar in name.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/geo/similar_places</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="GEOMETRY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">GEOMETRY</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Object for locations containing geometrical shape data.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="HASHTAG"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">HASHTAG</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Twitter hashtag entity.
+
+According to spec https://dev.twitter.com/docs/entities#The_hashtags_entity</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="HEIGHT"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">HEIGHT</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="HELP/CONFIGURATION"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">HELP/CONFIGURATION</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the current configuration used by Twitter including twitter.com slugs which are not usernames, maximum photo resolutions, and t.co URL lengths.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/help/configuration</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="HELP/LANGUAGES"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">HELP/LANGUAGES</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the list of languages supported by Twitter along with their ISO 639-1 code. The ISO 639-1 code is the two letter value to use if you include lang with any of your requests.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/help/languages</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="HELP/PRIVACY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">HELP/PRIVACY</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns Twitter's Privacy Policy.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/help/privacy</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="HELP/TOS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">HELP/TOS</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the Twitter Terms of Service in the requested format. These are not the same as the Developer Rules of the Road.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/help/tos</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="HMAC"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">HMAC</h3>
+                  <span class="funcargs">(STRING KEYSTRING)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a base-64 encoded string of the HMAC digest of the given STRING
+using the KEYSTRING as HMAC key. The encoding of *external-format* is used 
+throughout.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="HTML"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">HTML</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="HTTP-BODY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">HTTP-BODY</h3>
+                  <span class="funcargs">(CONDITION)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="HTTP-HEADERS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">HTTP-HEADERS</h3>
+                  <span class="funcargs">(CONDITION)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="HTTP-STATUS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">HTTP-STATUS</h3>
+                  <span class="funcargs">(CONDITION)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="ID"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">ID</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="IN-REPLY-TO"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">IN-REPLY-TO</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="INITIATE-AUTHENTICATION"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">INITIATE-AUTHENTICATION</h3>
+                  <span class="funcargs">(&amp;KEY (METHOD :PIN) (CONSUMER-KEY *OAUTH-CONSUMER-KEY*)
+ (CONSUMER-SECRET *OAUTH-CONSUMER-SECRET*))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Starts the authentication process and returns an URL that the user has to visit.
+METHOD can be one of :PIN :SERVER or a string designating a callback URL.
+See OAUTH/AUTHORIZE, INITIATE-SERVER-AUTHENTICATION and OAUTH/AUTHENTICATE respectively.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LANGUAGE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">LANGUAGE</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of the twitter language object.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/help/languages</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LANGUAGE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">LANGUAGE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LATITUDE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">LATITUDE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LIMIT"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">LIMIT</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/CREATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/CREATE</h3>
+                  <span class="funcargs">(NAME &amp;KEY (MODE :PUBLIC) DESCRIPTION)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Creates a new list for the authenticated user. Note that you can't create more than 20 lists per account.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/create</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/DESTROY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/DESTROY</h3>
+                  <span class="funcargs">(&amp;KEY LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Deletes the specified list. The authenticated user must own the list to be able to destroy it.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/destroy</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/LIST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/LIST</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME REVERSE)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns all lists the authenticating or specified user subscribes to, including their own. The user is specified using the user_id or screen_name parameters. If no user is given, the authenticating user is used.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/list</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/MEMBERS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/MEMBERS</h3>
+                  <span class="funcargs">(&amp;KEY LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID (INCLUDE-ENTITIES T) SKIP-STATUS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the members of the specified list. Private list members will only be shown if the authenticated user owns the specified list.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/members</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/MEMBERS/CREATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/MEMBERS/CREATE</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Add a member to a list. The authenticated user must own the list to be able to add members to it. Note that lists can't have more than 500 members.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/members/create</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/MEMBERS/CREATE-ALL"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/MEMBERS/CREATE-ALL</h3>
+                  <span class="funcargs">(&amp;KEY USER-IDS SCREEN-NAMES LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Adds multiple members to a list, by specifying a comma-separated list of member ids or screen names. The authenticated user must own the list to be able to add members to it. Note that lists can't have more than 5,000 members, and you are limited to adding up to 100 members to a list at a time with this method.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/members/create_all</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/MEMBERS/DESTROY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/MEMBERS/DESTROY</h3>
+                  <span class="funcargs">(&amp;KEY LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Unsubscribes the authenticated user from the specified list.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/subscribers/destroy</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/MEMBERS/DESTROY-ALL"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/MEMBERS/DESTROY-ALL</h3>
+                  <span class="funcargs">(&amp;KEY USER-IDS SCREEN-NAMES LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Removes multiple members from a list, by specifying a comma-separated list of member ids or screen names. The authenticated user must own the list to be able to remove members from it. Note that lists can't have more than 500 members, and you are limited to removing up to 100 members to a list at a time with this method.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/members/destroy_all</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/MEMBERS/SHOW"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/MEMBERS/SHOW</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID
+ (INCLUDE-ENTITIES T) SKIP-STATUS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Check if the specified user is a member of the specified list.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/members/show</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/MEMBERSHIPS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/MEMBERSHIPS</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the lists the specified user has been added to. If user_id or screen_name are not provided the memberships for the authenticating user are returned.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/memberships</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/OWNERSHIPS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/OWNERSHIPS</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the lists owned by the specified Twitter user. Private lists will only be shown if the authenticated user is also the owner of the lists.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/ownerships</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/SHOW"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/SHOW</h3>
+                  <span class="funcargs">(&amp;KEY LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the specified list. Private lists will only be shown if the authenticated user owns the specified list.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/show</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/STATUSES"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/STATUSES</h3>
+                  <span class="funcargs">(&amp;KEY LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID SINCE-ID MAX-ID (COUNT 20)
+ (INCLUDE-ENTITIES T) INCLUDE-RTS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a timeline of tweets authored by members of the specified list. Retweets are included by default. Use the include_rts=false parameter to omit retweets.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/statuses</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/SUBSCRIBERS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/SUBSCRIBERS</h3>
+                  <span class="funcargs">(&amp;KEY LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID (INCLUDE-ENTITIES T) SKIP-STATUS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the subscribers of the specified list. Private list subscribers will only be shown if the authenticated user owns the specified list.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/subscribers</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/SUBSCRIBERS/CREATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/SUBSCRIBERS/CREATE</h3>
+                  <span class="funcargs">(&amp;KEY LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Subscribes the authenticated user to the specified list.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/subscribers/create</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/SUBSCRIBERS/DESTROY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/SUBSCRIBERS/DESTROY</h3>
+                  <span class="funcargs">(&amp;KEY LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Unsubscribes the authenticated user from the specified list.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/subscribers/destroy</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/SUBSCRIBERS/SHOW"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/SUBSCRIBERS/SHOW</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID
+ (INCLUDE-ENTITIES T) SKIP-STATUS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Check if the specified user is a subscriber of the specified list. Returns the user if they are subscriber.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/subscribers/show</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/SUBSCRIPTIONS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/SUBSCRIPTIONS</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Obtain a collection of the lists the specified user is subscribed to, 20 lists per page by default. Does not include the user's own lists.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/lists/subscriptions</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LISTS/UPDATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">LISTS/UPDATE</h3>
+                  <span class="funcargs">(&amp;KEY LIST-ID SLUG OWNER-SCREEN-NAME OWNER-ID NAME MODE DESCRIPTION)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Updates the specified list. The authenticated user must own the list to be able to update it.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/update</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LOCATION"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">LOCATION</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Twitter object containing Locational data. Used for the Places &amp; Geo API.
+
+According to spec https://dev.twitter.com/docs/platform-objects/places</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LOCATION"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">LOCATION</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LOCATION-TYPE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">LOCATION-TYPE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LONGITUDE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">LONGITUDE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="MAP-CURSOR"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">MAP-CURSOR</h3>
+                  <span class="funcargs">(FUNCTION PARAMETER URI &amp;KEY PARAMETERS (METHOD :GET))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Applies FUNCTION to each element of the designated parameter while going through the cursor.
+Returns the collected return values of the FUNCTION calls.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="MARKED-SPAM"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">MARKED-SPAM</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="MAX-MEDIA-PER-UPLOAD"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">MAX-MEDIA-PER-UPLOAD</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="MEDIA"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">MEDIA</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Twitter media entity.
+
+According to spec https://dev.twitter.com/docs/entities#The_media_entity</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="MEDIA-TYPE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">MEDIA-TYPE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="MEDIA-URL"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">MEDIA-URL</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="MEDIA-URL-HTTPS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">MEDIA-URL-HTTPS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="MENTION"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">MENTION</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Twitter mention entity.
+
+According to spec https://dev.twitter.com/docs/entities#The_user_mentions_entity</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="MODE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">MODE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="NAME"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">NAME</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="NON-USERNAME-PATHS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">NON-USERNAME-PATHS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="NOTIFICATIONS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">NOTIFICATIONS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="NOTIFICATIONS-ENABLED"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">NOTIFICATIONS-ENABLED</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="OAUTH-ERROR"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">OAUTH-ERROR</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="OAUTH-PARAMETER-MISSING"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">OAUTH-PARAMETER-MISSING</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="OAUTH-REQUEST-ERROR"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">OAUTH-REQUEST-ERROR</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="OAUTH/ACCESS-TOKEN"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">OAUTH/ACCESS-TOKEN</h3>
+                  <span class="funcargs">(VERIFIER)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Turn the tokens received through the authentication into an access token.
+
+According to spec https://dev.twitter.com/docs/auth/implementing-sign-twitter</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="OAUTH/AUTHENTICATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">OAUTH/AUTHENTICATE</h3>
+                  <span class="funcargs">(CALLBACK-URL)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Initiate the authentication through the redirect mechanism.
+Returns an URL that the user has to open in the browser.
+Upon successful authentication, the page should redirect back
+to the specified callback url. This callback endpoint should then
+pass the proper parameters to COMPLETE-AUTHENTICATION.
+
+According to spec https://dev.twitter.com/docs/auth/implementing-sign-twitter</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="OAUTH/AUTHORIZE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">OAUTH/AUTHORIZE</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Initiate the authentication through the PIN mechanism.
+Returns an URL that the user has to open in the browser.
+This page should, upon successful authentication, return a PIN
+that has to be initialized by passing it to COMPLETE-AUTHENTICATION.
+
+According to spec https://dev.twitter.com/docs/auth/pin-based-authorization</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="OAUTH/REQUEST-TOKEN"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">OAUTH/REQUEST-TOKEN</h3>
+                  <span class="funcargs">(CALLBACK)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Query for a request token using the specified callback.
+Returns an ALIST containing :OAUTH-TOKEN, :OAUTH-TOKEN-SECRET and 
+:OAUTH-CALLBACK-CONFIRMED, the first two being strings and the last a boolean.
+
+According to spec https://dev.twitter.com/docs/auth/implementing-sign-twitter</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="OEMBED"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">OEMBED</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of a twitter oembed object.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="OEMBED-TYPE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">OEMBED-TYPE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="PARAMETER"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">PARAMETER</h3>
+                  <span class="funcargs">(CONDITION)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="PARAMETERS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">PARAMETERS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="PARENT"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">PARENT</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="PARSE-BOOLEAN"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">PARSE-BOOLEAN</h3>
+                  <span class="funcargs">(VALUE)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Parses a string boolean. If the string is one of 
+ (T, true, 1), then T is returned, otherwise NIL.
+The check is case-insensitive.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="PARSE-MONTH"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">PARSE-MONTH</h3>
+                  <span class="funcargs">(STRING)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="PARSE-TWITTER-TIME"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">PARSE-TWITTER-TIME</h3>
+                  <span class="funcargs">(STRING)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Parse a string returned by the twitter API that is of
+the form "Fri Mar 26 15:36:12 +0000 2010" to a local-time
+timestamp.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="PHOTO-SIZE-LIMIT"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">PHOTO-SIZE-LIMIT</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="PHOTO-SIZES"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">PHOTO-SIZES</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="PIN-REQUEST-TOKEN"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">PIN-REQUEST-TOKEN</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Query for a PIN based request token.
+Seee CALLBACK-REQUEST-TOKEN.
+
+According to spec https://dev.twitter.com/docs/auth/pin-based-authorization</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="PLACE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">PLACE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="PLACE-CODE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">PLACE-CODE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="PLACE-NAME"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">PLACE-NAME</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="POLY-LINES"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">POLY-LINES</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="POSSIBLY-SENSITIVE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">POSSIBLY-SENSITIVE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="PREPARE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">PREPARE</h3>
+                  <span class="funcargs">(PARAMETERS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Filters out empty key-value pairs and turns all values
+into strings, ready to be sent out as request parameters.
+This function is DESTRUCTIVE.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="PREPARE*"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL MACRO</span>
+                <code>
+                  <h3 class="funcname">PREPARE*</h3>
+                  <span class="funcargs">(&amp;REST PARAMETER-NAMES)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Creates a PREPARE statement out of the provided variables.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="PROMOTED-CONTENT"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">PROMOTED-CONTENT</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="PROTECTED"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">PROTECTED</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="PROVIDER-NAME"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">PROVIDER-NAME</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="PROVIDER-URL"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">PROVIDER-URL</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="QUERY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">QUERY</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="RECIPIENT"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">RECIPIENT</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="RELATIONSHIP"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">RELATIONSHIP</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of a relationship (target or source) to a user.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="REMAINING"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">REMAINING</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="REQUEST-METHOD"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">REQUEST-METHOD</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="RESET"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">RESET</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="RESIZE-METHOD"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">RESIZE-METHOD</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="RESOURCE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">RESOURCE</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of a twitter resource objkect.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/application/rate_limit_status</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="RETWEETED"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">RETWEETED</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="RETWEETED-STATUS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">RETWEETED-STATUS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SAVED-SEARCH"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">SAVED-SEARCH</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of a twitter saved-search object.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SAVED-SEARCHES/CREATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">SAVED-SEARCHES/CREATE</h3>
+                  <span class="funcargs">(QUERY)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Create a new saved search for the authenticated user. A user may only have 25 saved searches.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/saved_searches/create</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SAVED-SEARCHES/DESTROY/ID"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">SAVED-SEARCHES/DESTROY/ID</h3>
+                  <span class="funcargs">(ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Destroys a saved search for the authenticating user. The authenticating user must be the owner of saved search id being destroyed.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/saved_searches/destroy/%3Aid</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SAVED-SEARCHES/LIST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">SAVED-SEARCHES/LIST</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the authenticated user's saved search queries.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/saved_searches/list</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SAVED-SEARCHES/SHOW/ID"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">SAVED-SEARCHES/SHOW/ID</h3>
+                  <span class="funcargs">(ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Retrieve the information for the saved search represented by the given id. The authenticating user must be the owner of saved search ID being requested.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/saved_searches/show/%3Aid</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SCREEN-NAME"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">SCREEN-NAME</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SEARCH-POSITION"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">SEARCH-POSITION</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SENDER"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">SENDER</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SERIALIZE-OBJECT"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">SERIALIZE-OBJECT</h3>
+                  <span class="funcargs">(OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Turns all object slots into an ALIST.
+Requires CLOSER-MOP to be installed.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SETTINGS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">SETTINGS</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of the twitter user settings object.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SHAPE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">SHAPE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SHORT-URL-LENGTH"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">SHORT-URL-LENGTH</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SHORT-URL-LENGTH-HTTPS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">SHORT-URL-LENGTH-HTTPS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SHOW-INLINE-MEDIA"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">SHOW-INLINE-MEDIA</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SIGNED-DATA-REQUEST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">SIGNED-DATA-REQUEST</h3>
+                  <span class="funcargs">(REQUEST-URL &amp;KEY DATA-PARAMETERS PARAMETERS OAUTH-PARAMETERS
+ ADDITIONAL-HEADERS (METHOD :POST) DRAKMA-PARAMS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Issue a signed data request against the API.
+See SIGNED-REQUEST.
+
+According to spec https://dev.twitter.com/docs/uploading-media</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SIGNED-REQUEST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">SIGNED-REQUEST</h3>
+                  <span class="funcargs">(REQUEST-URL &amp;KEY PARAMETERS OAUTH-PARAMETERS ADDITIONAL-HEADERS (METHOD :POST)
+ DRAKMA-PARAMS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Issue a signed request against the API.
+This requires the *oauth-consumer-key*, *oauth-signature-method*,
+*oauth-version* and at least *oauth-consumer-secret* to be set.
+See CREATE-SIGNATURE.
+For return values see DRAKMA:HTTP-REQUEST
+
+According to spec https://dev.twitter.com/docs/auth/authorizing-request</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SIGNED-STREAM-REQUEST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">SIGNED-STREAM-REQUEST</h3>
+                  <span class="funcargs">(REQUEST-URL &amp;KEY PARAMETERS OAUTH-PARAMETERS ADDITIONAL-HEADERS (METHOD :POST)
+ DRAKMA-PARAMS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Issue a signed data request against the API.
+See SIGNED-REQUEST. Returns values according to DRAKMA:HTTP-REQUEST with :WANT-STREAM T</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SIZE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">SIZE</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Wrapper for size information in media entities.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SIZE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">SIZE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SIZES"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">SIZES</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SLEEP-TIME"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">SLEEP-TIME</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SLEEP-TIME-END"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">SLEEP-TIME-END</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SLEEP-TIME-START"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">SLEEP-TIME-START</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SLUG"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">SLUG</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of a twitter suggestion (slug) object.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SLUG"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">SLUG</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SOURCE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">SOURCE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SOURCE-STATUS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">SOURCE-STATUS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="START"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">START</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="STATUS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">STATUS</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of a twitter status (tweet).
+
+According to spec https://dev.twitter.com/docs/platform-objects/tweets</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="STATUS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">STATUS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="STATUSES/DESTROY"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">STATUSES/DESTROY</h3>
+                  <span class="funcargs">(ID &amp;KEY (TRIM-USER T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Destroys the status specified by the required ID parameter. The authenticating user must be the author of the specified status. Returns the destroyed status if successful.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/destroy/%3Aid</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="STATUSES/HOME-TIMELINE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">STATUSES/HOME-TIMELINE</h3>
+                  <span class="funcargs">(&amp;KEY (COUNT 20) SINCE-ID MAX-ID TRIM-USER EXCLUDE-REPLIES (INCLUDE-ENTITIES T)
+ CONTRIBUTOR-DETAILS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a collection of the most recent Tweets and retweets posted by the authenticating user and the users they follow. The home timeline is central to how most users interact with the Twitter service.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/home_timeline</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="STATUSES/MENTIONS-TIMELINE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">STATUSES/MENTIONS-TIMELINE</h3>
+                  <span class="funcargs">(&amp;KEY (COUNT 20) SINCE-ID MAX-ID TRIM-USER (INCLUDE-ENTITIES T)
+ CONTRIBUTOR-DETAILS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the 20 most recent mentions (tweets containing a users's @screen_name) for the authenticating user.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/mentions_timeline</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="STATUSES/OEMBED"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">STATUSES/OEMBED</h3>
+                  <span class="funcargs">(ID URL &amp;KEY MAX-WIDTH HIDE-MEDIA HIDE-THREAD OMIT-SCRIPT (ALIGN :NONE) RELATED
+    LANGUAGE)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns information allowing the creation of an embedded representation of a Tweet on third party sites. See the oEmbed specification for information about the response format.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/oembed</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="STATUSES/RETWEET"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">STATUSES/RETWEET</h3>
+                  <span class="funcargs">(ID &amp;KEY (TRIM-USER T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Retweets a tweet. Returns the original tweet with retweet details embedded.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/retweet/%3Aid</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="STATUSES/RETWEETERS/IDS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">STATUSES/RETWEETERS/IDS</h3>
+                  <span class="funcargs">(ID)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a collection of up to 100 user IDs belonging to users who have retweeted the tweet specified by the id parameter.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweeters/ids</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="STATUSES/RETWEETS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">STATUSES/RETWEETS</h3>
+                  <span class="funcargs">(ID &amp;KEY (COUNT 100) (TRIM-USER T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a collection of the 100 most recent retweets of the tweet specified by the id parameter.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweets/%3Aid</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="STATUSES/RETWEETS-OF-ME"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">STATUSES/RETWEETS-OF-ME</h3>
+                  <span class="funcargs">(&amp;KEY (COUNT 20) SINCE-ID MAX-ID TRIM-USER (INCLUDE-ENTITIES T)
+ (INCLUDE-USER-ENTITIES T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the most recent tweets authored by the authenticating user that have been retweeted by others. This timeline is a subset of the user's GET statuses/user_timeline.
+
+According to spec </pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="STATUSES/SHOW"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">STATUSES/SHOW</h3>
+                  <span class="funcargs">(ID &amp;KEY (TRIM-USER T) INCLUDE-MY-RETWEET (INCLUDE-ENTITIES T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a single Tweet, specified by the id parameter. The Tweet's author will also be embedded within the tweet.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/show/%3Aid</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="STATUSES/UPDATE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">STATUSES/UPDATE</h3>
+                  <span class="funcargs">(STATUS &amp;KEY REPLY-TO LATITUDE LONGITUDE PLACE-ID DISPLAY-COORDINATES TRIM-USER)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Updates the authenticating user's current status, also known as tweeting. To upload an image to accompany the tweet, use POST statuses/update_with_media.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/update</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="STATUSES/UPDATE-WITH-MEDIA"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">STATUSES/UPDATE-WITH-MEDIA</h3>
+                  <span class="funcargs">(STATUS MEDIA &amp;KEY POSSIBLY-SENSITIVE REPLY-TO LATITUDE LONGITUDE PLACE-ID
+        DISPLAY-COORDINATES TRIM-USER)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Updates the authenticating user's current status and attaches media for upload. In other words, it creates a Tweet with a picture attached. MEDIA is either a pathname, usb-8 array or a base64-encoded string, or a list thereof.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/update_with_media</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="STATUSES/USER-TIMELINE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">STATUSES/USER-TIMELINE</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME (COUNT 20) SINCE-ID MAX-ID TRIM-USER EXCLUDE-REPLIES
+ (INCLUDE-ENTITIES T) CONTRIBUTOR-DETAILS (INCLUDE-RTS T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a collection of the most recent Tweets posted by the user indicated by the screen_name or user_id parameters.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/user_timeline</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="T-SYMBOL"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">T-SYMBOL</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Twitter symbol entity. Name chosen to avoid package clash.
+
+According to spec https://dev.twitter.com/docs/entities#The_symbols_entity</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TARGET-HEADERS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">TARGET-HEADERS</h3>
+                  <span class="funcargs">(CONDITION)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TARGET-METHOD"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">TARGET-METHOD</h3>
+                  <span class="funcargs">(CONDITION)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TARGET-PARAMETERS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">TARGET-PARAMETERS</h3>
+                  <span class="funcargs">(CONDITION)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TARGET-URL"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">TARGET-URL</h3>
+                  <span class="funcargs">(CONDITION)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TEXT"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">TEXT</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TIME-ZONE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">TIME-ZONE</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TIME-ZONE-INFO"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">TIME-ZONE-INFO</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TIME-ZONE-NAME"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">TIME-ZONE-NAME</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TIME-ZONE-OFFSET"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">TIME-ZONE-OFFSET</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TO-KEYWORD"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">TO-KEYWORD</h3>
+                  <span class="funcargs">(STRING)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Turns a key into a keyword.
+Replaces _ with - and uppercases the string, then interns it
+into the keyword package. This is useful to parse the request
+responses into an alist.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TRANSLATOR"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">TRANSLATOR</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TREND"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">TREND</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of a twitter trend object.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TREND"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">TREND</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TREND-LOCATION"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">TREND-LOCATION</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of a twitter trend location object.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TRENDS/AVAILABLE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">TRENDS/AVAILABLE</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the locations that Twitter has trending topic information for.
+
+According to spec https://api.twitter.com/1.1/trends/available.json</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TRENDS/CLOSEST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">TRENDS/CLOSEST</h3>
+                  <span class="funcargs">(LATITUDE LONGITUDE)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the locations that Twitter has trending topic information for, closest to a specified location.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/trends/closest</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TRENDS/PLACE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">TRENDS/PLACE</h3>
+                  <span class="funcargs">(WOEID &amp;KEY EXCLUDE-HASHTAGS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns the top 10 trending topics for a specific WOEID, if trending information is available for it.
+
+According to spec https://api.twitter.com/1.1/trends/place.json</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TRUNCATED"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">TRUNCATED</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="URI"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">URI</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="URL"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">URL</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Twitter URL entity.
+
+According to spec https://dev.twitter.com/docs/entities#The_urls_entity</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="URL"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">URL</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="URL-ENCODE"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">URL-ENCODE</h3>
+                  <span class="funcargs">(STRING &amp;OPTIONAL (EXTERNAL-FORMAT *EXTERNAL-FORMAT*))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a URL-encoded version of the string STRING using the external format EXTERNAL-FORMAT.
+
+According to spec https://dev.twitter.com/docs/auth/percent-encoding-parameters</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="USER"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">USER</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of a user.
+
+According to spec https://dev.twitter.com/docs/platform-objects/users</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="USER"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">USER</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="USER-LIST"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL CLASS</span>
+                <code>
+                  <h3 class="funcname">USER-LIST</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc">Class representation of a twitter list object.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="USERS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">USERS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="USERS/CONTRIBUTEES"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">USERS/CONTRIBUTEES</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME INCLUDE-ENTITIES (SKIP-STATUS T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a list of users that the specified user can "contribute" to.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/users/contributees</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="USERS/CONTRIBUTORS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">USERS/CONTRIBUTORS</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME INCLUDE-ENTITIES (SKIP-STATUS T))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a list of users who can contribute to the specified account.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/users/contributors</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="USERS/LOOKUP"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">USERS/LOOKUP</h3>
+                  <span class="funcargs">(&amp;KEY SCREEN-NAMES USER-IDS INCLUDE-ENTITIES)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns fully-hydrated user objects for up to 100 users per request, as specified by the lists passed to the user_id and/or screen_name parameters.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/users/lookup</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="USERS/PROFILE-BANNER"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">USERS/PROFILE-BANNER</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a map of the available size variations of the specified user's profile banner. If the user has not uploaded a profile banner, a HTTP 404 will be served instead. This method can be used instead of string manipulation on the profile_banner_url returned in user objects as described in User Profile Images and Banners.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/users/profile_banner</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="USERS/REPORT-SPAM"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">USERS/REPORT-SPAM</h3>
+                  <span class="funcargs">(&amp;KEY USER-ID SCREEN-NAME)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Report the specified user as a spam account to Twitter. Additionally performs the equivalent of POST blocks/create on behalf of the authenticated user.
+
+According to spec https://dev.twitter.com/docs/api/1.1/post/users/report_spam</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="USERS/SEARCH"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">USERS/SEARCH</h3>
+                  <span class="funcargs">(QUERY &amp;KEY (PAGE 1) (COUNT 5) INCLUDE-ENTITIES)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Provides a simple, relevance-based search interface to public user accounts on Twitter. Try querying by topical interest, full name, company name, location, or other criteria. Exact match searches are not supported.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/users/search</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="USERS/SHOW"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">USERS/SHOW</h3>
+                  <span class="funcargs">(&amp;KEY SCREEN-NAME USER-ID INCLUDE-ENTITIES)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns a variety of information about the user specified by the required user_id or screen_name parameter. The author's most recent Tweet will be returned inline when possible.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/users/show</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="USERS/SUGGESTIONS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">USERS/SUGGESTIONS</h3>
+                  <span class="funcargs">(&amp;KEY LANGUAGE)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Access to Twitter's suggested user list. This returns the list of suggested user categories. The category can be used in GET users/suggestions/:slug to get the users in that category.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/users/suggestions</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="USERS/SUGGESTIONS/SLUG"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">USERS/SUGGESTIONS/SLUG</h3>
+                  <span class="funcargs">(SLUG &amp;KEY LANGUAGE)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Access the users in a given category of the Twitter suggested user list.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/users/suggestions/%3Aslug</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="USERS/SUGGESTIONS/SLUG/MEMBERS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">USERS/SUGGESTIONS/SLUG/MEMBERS</h3>
+                  <span class="funcargs">(SLUG)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Access the users in a given category of the Twitter suggested user list and return their most recent status if they are not a protected user.
+
+According to spec https://dev.twitter.com/docs/api/1.1/get/users/suggestions/%3Aslug/members</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="UTC-OFFSET"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">UTC-OFFSET</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="VALID-LANGUAGE-P"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">VALID-LANGUAGE-P</h3>
+                  <span class="funcargs">(LANGUAGE &amp;KEY REFRESH-CACHE)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns T if the given language code is a language covered by twitter.
+
+See HELP/LANGUAGES.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="VERIFIED"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">VERIFIED</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="VERSION"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">VERSION</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="WANT-RETWEETS"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">WANT-RETWEETS</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="WIDTH"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">WIDTH</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="WOEID"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">WOEID</h3>
+                  <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li></ul>
+      </article>
+    </div>
+  </body>
+</html>
