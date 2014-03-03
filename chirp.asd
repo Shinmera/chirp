@@ -48,7 +48,7 @@
                :cl-ppcre
                :alexandria))
 
-(defsystem chirp-doc
-  :name "Chirp Doc"
-  :components ((:file "documentation"))
-  :depends-on (:chirp :lquery-doc))
+;; (defsystem chirp-doc
+;;   :name "Chirp Doc"
+;;   :components ((:file "documentation"))
+;;   :depends-on (:chirp :lquery-doc))
