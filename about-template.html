@@ -8,6 +8,7 @@
     <title>Chirp - About</title>
     <style type="text/css">
       code{font-family: Consolas, Inconsolata, monospace;}
+      code.line{margin-left: 20px;}
       h3{display: inline-block;margin:0;padding:0;}
       .docs{list-style: none;}
       .docs li{margin-bottom: 20px;}
@@ -29,23 +30,30 @@
         <p>
           Load Chirp through Quicklisp or ASDF:
         </p>
-        <code>(ql:quickload :chirp)</code>
+        <code class="line">(ql:quickload :chirp)</code>
         <p>
           Next you need to authorize an account through twitter. By default this happens through the PIN method, though others are available as well. Retrieve your <a href="https://apps.twitter.com/">twitter application</a>'s consumer key and secret and invoke the following function:
         </p>
-        <code>(initiate-authentication :consumer-key "&lt;app consumer key&gt;" :consumer-secret "&lt;app consumer secret&gt;"</code>
+        <code class="line">(chirp:initiate-authentication :api-key "&lt;app api key&gt;" :api-secret "&lt;app api secret&gt;")</code>
         <p>
           If the first OAuth step is successful, it should return an URL that you have to visit. This will then prompt you to authorize the application and present a PIN. Copy this pin and complete the authentication process:
         </p>
-        <code>(complete-authentication "&lt;pin&gt;")</code>
+        <code class="line">(chirp:complete-authentication "&lt;pin&gt;")</code>
         <p>
           If the function returns successfully, you are ready to use the twitter API:
         </p>
-        <code>(account/verify-credentials)</code>
+        <code class="line">(chirp:account/verify-credentials)</code>
         <p>
-          If you do not want to repeat the authentication process, you can save and later set the <code>*oauth-consumer-key*</code>, <code>*oauth-consumer-secret*</code>, <code>*oauth-token*</code> and <code>*oauth-token-secret*</code> variables manually. That's all the information it takes to authenticate over twitter. Make sure to keep these tokens secret.
+          If you do not want to repeat the authentication process, you can save and later set the <code>*oauth-api-key*</code>, <code>*oauth-api-secret*</code>, <code>*oauth-access-token*</code> and <code>*oauth-access-secret*</code> variables manually. That's all the information it takes to authenticate over twitter. Make sure to keep these tokens secret.
         </p>
-        <code>(statuses/update "Hooray, I successfully used the Chirp Common Lisp library to tweet!")</code>
+        <code class="line">(chirp:statuses/update "Hooray, I successfully used the Chirp Common Lisp library to tweet!")</code>
+        <p>
+          Chirp also provides access to twitter's streaming API:
+        </p>
+        <code class="line">(chirp:stream/user #'(lambda (o) (when o (format T "~&amp;STREAM: ~a~%" o)) T))</code>
+        <p>
+          Do note that chirp does not concern itself with threading. As such, processing stream objects in the background is up to you. The objects passed to the handler function are either a subclass of <code>MESSAGE</code>, a <code>STATUS</code>, a <code>DIRECT-MESSAGE</code> or NIL. The handler function should return <code>T</code> for as long as the stream should be active.
+        </p>
       </article>
       <article>
         <header><h2>Other Guff</h2></header>
