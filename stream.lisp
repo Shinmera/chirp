@@ -263,7 +263,7 @@ https://dev.twitter.com/docs/streaming-apis/messages"
     (unwind-protect
          (loop for line = (read-line stream)
                for object = (parse-stream-line (trim-whitespace line))
-               while (funcall handler-function line))
+               while (funcall handler-function object))
       (close stream))))
 
 (defun stream/site (handler-function follow &key stall-warnings (filter-level :NONE) language (with :FOLLOW) replies count)
@@ -283,7 +283,7 @@ https://dev.twitter.com/docs/streaming-apis/messages"
     (unwind-protect
          (loop for line = (read-line stream)
                for object = (parse-stream-line (trim-whitespace line))
-               while (funcall handler-function line))
+               while (funcall handler-function object))
       (close stream))))
 
 (defun stream/statuses/filter (handler-function &key follow track locations stall-warnings (filter-level :NONE) language count)
@@ -302,7 +302,7 @@ https://dev.twitter.com/docs/streaming-apis/messages"
     (unwind-protect
          (loop for line = (read-line stream)
                for object = (parse-stream-line (trim-whitespace line))
-               while (funcall handler-function line))
+               while (funcall handler-function object))
       (close stream))))
 
 (defun stream/statuses/sample (handler-function &key stall-warnings (filter-level :NONE) language count)
@@ -317,7 +317,7 @@ https://dev.twitter.com/docs/streaming-apis/messages"
     (unwind-protect
          (loop for line = (read-line stream)
                for object = (parse-stream-line (trim-whitespace line))
-               while (funcall handler-function line))
+               while (funcall handler-function object))
       (close stream))))
 
 (defun stream/statuses/firehose (handler-function &key stall-warnings (filter-level :NONE) language count)
@@ -333,5 +333,5 @@ https://dev.twitter.com/docs/streaming-apis/messages"
     (unwind-protect
          (loop for line = (read-line stream)
                for object = (parse-stream-line (trim-whitespace line))
-               while (funcall handler-function line))
+               while (funcall handler-function object))
       (close stream))))
