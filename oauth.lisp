@@ -6,10 +6,10 @@
 
 (in-package #:org.tymoonnext.chirp)
 
-(defvar *oauth-consumer-key* NIL)
-(defvar *oauth-consumer-secret* NIL)
-(defvar *oauth-token* NIL)
-(defvar *oauth-token-secret* NIL)
+(defvar *oauth-api-key* NIL)
+(defvar *oauth-api-secret* NIL)
+(defvar *oauth-access-token* NIL)
+(defvar *oauth-access-secret* NIL)
 (defvar *oauth-signature-method* "HMAC-SHA1")
 (defvar *oauth-version* "1.0")
 (defvar *oauth/request-token* "https://api.twitter.com/oauth/request_token")
@@ -19,10 +19,10 @@
 (defvar *server-port* 8989)
 
 (defun oauth-reset ()
-  (setf *oauth-consumer-key* NIL
-        *oauth-consumer-secret* NIL
-        *oauth-token* NIL
-        *oauth-token-secret* NIL))
+  (setf *oauth-api-key* NIL
+        *oauth-api-secret* NIL
+        *oauth-access-token* NIL
+        *oauth-access-secret* NIL))
 
 (define-condition oauth-error (error) ())
 
@@ -57,19 +57,19 @@
 
 (defun create-signature (method url parameters)
   "Create an OAuth signature for a request.
-This requires at least the *oauth-consumer-secret* to be bound properly, and
-usually the *oauth-token-secret* as well.
+This requires at least the *oauth-api-secret* to be bound properly, and
+usually the *oauth-access-secret* as well.
 
 According to spec https://dev.twitter.com/docs/auth/creating-signature"
-  (assert (not (null *oauth-consumer-secret*)) (*oauth-consumer-secret*)
-          'oauth-parameter-missing :parameter '*oauth-consumer-secret*)
+  (assert (not (null *oauth-api-secret*)) (*oauth-api-secret*)
+          'oauth-parameter-missing :parameter '*oauth-api-secret*)
   (let ((prepared-parameters (sort (loop for (key . val) in parameters
                                          collect (cons (url-encode key)
                                                        (url-encode val)))
                                    #'string< :key #'car)))
     (let ((parameter-string (format NIL "~{~/chirp::signature-format-parameter/~^&~}" prepared-parameters)))
       (let ((base (format NIL "~a&~a&~a" (string-upcase method) (url-encode url) (url-encode parameter-string)))
-            (signing-key (format NIL "~a&~a" *oauth-consumer-secret* (or *oauth-token-secret* ""))))
+            (signing-key (format NIL "~a&~a" *oauth-api-secret* (or *oauth-access-secret* ""))))
         (hmac base signing-key)))))
 
 (defun make-signed (method url oauth-parameters &optional other-parameters)
@@ -102,20 +102,20 @@ Simply generates a signature and appends the proper parameter."
            body))))
 
 (defun create-authorization-header (method request-url oauth-parameters parameters)
-  (assert (not (null *oauth-consumer-key*)) (*oauth-consumer-key*)
-          'oauth-parameter-missing :parameter '*oauth-consumer-key*)
+  (assert (not (null *oauth-api-key*)) (*oauth-api-key*)
+          'oauth-parameter-missing :parameter '*oauth-api-key*)
   (assert (not (null *oauth-signature-method*)) (*oauth-signature-method*)
           'oauth-parameter-missing :parameter '*oauth-signature-method*)
   (assert (not (null *oauth-version*)) (*oauth-version*)
           'oauth-parameter-missing :parameter '*oauth-version*)
   (let* ((oauth-parameters (append
                             oauth-parameters
-                            `(("oauth_consumer_key" . ,*oauth-consumer-key*)
+                            `(("oauth_consumer_key" . ,*oauth-api-key*)
                               ("oauth_nonce" . ,(generate-nonce))
                               ("oauth_signature_method" . ,*oauth-signature-method*)
                               ("oauth_timestamp" . ,(write-to-string (get-unix-time)))
                               ("oauth_version" . ,*oauth-version*))
-                            (when *oauth-token* `(("oauth_token" . ,*oauth-token*)))))
+                            (when *oauth-access-token* `(("oauth_token" . ,*oauth-access-token*)))))
          (oauth-parameters (make-signed method request-url oauth-parameters parameters)))
     `(("Authorization" . ,(create-authorization-header-value oauth-parameters)))))
 
@@ -135,8 +135,8 @@ Simply generates a signature and appends the proper parameter."
 
 (defun signed-request (request-url &key parameters oauth-parameters additional-headers (method :POST) drakma-params)
   "Issue a signed request against the API.
-This requires the *oauth-consumer-key*, *oauth-signature-method*,
-*oauth-version* and at least *oauth-consumer-secret* to be set.
+This requires the *oauth-api-key*, *oauth-signature-method*,
+*oauth-version* and at least *oauth-api-secret* to be set.
 See CREATE-SIGNATURE.
 For return values see DRAKMA:HTTP-REQUEST
 
@@ -203,9 +203,9 @@ pass the proper parameters to COMPLETE-AUTHENTICATION.
 
 According to spec https://dev.twitter.com/docs/auth/implementing-sign-twitter"
   (let ((data (oauth/request-token callback-url)))
-    (setf *oauth-token* (cdr (assoc :oauth-token data))
-          *oauth-token-secret* (cdr (assoc :oauth-token-secret data)))
-    (format NIL "~a?oauth_token=~a" *oauth/authenticate* *oauth-token*)))
+    (setf *oauth-access-token* (cdr (assoc :oauth-token data))
+          *oauth-access-secret* (cdr (assoc :oauth-token-secret data)))
+    (format NIL "~a?oauth_token=~a" *oauth/authenticate* *oauth-access-token*)))
 
 (defun oauth/authorize ()
   "Initiate the authentication through the PIN mechanism.
@@ -215,9 +215,9 @@ that has to be initialized by passing it to COMPLETE-AUTHENTICATION.
 
 According to spec https://dev.twitter.com/docs/auth/pin-based-authorization"
   (let ((data (pin-request-token)))
-    (setf *oauth-token* (cdr (assoc :oauth-token data))
-          *oauth-token-secret* (cdr (assoc :oauth-token-secret data)))
-    (format NIL "~a?oauth_token=~a" *oauth/authorize* *oauth-token*)))
+    (setf *oauth-access-token* (cdr (assoc :oauth-token data))
+          *oauth-access-secret* (cdr (assoc :oauth-token-secret data)))
+    (format NIL "~a?oauth_token=~a" *oauth/authorize* *oauth-access-token*)))
 
 (defun initiate-server-authentication ()
   "Initiate the authentication through the server mechanism.
@@ -248,14 +248,14 @@ down automatically after a single request."
         (push #'dispatcher (symbol-value (ht-symb "*DISPATCH-TABLE*")))
         (oauth/authenticate (format NIL "http://localhost:~d/callback" *server-port*))))))
 
-(defun initiate-authentication (&key (method :PIN) (consumer-key *oauth-consumer-key*) (consumer-secret *oauth-consumer-secret*))
+(defun initiate-authentication (&key (method :PIN) (api-key *oauth-api-key*) (api-secret *oauth-api-secret*))
   "Starts the authentication process and returns an URL that the user has to visit.
 METHOD can be one of :PIN :SERVER or a string designating a callback URL.
 See OAUTH/AUTHORIZE, INITIATE-SERVER-AUTHENTICATION and OAUTH/AUTHENTICATE respectively."
-  (setf *oauth-consumer-key* consumer-key
-        *oauth-consumer-secret* consumer-secret
-        *oauth-token* NIL
-        *oauth-token-secret* NIL)
+  (setf *oauth-api-key* api-key
+        *oauth-api-secret* api-secret
+        *oauth-access-token* NIL
+        *oauth-access-secret* NIL)
   (case method
     (:PIN (oauth/authorize))
     (:SERVER (initiate-server-authentication))
@@ -268,11 +268,11 @@ According to spec https://dev.twitter.com/docs/auth/implementing-sign-twitter"
   (oauth-response->alist
    (signed-request *oauth/access-token* :parameters `(("oauth_verifier" . ,verifier)))))
 
-(defun complete-authentication (verifier &optional (token *oauth-token*))
+(defun complete-authentication (verifier &optional (token *oauth-access-token*))
   "Finishes the authentication procedure by retrieving the access token.
 Sets the *OAUTH-TOKEN* and *OAUTH-TOKEN-SECRET* to their respective values."
-  (setf *oauth-token* token)
+  (setf *oauth-access-token* token)
   (let ((data (oauth/access-token verifier)))
-    (setf *oauth-token* (cdr (assoc :oauth-token data))
-          *oauth-token-secret* (cdr (assoc :oauth-token-secret data)))
-    (values *oauth-token* *oauth-token-secret*)))
+    (setf *oauth-access-token* (cdr (assoc :oauth-token data))
+          *oauth-access-secret* (cdr (assoc :oauth-token-secret data)))
+    (values *oauth-access-token* *oauth-access-secret*)))
