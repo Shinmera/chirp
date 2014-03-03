@@ -165,7 +165,7 @@ According to spec https://dev.twitter.com/docs/uploading-media"
     (apply #'request-wrapper request-url
            :method method :parameters parameters :form-data T
            :additional-headers (append additional-headers
-                                       (create-authorization-header method request-url oauth-parameters))
+                                       (create-authorization-header method request-url oauth-parameters NIL))
            drakma-params)))
 
 (defun signed-stream-request (request-url &key parameters oauth-parameters additional-headers (method :POST) drakma-params)
