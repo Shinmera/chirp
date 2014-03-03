@@ -342,6 +342,80 @@
    #:statuses/update-with-media
    #:statuses/oembed
    #:statuses/retweeters/ids)
+  ;; stream.lisp
+  (:export
+   #:message
+   
+   #:stream-unknown
+   #:data
+   
+   #:stream-delete
+   #:id
+   #:user-id
+   
+   #:stream-scrub-geo
+   #:up-to-status-id
+   #:user-id
+   
+   #:stream-limit
+   #:track
+   
+   #:stream-status-withheld
+   #:id
+   #:withheld-in-countries
+   
+   #:stream-user-withheld
+   #:id
+   #:withheld-in-countries
+   
+   #:stream-disconnect
+   #:code
+   #:stream-name
+   #:reason
+   
+   #:stream-friends
+   #:friends
+   
+   #:stream-event
+   #:target
+   #:source
+   #:target-object
+   #:created-at
+   
+   #:event-unknown
+   #:event-access-revoked
+   #:event-block
+   #:event-unblock
+   #:event-favorite
+   #:event-unfavorite
+   #:event-follow
+   #:event-unfollow
+   #:event-list-create
+   #:event-list-destroy
+   #:event-list-update
+   #:event-list-member-add
+   #:event-list-member-remove
+   #:event-list-user-subscribe
+   #:event-list-user-unsubscribe
+   #:event-user-update
+   
+   #:stream-warning
+   #:code
+   #:message
+   #:user-id
+   
+   #:stream-control
+   #:control-uri
+   
+   #:stream-envelope
+   #:for-user
+   #:message
+   
+   #:stream/user
+   #:stream/site
+   #:stream/statuses/filter
+   #:stream/statuses/sample
+   #:stream/statuses/firehose)
   ;; suggestions.lisp
   (:export
    #:slug
