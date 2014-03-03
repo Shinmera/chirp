@@ -245,7 +245,7 @@ According to spec https://dev.twitter.com/docs/streaming-apis/messages"))
 (defun trim-whitespace (string)
   (string-trim '(#\Tab #\Newline #\Linefeed #\Page #\Return #\Space) string))
 
-(defun stream/user (handler-function &key stall-warnings (filter-level :NONE) language (with :USER) replies)
+(defun stream/user (handler-function &key stall-warnings (filter-level :NONE) language (with :USER) replies count)
   "Streams messages for a single user, as described in User streams.
 Each line is parsed into an appropriate object (NIL for empty lines) and passed to the handler function.
 This is done as long as the handler function returns a non-NIL value. Once the handler returns NIL,
@@ -255,54 +255,81 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/user
 https://dev.twitter.com/docs/streaming-apis/streams/user
 https://dev.twitter.com/docs/streaming-apis/messages"
   (assert (member filter-level '(:NONE :LOW :MEDIUM)) () "FILTER-LEVEL must be one of (:NONE :LOW :MEDIUM).")
-  (assert (member filter-level '(:USER :FOLLOWINGS)) () "WITH must be one of (:USER :FOLLOWINGS).")
+  (assert (member with '(:USER :FOLLOWINGS)) () "WITH must be one of (:USER :FOLLOWINGS).")
+  (when count (assert (< -150000 count 150000) () "COUNT must be NIL or between -150000 and 150000."))
   (when language (assert (valid-language-p language) () "~a is not a supported language." language))
   (when replies (setf replies "all"))
-  (let ((stream (signed-stream-request *stream/user* :parameters (prepare* stall-warnings filter-level language with replies) :method :GET)))
+  (let ((stream (signed-stream-request *stream/user* :parameters (prepare* stall-warnings filter-level language with replies count) :method :GET)))
     (unwind-protect
          (loop for line = (read-line stream)
                for object = (parse-stream-line (trim-whitespace line))
                while (funcall handler-function line))
       (close stream))))
 
-(defun stream/site (handler-function &key )
-  "
+(defun stream/site (handler-function follow &key stall-warnings (filter-level :NONE) language (with :FOLLOW) replies count)
+  "Streams messages for a set of users, as described in Site streams.
+See STREAM/USER.
 
-According to spec "
-  (let ((stream (signed-stream-request *stream/site* :parameters (prepare* ) :method :GET)))
+According to spec https://dev.twitter.com/docs/api/1.1/get/site
+https://dev.twitter.com/docs/streaming-apis/streams/site
+https://dev.twitter.com/docs/streaming-apis/messages"
+  (setf follow (format NIL "~{~a~^,~}" follow))
+  (assert (member filter-level '(:NONE :LOW :MEDIUM)) () "FILTER-LEVEL must be one of (:NONE :LOW :MEDIUM).")
+  (assert (member with '(:USER :FOLLOWINGS)) () "WITH must be one of (:USER :FOLLOWINGS).")
+  (when count (assert (< -150000 count 150000) () "COUNT must be NIL or between -150000 and 150000."))
+  (when language (assert (valid-language-p language) () "~a is not a supported language." language))
+  (when replies (setf replies "all"))
+  (let ((stream (signed-stream-request *stream/site* :parameters (prepare* follow stall-warnings filter-level language with replies count) :method :GET)))
     (unwind-protect
          (loop for line = (read-line stream)
                for object = (parse-stream-line (trim-whitespace line))
                while (funcall handler-function line))
       (close stream))))
 
-(defun stream/statuses/filter (handler-function &key follow track locations )
-  "
+(defun stream/statuses/filter (handler-function &key follow track locations stall-warnings (filter-level :NONE) language count)
+  "Returns public statuses that match one or more filter predicates. Multiple parameters may be specified which allows most clients to use a single connection to the Streaming API. Both GET and POST requests are supported, but GET requests with too many parameters may cause the request to be rejected for excessive URL length. Use a POST request to avoid long URLs.
+See STREAM/USER.
 
-According to spec "
-  (let ((stream (signed-stream-request *stream/statuses/filter* :parameters (prepare* ) :method :GET)))
+According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/filter
+https://dev.twitter.com/docs/streaming-apis/messages"
+  (setf follow (format NIL "~{~a~^,~}" follow))
+  (setf track (format NIL "~{~a~^,~}" track))
+  (setf locations (format NIL "~{~a~^,~}" locations))
+  (assert (member filter-level '(:NONE :LOW :MEDIUM)) () "FILTER-LEVEL must be one of (:NONE :LOW :MEDIUM).")
+  (when count (assert (< -150000 count 150000) () "COUNT must be NIL or between -150000 and 150000."))
+  (when language (assert (valid-language-p language) () "~a is not a supported language." language))
+  (let ((stream (signed-stream-request *stream/statuses/filter* :parameters (prepare* follow track locations stall-warnings filter-level language count) :method :GET)))
     (unwind-protect
          (loop for line = (read-line stream)
                for object = (parse-stream-line (trim-whitespace line))
                while (funcall handler-function line))
       (close stream))))
 
-(defun stream/statuses/sample (handler-function &key )
-  "
+(defun stream/statuses/sample (handler-function &key stall-warnings (filter-level :NONE) language count)
+  "Returns a small random sample of all public statuses. The Tweets returned by the default access level are the same, so if two different clients connect to this endpoint, they will see the same Tweets.
 
-According to spec "
-  (let ((stream (signed-stream-request *stream/statuses/sample* :parameters (prepare* ) :method :GET)))
+According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/sample
+https://dev.twitter.com/docs/streaming-apis/messages"
+  (assert (member filter-level '(:NONE :LOW :MEDIUM)) () "FILTER-LEVEL must be one of (:NONE :LOW :MEDIUM).")
+  (when count (assert (< -150000 count 150000) () "COUNT must be NIL or between -150000 and 150000."))
+  (when language (assert (valid-language-p language) () "~a is not a supported language." language))
+  (let ((stream (signed-stream-request *stream/statuses/sample* :parameters (prepare* stall-warnings filter-level language count) :method :GET)))
     (unwind-protect
          (loop for line = (read-line stream)
                for object = (parse-stream-line (trim-whitespace line))
                while (funcall handler-function line))
       (close stream))))
 
-(defun stream/statuses/firehose (handler-function &key )
-  "
+(defun stream/statuses/firehose (handler-function &key stall-warnings (filter-level :NONE) language count)
+  "Returns all public statuses. Few applications require this level of access. Creative use of a combination of other resources and various access levels can satisfy nearly every application use case.
+This endpoint requires special permission to access.
 
-According to spec "
-  (let ((stream (signed-stream-request *stream/statuses/sample* :parameters (prepare* ) :method :GET)))
+According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/firehose
+https://dev.twitter.com/docs/streaming-apis/messages"
+  (assert (member filter-level '(:NONE :LOW :MEDIUM)) () "FILTER-LEVEL must be one of (:NONE :LOW :MEDIUM).")
+  (when count (assert (< -150000 count 150000) () "COUNT must be NIL or between -150000 and 150000."))
+  (when language (assert (valid-language-p language) () "~a is not a supported language." language))
+  (let ((stream (signed-stream-request *stream/statuses/sample* :parameters (prepare* count stall-warnings filter-level language) :method :GET)))
     (unwind-protect
          (loop for line = (read-line stream)
                for object = (parse-stream-line (trim-whitespace line))
