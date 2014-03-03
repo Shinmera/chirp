@@ -245,7 +245,7 @@ According to spec https://dev.twitter.com/docs/streaming-apis/messages"))
 (defun trim-whitespace (string)
   (string-trim '(#\Tab #\Newline #\Linefeed #\Page #\Return #\Space) string))
 
-(defun stream/user (handler-function &key delimited stall-warnings with replies track locations)
+(defun stream/user (handler-function &key stall-warnings (filter-level :NONE) language (with :USER) replies)
   "Streams messages for a single user, as described in User streams.
 Each line is parsed into an appropriate object (NIL for empty lines) and passed to the handler function.
 This is done as long as the handler function returns a non-NIL value. Once the handler returns NIL,
@@ -254,7 +254,11 @@ the loop is stopped and the stream is closed.
 According to spec https://dev.twitter.com/docs/api/1.1/get/user
 https://dev.twitter.com/docs/streaming-apis/streams/user
 https://dev.twitter.com/docs/streaming-apis/messages"
-  (let ((stream (signed-stream-request *stream/user* :parameters (prepare* delimited stall-warnings with replies track locations) :method :GET)))
+  (assert (member filter-level '(:NONE :LOW :MEDIUM)) () "FILTER-LEVEL must be one of (:NONE :LOW :MEDIUM).")
+  (assert (member filter-level '(:USER :FOLLOWINGS)) () "WITH must be one of (:USER :FOLLOWINGS).")
+  (when language (assert (valid-language-p language) () "~a is not a supported language." language))
+  (when replies (setf replies "all"))
+  (let ((stream (signed-stream-request *stream/user* :parameters (prepare* stall-warnings filter-level language with replies) :method :GET)))
     (unwind-protect
          (loop for line = (read-line stream)
                for object = (parse-stream-line (trim-whitespace line))
@@ -265,14 +269,14 @@ https://dev.twitter.com/docs/streaming-apis/messages"
   "
 
 According to spec "
-  (let ((stream (signed-stream-request *stream/user* :parameters (prepare* ) :method :GET)))
+  (let ((stream (signed-stream-request *stream/site* :parameters (prepare* ) :method :GET)))
     (unwind-protect
          (loop for line = (read-line stream)
                for object = (parse-stream-line (trim-whitespace line))
                while (funcall handler-function line))
       (close stream))))
 
-(defun stream/statuses/filter (handler-function &key )
+(defun stream/statuses/filter (handler-function &key follow track locations )
   "
 
 According to spec "
