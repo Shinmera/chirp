@@ -12,6 +12,7 @@
 (defvar *help/tos* "https://api.twitter.com/1.1/help/tos.json")
 (defvar *application/rate-limit-status* "https://api.twitter.com/1.1/application/rate_limit_status.json")
 (defvar *cached-languages* ())
+(defvar *cached-configuration* NIL)
 
 (defclass* configuration ()
   (photo-size-limit photo-sizes short-url-length short-url-length-https
@@ -60,11 +61,12 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/application/rate_limi
      :reset (local-time:unix-to-timestamp (param :reset))
      :limit (param :limit))))
 
-(defun help/configuration ()
+(defun help/configuration (&key (use-cache T))
   "Returns the current configuration used by Twitter including twitter.com slugs which are not usernames, maximum photo resolutions, and t.co URL lengths.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/help/configuration"
-  (make-configuration (signed-request *help/configuration* :method :GET)))
+  (or (when use-cache *cached-configuration*)
+      (setf *cached-configuration* (make-configuration (signed-request *help/configuration* :method :GET)))))
 
 (defun help/languages ()
   "Returns the list of languages supported by Twitter along with their ISO 639-1 code. The ISO 639-1 code is the two letter value to use if you include lang with any of your requests.
