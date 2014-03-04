@@ -163,14 +163,14 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/lists/subscribers/sho
 
 According to spec https://dev.twitter.com/docs/api/1.1/post/lists/subscribers/create"
   (assert (or list-id (and slug (or owner-screen-name owner-id))) () "Either LIST-ID or SLUG and OWNER-SCREEN-NAME or OWNER-ID are required.")
-  (make-user (signed-request *lists/subscribers/create* :parameters (prepare* list-id slug owner-screen-name owner-id) :method :POST)))
+  (make-user-list (signed-request *lists/subscribers/create* :parameters (prepare* list-id slug owner-screen-name owner-id) :method :POST)))
 
 (defun lists/subscribers/destroy  (&key list-id slug owner-screen-name owner-id)
   "Unsubscribes the authenticated user from the specified list.
 
 According to spec https://dev.twitter.com/docs/api/1.1/post/lists/subscribers/destroy"
   (assert (or list-id (and slug (or owner-screen-name owner-id))) () "Either LIST-ID or SLUG and OWNER-SCREEN-NAME or OWNER-ID are required.")
-  (signed-request *lists/subscribers/destroy* :parameters (prepare* list-id slug owner-screen-name owner-id) :method :POST))
+  (make-user-list (signed-request *lists/subscribers/destroy* :parameters (prepare* list-id slug owner-screen-name owner-id) :method :POST)))
 
 (defun lists/subscriptions (&key user-id screen-name)
   "Obtain a collection of the lists the specified user is subscribed to, 20 lists per page by default. Does not include the user's own lists.
