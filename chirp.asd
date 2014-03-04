@@ -31,7 +31,7 @@
                (:file "suggestions")
                (:file "statuses")
                (:file "timelines")
-               (:file "directmessages")
+               (:file "direct-messages")
                (:file "friends")
                (:file "favorites")
                (:file "saved-searches")
