@@ -243,10 +243,10 @@
    #:geo/similar-places)
   ;; oauth.lisp
   (:export
-   #:*oauth-consumer-key*
-   #:*oauth-consumer-secret*
-   #:*oauth-token*
-   #:*oauth-token-secret*
+   #:*oauth-api-key*
+   #:*oauth-api-secret*
+   #:*oauth-access-token*
+   #:*oauth-access-secret*
    #:*oauth-signature-method*
    #:*oauth-version*
    #:*server-port*
