@@ -296,7 +296,9 @@
    #:oauth/authorize
    #:oauth/access-token
    #:complete-authentication
-   #:initiate-authentication)
+   #:initiate-authentication
+
+   #:access-level)
   ;; saved-searches.lisp
   (:export
    #:saved-search

@@ -276,3 +276,11 @@ Sets the *OAUTH-TOKEN* and *OAUTH-TOKEN-SECRET* to their respective values."
     (setf *oauth-access-token* (cdr (assoc :oauth-token data))
           *oauth-access-secret* (cdr (assoc :oauth-token-secret data)))
     (values *oauth-access-token* *oauth-access-secret*)))
+
+(defvar *access-levels* '(:READ :READ-WRITE :READ-WRITE-DIRECTMESSAGES))
+(defun access-level ()
+  "Returns :READ, :READ-WRITE, :READ-WRITE-DIRECTMESSAGES or NIL indicating the current
+access level."
+  (ignore-errors
+   (let ((header (cdr (assoc :x-access-level (nth-value 2 (chirp:signed-request chirp::*account/verify-credentials* :parameters () :method :GET))))))
+     (values (find-symbol (string-upcase header) "KEYWORD")))))
