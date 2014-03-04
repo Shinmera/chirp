@@ -162,7 +162,7 @@
    #:report!
    #:message!
    #:tweet!
-   #:note!
+   #:mention!
    #:delete!
    #:reply!
    #:reply-all!

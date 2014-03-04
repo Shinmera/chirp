@@ -43,7 +43,7 @@
         (statuses/update-with-media text file :possibly-sensitive possibly-sensitive :reply-to reply-to :latitude latitude :longitude longitude :place-id place-id)
         (statuses/update text :reply-to reply-to :latitude latitude :longitude longitude :place-id place-id))))
 
-(defgeneric note! (user text &key file reply-to latitude longitude place-id possibly-sensitive)
+(defgeneric mention! (user text &key file reply-to latitude longitude place-id possibly-sensitive)
   (:documentation "Creates a new mentioning status (@user ..) as per TWEET!. Returns the new STATUS object.")
   (:method ((user user) text &key file reply-to latitude longitude place-id possibly-sensitive)
     (tweet! (format NIL "@~a ~a" (screen-name user) text)
@@ -67,12 +67,12 @@
 (defgeneric reply! (status text &key file latitude longitude place-id possibly-sensitive)
   (:documentation "Replies to the given status, mentioning only the status' owner (@user ..) as per TWEET!. Returns the new STATUS object.")
   (:method ((status status) text &key file latitude longitude place-id possibly-sensitive)
-    (note! (user status) text :reply-to (id status) :file file :latitude latitude :longitude longitude :place-id place-id :possibly-sensitive possibly-sensitive)))
+    (mention! (user status) text :reply-to (id status) :file file :latitude latitude :longitude longitude :place-id place-id :possibly-sensitive possibly-sensitive)))
 
 (defgeneric reply-all! (status text &key file latitude longitude place-id possibly-sensitive)
   (:documentation "Replies to all mentioned users in the tweet as per TWEET!. Returns the new STATUS object.")
   (:method ((status status) text &key file latitude longitude place-id possibly-sensitive)
-    (tweet! (format NIL "~{@~a~^ ~} ~a" (mapcar #'screen-name (cdr (assoc :mentions (entities status)))) text)
+    (tweet! (format NIL "~{@~a~^ ~} ~a" (mapcar #'screen-name (cdr (assoc :user-mentions (entities status)))) text)
             :file file :latitude latitude :longitude longitude :place-id place-id :possibly-sensitive possibly-sensitive)))
 
 (defgeneric retweet! (status)
