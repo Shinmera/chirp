@@ -153,6 +153,27 @@
    #:friendships/show
    #:friendships/lookup
    #:friendships/no-retweets/ids)
+  ;; generics.lisp
+  (:export
+   #:block!
+   #:unblock!
+   #:follow!
+   #:unfollow!
+   #:report!
+   #:message!
+   #:tweet!
+   #:note!
+   #:delete!
+   #:reply!
+   #:reply-all!
+   #:retweet!
+   #:favorite!
+   #:unfavorite!
+   #:list!
+   #:unlist!
+   #:subscribe!
+   #:unsubscribe!
+   #:stream!)
   ;; help.lisp
   (:export
    #:*cached-languages*

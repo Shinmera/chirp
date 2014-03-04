@@ -36,7 +36,8 @@
                (:file "favorites")
                (:file "saved-searches")
                (:file "lists")
-               (:file "stream"))
+               (:file "stream")
+               (:file "generics"))
   :depends-on (:drakma
                :yason
                :split-sequence
