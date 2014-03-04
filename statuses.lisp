@@ -78,13 +78,13 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/show/%3Aid"
   (unless include-entities (setf include-entities "false"))
   (make-status (signed-request (format NIL *statuses/show* id) :parameters (prepare* trim-user include-my-retweet include-entities) :method :GET)))
 
-(defun statuses/destroy (id &key (trim-user T))
+(defun statuses/destroy (id &key trim-user)
   "Destroys the status specified by the required ID parameter. The authenticating user must be the author of the specified status. Returns the destroyed status if successful.
 
 According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/destroy/%3Aid"
   (make-status (signed-request (format NIL *statuses/destroy* id) :parameters (prepare* trim-user) :method :POST)))
 
-(defun statuses/retweet (id &key (trim-user T))
+(defun statuses/retweet (id &key trim-user)
   "Retweets a tweet. Returns the original tweet with retweet details embedded.
 
 According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/retweet/%3Aid"
