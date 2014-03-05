@@ -173,7 +173,8 @@
    #:unlist!
    #:subscribe!
    #:unsubscribe!
-   #:stream!)
+   #:stream!
+   #:fetch-user!)
   ;; help.lisp
   (:export
    #:*cached-languages*
