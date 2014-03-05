@@ -143,6 +143,7 @@ For return values see DRAKMA:HTTP-REQUEST
 According to spec https://dev.twitter.com/docs/auth/authorizing-request"
   (apply #'request-wrapper request-url
          :method method :parameters parameters
+         :content-type "application/x-www-form-urlencoded"
          :additional-headers (append additional-headers
                                      (create-authorization-header method request-url oauth-parameters parameters))
          drakma-params))
