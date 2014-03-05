@@ -46,7 +46,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/home_timelin
 (defun statuses/retweets-of-me (&key (count 20) since-id max-id trim-user (include-entities T) (include-user-entities T))
   "Returns the most recent tweets authored by the authenticating user that have been retweeted by others. This timeline is a subset of the user's GET statuses/user_timeline.
 
-According to spec "
+According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweets_of_me"
   (assert (<= count 200) () "Count cannot be higher than 200.")
   (unless include-entities (setf include-entities "false"))
   (unless include-user-entities (setf include-user-entities "false"))
