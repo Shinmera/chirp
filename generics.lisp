@@ -159,22 +159,36 @@ FILTER can be of type USER, LOCATION, GEOMETRY, STRING, NULL or :USER, :SITE, :S
   (:documentation "Fetches the user object associated with the given object. 
 This always returns a fresh object and always results in a server call.")
   (:method ((user-id integer))
+    "Fetches the user associated with the given ID."
     (users/show :user-id user-id))
   (:method ((screen-name string))
+    "Fetches the user associated with the given screen name."
     (users/show :screen-name screen-name))
-  (:method ((ids list))
-    (mapcar #'fetch-user! ids))
+  (:method ((list list))
+    "Fetches all users in the list. A list of IDs or screen names will be fetched through USERS/LOOKUP and is thus faster."
+    (typecase (first list)
+      (integer (users/lookup :user-ids list))
+      (string (users/lookup :screen-names list))
+      (null NIL)
+      (T (mapcar #'fetch-user! list))))
   (:method ((null null))
+    "Fetches the authenticated user object (ACCOUNT/SELF)."
     (account/self))
   (:method ((user user))
+    "Fetches the complete user object."
     (fetch-user! (or (id user) (screen-name user))))
   (:method ((status status))
+    "Fetches the user associated with the status."
     (fetch-user! (user status)))
   (:method ((message direct-message))
+    "Fetches the user associated with the direct-message."
     (fetch-user! (sender message)))
   (:method ((relat relationship))
+    "Fetches the user associated with the relationship."
     (fetch-user! (or (id relat) (screen-name relat))))
   (:method ((list user-list))
+    "Fetches the owner of the user-list."
     (fetch-user! (user list)))
   (:method ((slug slug))
+    "Fetches all suggested users in the slug."
     (fetch-user! (users slug))))
