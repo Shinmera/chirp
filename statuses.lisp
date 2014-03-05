@@ -122,3 +122,15 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/oembed"
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweeters/ids"
   (cursor-collect :ids *statuses/retweeters/ids* :parameters (prepare* id)))
+
+(defparameter *http-url-regex* (cl-ppcre:create-scanner "http://[\\w\\d\\-.]+\\.\\w{2,}(/[\\w\\d\\-%+?=&@#.;]*)?"))
+(defparameter *https-url-regex* (cl-ppcre:create-scanner "https://[\\w\\d\\-.]+\\.\\w{2,}(/[\\w\\d\\-%+?=&@#.;]*)?"))
+(defun compute-status-length (status)
+  (let* ((config (help/configuration))
+         (http-url (make-string (short-url-length config) :initial-element #\X))
+         (https-url (make-string (short-url-length-https config) :initial-element #\X)))
+    (length
+     (cl-ppcre:regex-replace-all
+      *http-url-regex*
+      (cl-ppcre:regex-replace-all *https-url-regex* status https-url)
+      http-url))))
