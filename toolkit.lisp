@@ -179,9 +179,10 @@ Horrible macro, uses implicit PARAMETERS symbol by default."
 
 (defun remf-plist (plist element)
   (let ((pos (position element plist)))
-    (if (= 0 pos)
-        (setf plist (cddr plist))
-        (setf (cdr (nthcdr (1- pos) plist))
-              (nthcdr (+ pos 2) plist)))
+    (when pos
+      (if (= 0 pos)
+          (setf plist (cddr plist))
+          (setf (cdr (nthcdr (1- pos) plist))
+                (nthcdr (+ pos 2) plist))))
     plist))
 
