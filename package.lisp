@@ -10,6 +10,8 @@
   (:shadow #:parse-body)
   ;; account.lisp
   (:export
+   #:*cached-self*
+   
    #:settings
    #:force-https
    #:email-discoverable
@@ -369,7 +371,9 @@
    #:statuses/oembed
    #:statuses/retweeters/ids
 
-   #:compute-status-length)
+   #:compute-status-length
+   #:direct-mention-p
+   #:mention-p)
   ;; stream.lisp
   (:export
    #:message

@@ -125,12 +125,23 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweeters/i
 
 (defparameter *http-url-regex* (cl-ppcre:create-scanner "http://[\\w\\d\\-.]+\\.\\w{2,}(/[\\w\\d\\-%+?=&@#.;]*)?"))
 (defparameter *https-url-regex* (cl-ppcre:create-scanner "https://[\\w\\d\\-.]+\\.\\w{2,}(/[\\w\\d\\-%+?=&@#.;]*)?"))
-(defun compute-status-length (status)
+(defun compute-status-length (status-text)
   (let* ((config (help/configuration))
          (http-url (make-string (short-url-length config) :initial-element #\X))
          (https-url (make-string (short-url-length-https config) :initial-element #\X)))
     (length
      (cl-ppcre:regex-replace-all
       *http-url-regex*
-      (cl-ppcre:regex-replace-all *https-url-regex* status https-url)
+      (cl-ppcre:regex-replace-all *https-url-regex* status-text https-url)
       http-url))))
+
+(defun direct-mention-p (status)
+  (when (entities status)
+    (when-let ((mentions (cdr (assoc :user-mentions (entities status)))))
+      (string-equal (screen-name (account/self)) (screen-name (first mentions))))))
+
+(defun mention-p (status)
+  (when (entities status)
+    (when-let ((mentions (cdr (assoc :user-mentions (entities status)))))
+      (member (screen-name (account/self)) mentions
+              :key #'screen-name :test #'string-equal))))
