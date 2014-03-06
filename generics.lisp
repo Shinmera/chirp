@@ -147,7 +147,7 @@ FILTER can be of type USER, LOCATION, GEOMETRY, STRING, NULL or :USER, :SITE, :S
     (declare (ignore stall-warnings filter-level language count))
     (apply #'stream! NIL handler-function args))
 
-  (:method ((sample (eql :filter)) handler-function &rest args &key follow track locations stall-warnings (filter-level :none) language count)
+  (:method ((filter (eql :filter)) handler-function &rest args &key follow track locations stall-warnings (filter-level :none) language count)
     (declare (ignore stall-warnings filter-level language count follow track locations))
     (apply #'stream/statuses/filter handler-function args))
   
