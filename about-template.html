@@ -48,10 +48,6 @@
         </p>
         <code class="line">(chirp:statuses/update "Hooray, I successfully used the Chirp Common Lisp library to tweet!")</code>
         <p>
-          Using the various convenience methods, a simple bot can be assembled with relative ease:
-        </p>
-        <code class="line">(chirp:map-timeline! :mentions #'(lambda (status) (chirp:reply! status "Chirp chirp!")))</code>
-        <p>
           There are functions to check for tweet length, available languages, access level, rate limits, and so on as well.
         </p>
         <code class="line">(chirp:compute-status-length "Wowsers, URL shortening sure is a thing! https://github.com/Shinmera/chirp.git")</code><br />
@@ -60,10 +56,23 @@
         <p>
           Chirp also provides access to twitter's streaming API:
         </p>
-        <code class="line">(chirp:stream/user #'(lambda (o) (when o (format T "~&amp;STREAM: ~a~%" o)) T))</code>
+        <code class="line">(chirp:stream/user #'(lambda (message) (when message (format T "~&amp;STREAM: ~a~%" message)) T))</code>
         <p>
           Do note that chirp does not concern itself with threading. As such, processing stream objects in the background is up to you.
         </p>
+        <p>
+          Using the various convenience methods, a simple bot can be assembled with relative ease:
+        </p>
+        <code class="line">(chirp:map-timeline! :mentions #'(lambda (status) (chirp:reply! status "Chirp chirp!")))</code>
+        <p>
+          Though the timelines are heavily rate-limited. For a more immediate response, the streaming API should be used:
+        </p>
+        <pre><code class="line">(chirp:stream!
+   :user #'(lambda (message)
+             (when (and (typep message 'chirp:status) (chirp:direct-mention-p message))
+               (chirp:reply! message "Chirp chirp!"))
+             T))</code></pre>
+        <p></p>
       </article>
       <article>
         <header><h2>Other Guff</h2></header>
