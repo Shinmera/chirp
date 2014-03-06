@@ -73,7 +73,7 @@
         </p>
         <pre><code class="line">(<a href="#STREAM!">chirp:stream!</a>
    :user #'(lambda (message)
-             (when (and (typep message '<a href="#STATUS">chirp:status</a>) (<a href="#DIRECT-MENTION-P">chirp:direct-mention-p message</a>))
+             (when (and (typep message '<a href="#STATUS">chirp:status</a>) (<a href="#DIRECT-MENTION-P">chirp:direct-mention-p</a> message))
                (<a href="#REPLY!">chirp:reply!</a> message "Chirp chirp!"))
              T))</code></pre>
         <p></p>
