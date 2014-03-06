@@ -14,6 +14,7 @@
 (defvar *account/update-profile-image* "https://api.twitter.com/1.1/account/update_profile_image.json")
 (defvar *account/update-profile-banner* "https://api.twitter.com/1.1/account/update_profile_banner.json")
 (defvar *account/remove-profile-banner* "https://api.twitter.com/1.1/account/remove_profile_banner.json")
+(defvar *cached-self* NIL)
 
 (defclass* settings ()
   (force-https email-discoverable geo language protected screen-name
@@ -54,9 +55,10 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/account/settings"
 According to spec https://dev.twitter.com/docs/api/1.1/get/account/verify_credentials"
   (make-user (signed-request *account/verify-credentials* :parameters (prepare* include-entities skip-status) :method :GET)))
 
-(defun account/self (&key include-entities (skip-status T))
-  "Alias for ACCOUNT/VERIFY-CREDENTIALS."
-  (account/verify-credentials :include-entities include-entities :skip-status skip-status))
+(defun account/self (&key refresh-cache include-entities (skip-status T))
+  "Alias for ACCOUNT/VERIFY-CREDENTIALS, using caching."
+  (or (unless refresh-cache *cached-self*)
+      (setf *cached-self* (account/verify-credentials :include-entities include-entities :skip-status skip-status))))
 
 (defun account/settings/post (&key trend-woeid sleep-time sleep-time-start sleep-time-end time-zone language)
   "Updates the authenticating user's settings. Returns a new settings object.
