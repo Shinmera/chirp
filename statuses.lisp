@@ -123,8 +123,8 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/oembed"
 According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweeters/ids"
   (cursor-collect :ids *statuses/retweeters/ids* :parameters (prepare* id)))
 
-(defparameter *http-url-regex* (cl-ppcre:create-scanner "http://[\\w\\d\\-.]+\\.\\w{2,}(/[\\w\\d\\-%+?=&@#.;]*)?"))
-(defparameter *https-url-regex* (cl-ppcre:create-scanner "https://[\\w\\d\\-.]+\\.\\w{2,}(/[\\w\\d\\-%+?=&@#.;]*)?"))
+(defparameter *http-url-regex* (cl-ppcre:create-scanner "http://[\\w\\d\\-.]+\\.\\w{2,}(/[\\w\\d\\-%+?=&@#.;/]*)?"))
+(defparameter *https-url-regex* (cl-ppcre:create-scanner "https://[\\w\\d\\-.]+\\.\\w{2,}(/[\\w\\d\\-%+?=&@#.;/]*)?"))
 (defun compute-status-length (status-text)
   (let* ((config (help/configuration))
          (http-url (make-string (short-url-length config) :initial-element #\X))
