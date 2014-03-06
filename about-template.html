@@ -18,7 +18,7 @@
   <body>
     <header>
       <img src="chirp-logo.png" alt="Chirp"/>
-      <h1>v0.0.1</h1>
+      <h1>v0.1.0</h1>
     </header>
     <div id="content">
       <article>
@@ -32,7 +32,7 @@
         </p>
         <code class="line">(ql:quickload :chirp)</code>
         <p>
-          Next you need to authorize an account through twitter. By default this happens through the PIN method, though others are available as well. Retrieve your <a href="https://apps.twitter.com/">twitter application</a>'s consumer key and secret and invoke the following function:
+          To use twitter's API, you need to authorize an account. By default this happens through the PIN method, though others are available as well. Retrieve your <a href="https://apps.twitter.com/">twitter application</a>'s api key and secret and invoke the following function:
         </p>
         <code class="line">(chirp:initiate-authentication :api-key "&lt;app api key&gt;" :api-secret "&lt;app api secret&gt;")</code>
         <p>
@@ -44,15 +44,25 @@
         </p>
         <code class="line">(chirp:account/verify-credentials)</code>
         <p>
-          If you do not want to repeat the authentication process, you can save and later set the <code>*oauth-api-key*</code>, <code>*oauth-api-secret*</code>, <code>*oauth-access-token*</code> and <code>*oauth-access-secret*</code> variables manually. That's all the information it takes to authenticate over twitter. Make sure to keep these tokens secret.
+          In the case that you do not want to repeat the authentication process, you can save and later set the <code>*oauth-api-key*</code>, <code>*oauth-api-secret*</code>, <code>*oauth-access-token*</code> and <code>*oauth-access-secret*</code> variables manually. That's all the information it takes to authenticate over twitter. Make sure to keep these tokens secret.
         </p>
         <code class="line">(chirp:statuses/update "Hooray, I successfully used the Chirp Common Lisp library to tweet!")</code>
+        <p>
+          Using the various convenience methods, a simple bot can be assembled with relative ease:
+        </p>
+        <code class="line">(chirp:map-timeline! :mentions #'(lambda (status) (chirp:reply! status "Chirp chirp!")))</code>
+        <p>
+          There are functions to check for tweet length, available languages, access level, rate limits, and so on as well.
+        </p>
+        <code class="line">(chirp:compute-status-length "Wowsers, URL shortening sure is a thing! https://github.com/Shinmera/chirp.git")</code><br />
+        <code class="line">(chirp:valid-language-p "en")</code><br />
+        <code class="line">(chirp:access-level)</code>
         <p>
           Chirp also provides access to twitter's streaming API:
         </p>
         <code class="line">(chirp:stream/user #'(lambda (o) (when o (format T "~&amp;STREAM: ~a~%" o)) T))</code>
         <p>
-          Do note that chirp does not concern itself with threading. As such, processing stream objects in the background is up to you. The objects passed to the handler function are either a subclass of <code>MESSAGE</code>, a <code>STATUS</code>, a <code>DIRECT-MESSAGE</code> or NIL. The handler function should return <code>T</code> for as long as the stream should be active.
+          Do note that chirp does not concern itself with threading. As such, processing stream objects in the background is up to you.
         </p>
       </article>
       <article>

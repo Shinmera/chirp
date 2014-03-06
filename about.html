@@ -1,6 +1,6 @@
 <!DOCTYPE html><!--
   This file is a part of Chirp
-  (c) 2013 TymoonNET/NexT http://tymoon.eu (shinmera@tymoon.eu)
+  (c) 2014 TymoonNET/NexT http://tymoon.eu (shinmera@tymoon.eu)
   Author: Nicolas Hafner <shinmera@tymoon.eu>
   !--><html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -18,7 +18,7 @@
   <body>
     <header>
       <img src="chirp-logo.png" alt="Chirp"/>
-      <h1>v0.0.1</h1>
+      <h1>v0.1.0</h1>
     </header>
     <div id="content">
       <article>
@@ -32,7 +32,7 @@
         </p>
         <code class="line">(ql:quickload :chirp)</code>
         <p>
-          Next you need to authorize an account through twitter. By default this happens through the PIN method, though others are available as well. Retrieve your <a href="https://apps.twitter.com/">twitter application</a>'s consumer key and secret and invoke the following function:
+          To use twitter's API, you need to authorize an account. By default this happens through the PIN method, though others are available as well. Retrieve your <a href="https://apps.twitter.com/">twitter application</a>'s api key and secret and invoke the following function:
         </p>
         <code class="line">(chirp:initiate-authentication :api-key "&lt;app api key&gt;" :api-secret "&lt;app api secret&gt;")</code>
         <p>
@@ -44,33 +44,103 @@
         </p>
         <code class="line">(chirp:account/verify-credentials)</code>
         <p>
-          If you do not want to repeat the authentication process, you can save and later set the <code>*oauth-api-key*</code>, <code>*oauth-api-secret*</code>, <code>*oauth-access-token*</code> and <code>*oauth-access-secret*</code> variables manually. That's all the information it takes to authenticate over twitter. Make sure to keep these tokens secret.
+          In the case that you do not want to repeat the authentication process, you can save and later set the <code>*oauth-api-key*</code>, <code>*oauth-api-secret*</code>, <code>*oauth-access-token*</code> and <code>*oauth-access-secret*</code> variables manually. That's all the information it takes to authenticate over twitter. Make sure to keep these tokens secret.
         </p>
         <code class="line">(chirp:statuses/update "Hooray, I successfully used the Chirp Common Lisp library to tweet!")</code>
+        <p>
+          Using the various convenience methods, a simple bot can be assembled with relative ease:
+        </p>
+        <code class="line">(chirp:map-timeline! :mentions #'(lambda (status) (chirp:reply! status "Chirp chirp!")))</code>
+        <p>
+          There are functions to check for tweet length, available languages, access level, rate limits, and so on as well.
+        </p>
+        <code class="line">(chirp:compute-status-length "Wowsers, URL shortening sure is a thing! https://github.com/Shinmera/chirp.git")</code><br/>
+        <code class="line">(chirp:valid-language-p "en")</code><br/>
+        <code class="line">(chirp:access-level)</code>
         <p>
           Chirp also provides access to twitter's streaming API:
         </p>
         <code class="line">(chirp:stream/user #'(lambda (o) (when o (format T "~&amp;STREAM: ~a~%" o)) T))</code>
         <p>
-          Do note that chirp does not concern itself with threading. As such, processing stream objects in the background is up to you. The objects passed to the handler function are either a subclass of <code>MESSAGE</code>, a <code>STATUS</code>, a <code>DIRECT-MESSAGE</code> or NIL. The handler function should return <code>T</code> for as long as the stream should be active.
+          Do note that chirp does not concern itself with threading. As such, processing stream objects in the background is up to you.
         </p>
       </article>
       <article>
         <header><h2>Other Guff</h2></header>
         <p>
-          Chirp is licensed under the <a href="http://opensource.org/licenses/Artistic-2.0">Artistic License 2.0</a> and ©2013 TymoonNET/NexT, <a href="http://shinmera.com">Nicolas Hafner</a>.<br/>
+          Chirp is licensed under the <a href="http://opensource.org/licenses/Artistic-2.0">Artistic License 2.0</a> and ©2014 TymoonNET/NexT, <a href="http://shinmera.com">Nicolas Hafner</a>.<br/>
           This library can be obtained via git on <a href="https://github.com/Shinmera/chirp.git">https://github.com/Shinmera/chirp.git</a>. For questions, patches or suggestions, please contact me via <a href="mailto:shinmera@tymoon.eu">email</a> or write a <a href="https://github.com/Shinmera/chirp/issues/new">github issue</a>.
         </p>
       </article>
       <article>
         <header><h2>Chirp Package Index</h2></header>
         <ul id="docs" class="docs"><li id="template">
+            <a class="anchor" name="*CACHED-CONFIGURATION*"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL SPECIAL</span>
+                <code>
+                  <h3 class="funcname">*CACHED-CONFIGURATION*</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="*CACHED-LANGUAGES*"/>
             <article>
               <header>
                 <span class="functype">EXTERNAL SPECIAL</span>
                 <code>
                   <h3 class="funcname">*CACHED-LANGUAGES*</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="*OAUTH-ACCESS-SECRET*"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL SPECIAL</span>
+                <code>
+                  <h3 class="funcname">*OAUTH-ACCESS-SECRET*</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="*OAUTH-ACCESS-TOKEN*"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL SPECIAL</span>
+                <code>
+                  <h3 class="funcname">*OAUTH-ACCESS-TOKEN*</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="*OAUTH-API-KEY*"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL SPECIAL</span>
+                <code>
+                  <h3 class="funcname">*OAUTH-API-KEY*</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="*OAUTH-API-SECRET*"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL SPECIAL</span>
+                <code>
+                  <h3 class="funcname">*OAUTH-API-SECRET*</h3>
                   <span class="funcargs"></span>
                 </code>
               </header>
@@ -111,6 +181,19 @@
                 </code>
               </header>
               <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="ACCESS-LEVEL"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">ACCESS-LEVEL</h3>
+                  <span class="funcargs">()</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns :READ, :READ-WRITE, :READ-WRITE-DIRECTMESSAGES or NIL indicating the current
+access level.</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="ACCOUNT/REMOVE-PROFILE-BANNER"/>
@@ -337,6 +420,18 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/application/rate_limi
               <pre class="funcdesc">Class representation of a banner as returned by users/profile-banner.</pre>
             </article>
           </li><li id="template">
+            <a class="anchor" name="BLOCK!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">BLOCK!</h3>
+                  <span class="funcargs">(USER)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Blocks the given user as per BLOCKS/CREATE. Returns a new user object.</pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="BLOCKING"/>
             <article>
               <header>
@@ -488,6 +583,18 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/blocks/list</pre>
               </header>
               <pre class="funcdesc">Finishes the authentication procedure by retrieving the access token.
 Sets the *OAUTH-TOKEN* and *OAUTH-TOKEN-SECRET* to their respective values.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="COMPUTE-STATUS-LENGTH"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">COMPUTE-STATUS-LENGTH</h3>
+                  <span class="funcargs">(STATUS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="CONFIGURATION"/>
@@ -734,6 +841,18 @@ If no additional data is available, NIL is returned instead.</pre>
                 </code>
               </header>
               <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="DELETE!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">DELETE!</h3>
+                  <span class="funcargs">(OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Deletes the given object.</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="DESCRIPTION"/>
@@ -1122,6 +1241,18 @@ According to spec https://dev.twitter.com/docs/entities</pre>
               <pre class="funcdesc"></pre>
             </article>
           </li><li id="template">
+            <a class="anchor" name="FAVORITE!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">FAVORITE!</h3>
+                  <span class="funcargs">(STATUS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Favorites the given status as per FAVORITES/CREATE. Returns a new STATUS object.</pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="FAVORITED"/>
             <article>
               <header>
@@ -1176,6 +1307,19 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/favorites/destroy</p
 According to spec https://dev.twitter.com/docs/api/1.1/get/favorites/list</pre>
             </article>
           </li><li id="template">
+            <a class="anchor" name="FETCH-USER!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">FETCH-USER!</h3>
+                  <span class="funcargs">(OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Fetches the user object associated with the given object. 
+This always returns a fresh object and always results in a server call.</pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="FILE-TO-BASE64-STRING"/>
             <article>
               <header>
@@ -1186,6 +1330,18 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/favorites/list</pre>
                 </code>
               </header>
               <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="FOLLOW!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">FOLLOW!</h3>
+                  <span class="funcargs">(USER)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Follows the given user as per FRIENDSHIPS/CREATE. Returns a new user object.</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="FOLLOW-REQUEST-SENT"/>
@@ -1582,7 +1738,7 @@ According to spec https://dev.twitter.com/docs/entities#The_hashtags_entity</pre
                 <span class="functype">EXTERNAL FUNCTION</span>
                 <code>
                   <h3 class="funcname">HELP/CONFIGURATION</h3>
-                  <span class="funcargs">()</span>
+                  <span class="funcargs">(&amp;KEY REFRESH-CACHE)</span>
                 </code>
               </header>
               <pre class="funcdesc">Returns the current configuration used by Twitter including twitter.com slugs which are not usernames, maximum photo resolutions, and t.co URL lengths.
@@ -1596,7 +1752,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/help/configuration</p
                 <span class="functype">EXTERNAL FUNCTION</span>
                 <code>
                   <h3 class="funcname">HELP/LANGUAGES</h3>
-                  <span class="funcargs">()</span>
+                  <span class="funcargs">(&amp;KEY REFRESH-CACHE)</span>
                 </code>
               </header>
               <pre class="funcdesc">Returns the list of languages supported by Twitter along with their ISO 639-1 code. The ISO 639-1 code is the two letter value to use if you include lang with any of your requests.
@@ -1780,6 +1936,18 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/help/languages</pre>
                 </code>
               </header>
               <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="LIST!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">LIST!</h3>
+                  <span class="funcargs">(LIST USER)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Adds the given user to the given list as per LISTS/MEMBERS/CREATE. Returns the given USER.</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="LISTS/CREATE"/>
@@ -2114,6 +2282,28 @@ According to spec https://dev.twitter.com/docs/platform-objects/places</pre>
 Returns the collected return values of the FUNCTION calls.</pre>
             </article>
           </li><li id="template">
+            <a class="anchor" name="MAP-TIMELINE!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">MAP-TIMELINE!</h3>
+                  <span class="funcargs">(TIMELINE HANDLER-FUNCTION &amp;REST ARGS &amp;KEY COOLDOWN COUNT TRIM-USER
+ INCLUDE-ENTITIES (INCLUDE-USER-ENTITIES T) (INCLUDE-ENTITIES T) (COUNT 20)
+ (COOLDOWN 5) (INCLUDE-RTS T) CONTRIBUTOR-DETAILS EXCLUDE-REPLIES
+ &amp;ALLOW-OTHER-KEYS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Continuously apply HANDLER-FUNCTION to each STATUS appearing in the given TIMELINE.
+Before fetching new tweets, a COOLDOWN amount of seconds are slept to avoid spamming.
+Each time after a fetch, HANDLER-FUNCTION is applied to each status returned by the fetch.
+Internally, the :SINCE-ID argument is supplied to each subsequent request to assure that only
+new statuses are fetched on every iteration.
+Depending on which timeline is requested, additional keyword arguments may be supplied.
+
+See the individual STATUSES/* functions for further reference.</pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="MARKED-SPAM"/>
             <article>
               <header>
@@ -2202,6 +2392,18 @@ According to spec https://dev.twitter.com/docs/entities#The_media_entity</pre>
 According to spec https://dev.twitter.com/docs/entities#The_user_mentions_entity</pre>
             </article>
           </li><li id="template">
+            <a class="anchor" name="MENTION!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">MENTION!</h3>
+                  <span class="funcargs">(USER TEXT &amp;KEY FILE REPLY-TO LATITUDE LONGITUDE PLACE-ID POSSIBLY-SENSITIVE)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Creates a new mentioning status (@user ..) as per TWEET!. Returns the new STATUS object.</pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="MESSAGE"/>
             <article>
               <header>
@@ -2226,6 +2428,18 @@ According to spec https://dev.twitter.com/docs/streaming-apis/messages</pre>
                 </code>
               </header>
               <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="MESSAGE!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">MESSAGE!</h3>
+                  <span class="funcargs">(USER TEXT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Sends a direct message to the given user as per DIRECT-MESSAGES/NEW. Returns the new DIRECT-MESSAGE Object.</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="MODE"/>
@@ -2722,6 +2936,42 @@ This function is DESTRUCTIVE.</pre>
               <pre class="funcdesc"></pre>
             </article>
           </li><li id="template">
+            <a class="anchor" name="REPLY!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">REPLY!</h3>
+                  <span class="funcargs">(STATUS TEXT &amp;KEY FILE LATITUDE LONGITUDE PLACE-ID POSSIBLY-SENSITIVE)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Replies to the given status, mentioning only the status' owner (@user ..) as per TWEET!. Returns the new STATUS object.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="REPLY-ALL!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">REPLY-ALL!</h3>
+                  <span class="funcargs">(STATUS TEXT &amp;KEY FILE LATITUDE LONGITUDE PLACE-ID POSSIBLY-SENSITIVE)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Replies to all mentioned users in the tweet as per TWEET!. Returns the new STATUS object.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="REPORT!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">REPORT!</h3>
+                  <span class="funcargs">(USER)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Reports the given user for spam and blocks it as per USERS/REPORT-SPAM. Returns a new user object.</pre>
+            </article>
+          </li><li id="template">
             <a class="anchor" name="REQUEST-METHOD"/>
             <article>
               <header>
@@ -2770,6 +3020,18 @@ This function is DESTRUCTIVE.</pre>
               <pre class="funcdesc">Class representation of a twitter resource objkect.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/application/rate_limit_status</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="RETWEET!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">RETWEET!</h3>
+                  <span class="funcargs">(STATUS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Retweets the given status as per STATUSES/RETWEET. Returns the new STATUS object.</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="RETWEETED"/>
@@ -3186,7 +3448,7 @@ According to spec https://dev.twitter.com/docs/platform-objects/tweets</pre>
                 <span class="functype">EXTERNAL FUNCTION</span>
                 <code>
                   <h3 class="funcname">STATUSES/DESTROY</h3>
-                  <span class="funcargs">(ID &amp;KEY (TRIM-USER T))</span>
+                  <span class="funcargs">(ID &amp;KEY TRIM-USER)</span>
                 </code>
               </header>
               <pre class="funcdesc">Destroys the status specified by the required ID parameter. The authenticating user must be the author of the specified status. Returns the destroyed status if successful.
@@ -3245,7 +3507,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/oembed</pre>
                 <span class="functype">EXTERNAL FUNCTION</span>
                 <code>
                   <h3 class="funcname">STATUSES/RETWEET</h3>
-                  <span class="funcargs">(ID &amp;KEY (TRIM-USER T))</span>
+                  <span class="funcargs">(ID &amp;KEY TRIM-USER)</span>
                 </code>
               </header>
               <pre class="funcdesc">Retweets a tweet. Returns the original tweet with retweet details embedded.
@@ -3293,7 +3555,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweets/%3A
               </header>
               <pre class="funcdesc">Returns the most recent tweets authored by the authenticating user that have been retweeted by others. This timeline is a subset of the user's GET statuses/user_timeline.
 
-According to spec </pre>
+According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweets_of_me</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="STATUSES/SHOW"/>
@@ -3352,6 +3614,21 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/update_with
               <pre class="funcdesc">Returns a collection of the most recent Tweets posted by the user indicated by the screen_name or user_id parameters.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/user_timeline</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="STREAM!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">STREAM!</h3>
+                  <span class="funcargs">(FILTER HANDLER-FUNCTION &amp;REST ARGS &amp;KEY STALL-WARNINGS FILTER-LEVEL LANGUAGE
+ COUNT (FILTER-LEVEL :NONE) LOCATIONS TRACK FOLLOW REPLIES (WITH :FOLLOW)
+ &amp;ALLOW-OTHER-KEYS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Starts the streaming process as per the STREAM/ functions. Depending on the filter, a different stream is started.
+FILTER can be of type USER, LOCATION, GEOMETRY, STRING, NULL or :USER, :SITE, :SAMPLE, :FILTER or :FIREHOSE.</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="STREAM-CONTROL"/>
@@ -3594,6 +3871,18 @@ the loop is stopped and the stream is closed.
 According to spec https://dev.twitter.com/docs/api/1.1/get/user
 https://dev.twitter.com/docs/streaming-apis/streams/user
 https://dev.twitter.com/docs/streaming-apis/messages</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="SUBSCRIBE!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">SUBSCRIBE!</h3>
+                  <span class="funcargs">(LIST)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Subscribes to the given list as per LISTS/SUBSCRIBERS/CREATE. Returns a new USER-LIST object.</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="T-SYMBOL"/>
@@ -3869,6 +4158,78 @@ According to spec https://api.twitter.com/1.1/trends/place.json</pre>
                 </code>
               </header>
               <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="TWEET!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">TWEET!</h3>
+                  <span class="funcargs">(TEXT &amp;KEY FILE REPLY-TO LATITUDE LONGITUDE PLACE-ID POSSIBLY-SENSITIVE)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Creates a new status as per STATUSES/UPDATE or STATUSES/UPDATE-WITH-MEDIA if FILE is given. Returns the new STATUS object.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="UNBLOCK!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">UNBLOCK!</h3>
+                  <span class="funcargs">(USER)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Unblocks the given user as per BLOCKS/DESTROY. Returns a new user object.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="UNFAVORITE!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">UNFAVORITE!</h3>
+                  <span class="funcargs">(STATUS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Unfavorites the given status as per FAVORITES/DESTROY. Returns a new STATUS object.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="UNFOLLOW!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">UNFOLLOW!</h3>
+                  <span class="funcargs">(USER)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Unfollows the given user as per FRIENDSHIPS/DESTROY. Returns a new user object.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="UNLIST!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">UNLIST!</h3>
+                  <span class="funcargs">(LIST USER)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Removes the given user from the given list as per LISTS/MEMBERS/DESTROY-ALL. Returns the given USER.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="UNSUBSCRIBE!"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3 class="funcname">UNSUBSCRIBE!</h3>
+                  <span class="funcargs">(LIST)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Unsubscribes from the given list as per LISTS/SUBSCRIBERS/DESTROY. REturns a new USER-LIST object.</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="UP-TO-STATUS-ID"/>
