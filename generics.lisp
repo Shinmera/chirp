@@ -197,10 +197,11 @@ This always returns a fresh object and always results in a server call.")
   (assert (numberp cooldown) () "COOLDOWN must be a number.")
   (setf timelineargs (remf-plist timelineargs :cooldown))
   (loop with last-id = NIL
-        for data = (apply timelinefun timelineargs) then (apply timelinefun :since-id last-id timelineargs)
+        for data = (nreverse (apply timelinefun timelineargs))
+          then (nreverse (apply timelinefun :since-id last-id timelineargs))
         do (loop for status in data
                  do (funcall handlerfun status)
-                 finally (setf last-id (id status)))
+                 finally (when status (setf last-id (id status))))
            (sleep cooldown)))
 
 (defgeneric map-timeline! (timeline handler-function &rest args &key cooldown count trim-user include-entities &allow-other-keys)
@@ -212,18 +213,18 @@ new statuses are fetched on every iteration.
 Depending on which timeline is requested, additional keyword arguments may be supplied.
 
 See the individual STATUSES/* functions for further reference.")
-  (:method ((timeline (eql :mentions)) handler-function &rest args &key (cooldown 5) (count 20) trim-user (include-entities T) contributor-details)
+  (:method ((timeline (eql :mentions)) handler-function &rest args &key (cooldown 60) (count 20) trim-user (include-entities T) contributor-details)
     (declare (ignore count trim-user include-entities contributor-details))
     (%map-timeline! #'statuses/mentions-timeline handler-function cooldown args))
   
-  (:method ((timeline (eql :user)) handler-function &rest args &key (cooldown 5) (count 20) trim-user (include-entities T) contributor-details (include-rts T) exclude-replies)
+  (:method ((timeline (eql :user)) handler-function &rest args &key (cooldown 60) (count 20) trim-user (include-entities T) contributor-details (include-rts T) exclude-replies)
     (declare (ignore count trim-user include-entities contributor-details include-rts exclude-replies))
     (%map-timeline! #'statuses/user-timeline handler-function cooldown args))
   
-  (:method ((timeline (eql :home)) handler-function &rest args &key (cooldown 5) (count 20) trim-user (include-entities T) contributor-details exclude-replies)
+  (:method ((timeline (eql :home)) handler-function &rest args &key (cooldown 60) (count 20) trim-user (include-entities T) contributor-details exclude-replies)
     (declare (ignore count trim-user include-entities contributor-details exclude-replies))
     (%map-timeline! #'statuses/home-timeline handler-function cooldown args))
   
-  (:method ((timeline (eql :retweets)) handler-function &rest args &key (cooldown 5) (count 20) trim-user (include-entities T) (include-user-entities T))
+  (:method ((timeline (eql :retweets)) handler-function &rest args &key (cooldown 60) (count 20) trim-user (include-entities T) (include-user-entities T))
     (declare (ignore count trim-user include-entities include-user-entities))
     (%map-timeline! #'statuses/retweets-of-me handler-function cooldown args)))
