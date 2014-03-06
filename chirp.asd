@@ -51,5 +51,6 @@
 
 ;; (defsystem chirp-doc
 ;;   :name "Chirp Doc"
+;;   :pathname #.(asdf:system-source-directory :chirp)
 ;;   :components ((:file "documentation"))
 ;;   :depends-on (:chirp :lquery-doc))
