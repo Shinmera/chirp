@@ -48,10 +48,6 @@
         </p>
         <code class="line">(chirp:statuses/update "Hooray, I successfully used the Chirp Common Lisp library to tweet!")</code>
         <p>
-          Using the various convenience methods, a simple bot can be assembled with relative ease:
-        </p>
-        <code class="line">(chirp:map-timeline! :mentions #'(lambda (status) (chirp:reply! status "Chirp chirp!")))</code>
-        <p>
           There are functions to check for tweet length, available languages, access level, rate limits, and so on as well.
         </p>
         <code class="line">(chirp:compute-status-length "Wowsers, URL shortening sure is a thing! https://github.com/Shinmera/chirp.git")</code><br/>
@@ -60,10 +56,23 @@
         <p>
           Chirp also provides access to twitter's streaming API:
         </p>
-        <code class="line">(chirp:stream/user #'(lambda (o) (when o (format T "~&amp;STREAM: ~a~%" o)) T))</code>
+        <code class="line">(chirp:stream/user #'(lambda (message) (when message (format T "~&amp;STREAM: ~a~%" message)) T))</code>
         <p>
           Do note that chirp does not concern itself with threading. As such, processing stream objects in the background is up to you.
         </p>
+        <p>
+          Using the various convenience methods, a simple bot can be assembled with relative ease:
+        </p>
+        <code class="line">(chirp:map-timeline! :mentions #'(lambda (status) (chirp:reply! status "Chirp chirp!")))</code>
+        <p>
+          Though the timelines are heavily rate-limited. For a more immediate response, the streaming API should be used:
+        </p>
+        <pre><code class="line">(chirp:stream!
+   :user #'(lambda (message)
+             (when (and (typep message 'chirp:status) (chirp:direct-mention-p message))
+               (chirp:reply! message "Chirp chirp!"))
+             T))</code></pre>
+        <p/>
       </article>
       <article>
         <header><h2>Other Guff</h2></header>
@@ -93,6 +102,18 @@
                 <span class="functype">EXTERNAL SPECIAL</span>
                 <code>
                   <h3 class="funcname">*CACHED-LANGUAGES*</h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="*CACHED-SELF*"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL SPECIAL</span>
+                <code>
+                  <h3 class="funcname">*CACHED-SELF*</h3>
                   <span class="funcargs"></span>
                 </code>
               </header>
@@ -216,10 +237,10 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/account/remove_profi
                 <span class="functype">EXTERNAL FUNCTION</span>
                 <code>
                   <h3 class="funcname">ACCOUNT/SELF</h3>
-                  <span class="funcargs">(&amp;KEY INCLUDE-ENTITIES (SKIP-STATUS T))</span>
+                  <span class="funcargs">(&amp;KEY REFRESH-CACHE INCLUDE-ENTITIES (SKIP-STATUS T))</span>
                 </code>
               </header>
-              <pre class="funcdesc">Alias for ACCOUNT/VERIFY-CREDENTIALS.</pre>
+              <pre class="funcdesc">Alias for ACCOUNT/VERIFY-CREDENTIALS, using caching.</pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="ACCOUNT/SETTINGS"/>
@@ -591,7 +612,7 @@ Sets the *OAUTH-TOKEN* and *OAUTH-TOKEN-SECRET* to their respective values.</pre
                 <span class="functype">EXTERNAL FUNCTION</span>
                 <code>
                   <h3 class="funcname">COMPUTE-STATUS-LENGTH</h3>
-                  <span class="funcargs">(STATUS)</span>
+                  <span class="funcargs">(STATUS-TEXT)</span>
                 </code>
               </header>
               <pre class="funcdesc"></pre>
@@ -862,6 +883,18 @@ If no additional data is available, NIL is returned instead.</pre>
                 <code>
                   <h3 class="funcname">DESCRIPTION</h3>
                   <span class="funcargs">(SB-PCL::OBJECT)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="DIRECT-MENTION-P"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">DIRECT-MENTION-P</h3>
+                  <span class="funcargs">(STATUS)</span>
                 </code>
               </header>
               <pre class="funcdesc"></pre>
@@ -2290,7 +2323,7 @@ Returns the collected return values of the FUNCTION calls.</pre>
                   <h3 class="funcname">MAP-TIMELINE!</h3>
                   <span class="funcargs">(TIMELINE HANDLER-FUNCTION &amp;REST ARGS &amp;KEY COOLDOWN COUNT TRIM-USER
  INCLUDE-ENTITIES (INCLUDE-USER-ENTITIES T) (INCLUDE-ENTITIES T) (COUNT 20)
- (COOLDOWN 5) (INCLUDE-RTS T) CONTRIBUTOR-DETAILS EXCLUDE-REPLIES
+ (COOLDOWN 60) (INCLUDE-RTS T) CONTRIBUTOR-DETAILS EXCLUDE-REPLIES
  &amp;ALLOW-OTHER-KEYS)</span>
                 </code>
               </header>
@@ -2402,6 +2435,18 @@ According to spec https://dev.twitter.com/docs/entities#The_user_mentions_entity
                 </code>
               </header>
               <pre class="funcdesc">Creates a new mentioning status (@user ..) as per TWEET!. Returns the new STATUS object.</pre>
+            </article>
+          </li><li id="template">
+            <a class="anchor" name="MENTION-P"/>
+            <article>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3 class="funcname">MENTION-P</h3>
+                  <span class="funcargs">(STATUS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
             </article>
           </li><li id="template">
             <a class="anchor" name="MESSAGE"/>
