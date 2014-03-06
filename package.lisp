@@ -174,7 +174,8 @@
    #:subscribe!
    #:unsubscribe!
    #:stream!
-   #:fetch-user!)
+   #:fetch-user!
+   #:map-timeline!)
   ;; help.lisp
   (:export
    #:*cached-languages*
@@ -366,7 +367,9 @@
    #:statuses/update
    #:statuses/update-with-media
    #:statuses/oembed
-   #:statuses/retweeters/ids)
+   #:statuses/retweeters/ids
+
+   #:compute-status-length)
   ;; stream.lisp
   (:export
    #:message
