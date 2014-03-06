@@ -61,19 +61,19 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/application/rate_limi
      :reset (local-time:unix-to-timestamp (param :reset))
      :limit (param :limit))))
 
-(defun help/configuration (&key (use-cache T))
+(defun help/configuration (&key refresh-cache)
   "Returns the current configuration used by Twitter including twitter.com slugs which are not usernames, maximum photo resolutions, and t.co URL lengths.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/help/configuration"
-  (or (when use-cache *cached-configuration*)
+  (or (unless refresh-cache *cached-configuration*)
       (setf *cached-configuration* (make-configuration (signed-request *help/configuration* :method :GET)))))
 
-(defun help/languages ()
+(defun help/languages (&key refresh-cache)
   "Returns the list of languages supported by Twitter along with their ISO 639-1 code. The ISO 639-1 code is the two letter value to use if you include lang with any of your requests.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/help/languages"
-  (setf *cached-languages*
-        (mapcar #'make-language (signed-request *help/languages* :method :GET))))
+  (or (unless refresh-cache *cached-languages*)
+      (setf *cached-languages* (mapcar #'make-language (signed-request *help/languages* :method :GET)))))
 
 (defun help/privacy ()
   "Returns Twitter's Privacy Policy.
@@ -104,7 +104,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/application/rate_limi
 
 See HELP/LANGUAGES."
   (when (or refresh-cache (not *cached-languages*))
-    (help/languages))
+    (help/languages :refresh-cache T))
   (loop for lang in *cached-languages*
         if (string-equal language (code lang))
           return T))
