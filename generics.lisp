@@ -195,7 +195,7 @@ This always returns a fresh object and always results in a server call.")
 
 (defun %map-timeline! (timelinefun handlerfun cooldown timelineargs)
   (assert (numberp cooldown) () "COOLDOWN must be a number.")
-  (setf timelineargs (remf-plist timelineargs :cooldown))
+  (setf timelineargs (remf timelineargs :cooldown))
   (loop with last-id = NIL
         for data = (nreverse (apply timelinefun timelineargs))
           then (nreverse (apply timelinefun :since-id last-id timelineargs))
