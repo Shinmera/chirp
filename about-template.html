@@ -67,7 +67,7 @@
         <p>
           Using the various convenience methods, a simple bot can be assembled with relative ease:
         </p>
-        <code class="line">(<a href="#MAP-TIMELINE!">chirp:map-timeline!</a> :mentions #'(lambda (status) (chirp:reply! status "Chirp chirp!")))</code>
+        <code class="line">(<a href="#MAP-TIMELINE!">chirp:map-timeline!</a> :mentions #'(lambda (status) (<a href="#REPLY!">chirp:reply!</a> status "Chirp chirp!")))</code>
         <p>
           Though the timelines are heavily rate-limited. For a more immediate response, the streaming API should be used:
         </p>
