@@ -286,5 +286,5 @@ Sets the *OAUTH-TOKEN* and *OAUTH-TOKEN-SECRET* to their respective values."
   "Returns :READ, :READ-WRITE, :READ-WRITE-DIRECTMESSAGES or NIL indicating the current
 access level."
   (ignore-errors
-   (let ((header (cdr (assoc :x-access-level (nth-value 2 (chirp:signed-request chirp::*account/verify-credentials* :parameters () :method :GET))))))
+   (let ((header (cdr (assoc :x-access-level (nth-value 2 (signed-request *account/verify-credentials* :parameters () :method :GET))))))
      (values (find-symbol (string-upcase header) "KEYWORD")))))
