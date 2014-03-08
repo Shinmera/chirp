@@ -17,6 +17,8 @@
 (defvar *oauth/authorize* "https://api.twitter.com/oauth/authorize")
 (defvar *oauth/access-token* "https://api.twitter.com/oauth/access_token")
 (defvar *server-port* 8989)
+(defvar *access-levels* '(:READ :READ-WRITE :READ-WRITE-DIRECTMESSAGES))
+(defvar *cached-access* NIL)
 
 (defun oauth-reset ()
   (setf *oauth-api-key* NIL
@@ -129,7 +131,10 @@ Simply generates a signature and appends the proper parameter."
            (body (parse-body (nth 0 vals) (nth 2 vals))))
       (setf (nth 0 vals) body)
       (if (= (nth 1 vals) 200)
-          (values-list vals)
+          (progn
+            (when-let ((access (cdr (assoc :x-access-level (nth 2 vals)))))
+              (setf *cached-access* (find-symbol (string-upcase access) "KEYWORD")))
+            (values-list vals))
           (error 'oauth-request-error
                  :body body :status (second vals) :headers (third vals)
                  :url uri
@@ -281,10 +286,10 @@ Sets the *OAUTH-TOKEN* and *OAUTH-TOKEN-SECRET* to their respective values."
           *oauth-access-secret* (cdr (assoc :oauth-token-secret data)))
     (values *oauth-access-token* *oauth-access-secret*)))
 
-(defvar *access-levels* '(:READ :READ-WRITE :READ-WRITE-DIRECTMESSAGES))
 (defun access-level ()
   "Returns :READ, :READ-WRITE, :READ-WRITE-DIRECTMESSAGES or NIL indicating the current
 access level."
-  (ignore-errors
-   (let ((header (cdr (assoc :x-access-level (nth-value 2 (signed-request *account/verify-credentials* :parameters () :method :GET))))))
-     (values (find-symbol (string-upcase header) "KEYWORD")))))
+  (unless *cached-access*
+    ;; Use some other call that is commonly required at some point anyway.
+    (help/configuration :refresh-cache T))
+  *cached-access*)

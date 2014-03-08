@@ -540,6 +540,8 @@
    #:*oauth-signature-method*
    #:*oauth-version*
    #:*server-port*
+   #:*access-levels*
+   #:*cached-access*
    
    #:signed-request
    #:signed-data-request
