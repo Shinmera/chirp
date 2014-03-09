@@ -67,14 +67,14 @@
         <p>
           Using the various convenience methods, a simple bot can be assembled with relative ease:
         </p>
-        <code class="line">(<a href="#MAP-TIMELINE!">chirp:map-timeline!</a> :mentions #'(lambda (status) (chirp:reply! status "Chirp chirp!")))</code>
+        <code class="line">(<a href="#MAP-TIMELINE">chirp:map-timeline</a> :mentions #'(lambda (status) (<a href="#REPLY">chirp:reply</a> status "Chirp chirp!")))</code>
         <p>
           Though the timelines are heavily rate-limited. For a more immediate response, the streaming API should be used:
         </p>
-        <pre><code class="line">(<a href="#STREAM!">chirp:stream!</a>
+        <pre><code class="line">(<a href="#START-STREAM">chirp:start-stream</a>
    :user #'(lambda (message)
              (when (and (typep message '<a href="#STATUS">chirp:status</a>) (<a href="#DIRECT-MENTION-P">chirp:direct-mention-p</a> message))
-               (<a href="#REPLY!">chirp:reply!</a> message "Chirp chirp!"))
+               (<a href="#REPLY">chirp:reply</a> message "Chirp chirp!"))
              T))</code></pre>
         <p/>
       </article>
@@ -1516,6 +1516,30 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/users/suggestions/%3A
         <header><h2>Chirp-Extra Package Index</h2></header>
         <ul id="docs-extra" class="docs"><li id="template">
             <article>
+              <a class="anchor" name="*ACCESS-LEVELS*"/>
+              <header>
+                <span class="functype">EXTERNAL SPECIAL</span>
+                <code>
+                  <h3><a class="funcname" href="#*ACCESS-LEVELS*">*ACCESS-LEVELS*</a></h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <article>
+              <a class="anchor" name="*CACHED-ACCESS*"/>
+              <header>
+                <span class="functype">EXTERNAL SPECIAL</span>
+                <code>
+                  <h3><a class="funcname" href="#*CACHED-ACCESS*">*CACHED-ACCESS*</a></h3>
+                  <span class="funcargs"></span>
+                </code>
+              </header>
+              <pre class="funcdesc"></pre>
+            </article>
+          </li><li id="template">
+            <article>
               <a class="anchor" name="*CACHED-CONFIGURATION*"/>
               <header>
                 <span class="functype">EXTERNAL SPECIAL</span>
@@ -1661,11 +1685,11 @@ access level.</pre>
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="BLOCK!"/>
+              <a class="anchor" name="BLOCK-USER"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#BLOCK!">BLOCK!</a></h3>
+                  <h3><a class="funcname" href="#BLOCK-USER">BLOCK-USER</a></h3>
                   <span class="funcargs">(USER)</span>
                 </code>
               </header>
@@ -1760,11 +1784,11 @@ If no additional data is available, NIL is returned instead.</pre>
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="DELETE!"/>
+              <a class="anchor" name="DELETE-OBJECT"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#DELETE!">DELETE!</a></h3>
+                  <h3><a class="funcname" href="#DELETE-OBJECT">DELETE-OBJECT</a></h3>
                   <span class="funcargs">(OBJECT)</span>
                 </code>
               </header>
@@ -1798,11 +1822,11 @@ Returns the cursor at its end position. </pre>
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="FAVORITE!"/>
+              <a class="anchor" name="FAVORITE"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#FAVORITE!">FAVORITE!</a></h3>
+                  <h3><a class="funcname" href="#FAVORITE">FAVORITE</a></h3>
                   <span class="funcargs">(STATUS)</span>
                 </code>
               </header>
@@ -1810,11 +1834,11 @@ Returns the cursor at its end position. </pre>
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="FETCH-USER!"/>
+              <a class="anchor" name="FETCH-USER"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#FETCH-USER!">FETCH-USER!</a></h3>
+                  <h3><a class="funcname" href="#FETCH-USER">FETCH-USER</a></h3>
                   <span class="funcargs">(OBJECT)</span>
                 </code>
               </header>
@@ -1835,11 +1859,11 @@ This always returns a fresh object and always results in a server call.</pre>
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="FOLLOW!"/>
+              <a class="anchor" name="FOLLOW-USER"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#FOLLOW!">FOLLOW!</a></h3>
+                  <h3><a class="funcname" href="#FOLLOW-USER">FOLLOW-USER</a></h3>
                   <span class="funcargs">(USER)</span>
                 </code>
               </header>
@@ -1902,11 +1926,11 @@ See OAUTH/AUTHORIZE, INITIATE-SERVER-AUTHENTICATION and OAUTH/AUTHENTICATE respe
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="LIST!"/>
+              <a class="anchor" name="LIST-USER"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#LIST!">LIST!</a></h3>
+                  <h3><a class="funcname" href="#LIST-USER">LIST-USER</a></h3>
                   <span class="funcargs">(LIST USER)</span>
                 </code>
               </header>
@@ -1927,11 +1951,11 @@ Returns the collected return values of the FUNCTION calls.</pre>
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="MAP-TIMELINE!"/>
+              <a class="anchor" name="MAP-TIMELINE"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#MAP-TIMELINE!">MAP-TIMELINE!</a></h3>
+                  <h3><a class="funcname" href="#MAP-TIMELINE">MAP-TIMELINE</a></h3>
                   <span class="funcargs">(TIMELINE HANDLER-FUNCTION &amp;REST ARGS &amp;KEY COOLDOWN COUNT TRIM-USER
  INCLUDE-ENTITIES (INCLUDE-USER-ENTITIES T) (INCLUDE-ENTITIES T) (COUNT 20)
  (COOLDOWN 60) (INCLUDE-RTS T) CONTRIBUTOR-DETAILS EXCLUDE-REPLIES
@@ -1949,18 +1973,6 @@ See the individual STATUSES/* functions for further reference.</pre>
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="MENTION!"/>
-              <header>
-                <span class="functype">EXTERNAL GENERIC</span>
-                <code>
-                  <h3><a class="funcname" href="#MENTION!">MENTION!</a></h3>
-                  <span class="funcargs">(USER TEXT &amp;KEY FILE REPLY-TO LATITUDE LONGITUDE PLACE-ID POSSIBLY-SENSITIVE)</span>
-                </code>
-              </header>
-              <pre class="funcdesc">Creates a new mentioning status (@user ..) as per TWEET!. Returns the new STATUS object.</pre>
-            </article>
-          </li><li id="template">
-            <article>
               <a class="anchor" name="MENTION-P"/>
               <header>
                 <span class="functype">EXTERNAL FUNCTION</span>
@@ -1973,11 +1985,23 @@ See the individual STATUSES/* functions for further reference.</pre>
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="MESSAGE!"/>
+              <a class="anchor" name="MENTION-USER"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#MESSAGE!">MESSAGE!</a></h3>
+                  <h3><a class="funcname" href="#MENTION-USER">MENTION-USER</a></h3>
+                  <span class="funcargs">(USER TEXT &amp;KEY FILE REPLY-TO LATITUDE LONGITUDE PLACE-ID POSSIBLY-SENSITIVE)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Creates a new mentioning status (@user ..) as per TWEET!. Returns the new STATUS object.</pre>
+            </article>
+          </li><li id="template">
+            <article>
+              <a class="anchor" name="MESSAGE-USER"/>
+              <header>
+                <span class="functype">EXTERNAL GENERIC</span>
+                <code>
+                  <h3><a class="funcname" href="#MESSAGE-USER">MESSAGE-USER</a></h3>
                   <span class="funcargs">(USER TEXT)</span>
                 </code>
               </header>
@@ -2066,11 +2090,11 @@ This function is DESTRUCTIVE.</pre>
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="REPLY!"/>
+              <a class="anchor" name="REPLY"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#REPLY!">REPLY!</a></h3>
+                  <h3><a class="funcname" href="#REPLY">REPLY</a></h3>
                   <span class="funcargs">(STATUS TEXT &amp;KEY FILE LATITUDE LONGITUDE PLACE-ID POSSIBLY-SENSITIVE)</span>
                 </code>
               </header>
@@ -2078,11 +2102,11 @@ This function is DESTRUCTIVE.</pre>
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="REPLY-ALL!"/>
+              <a class="anchor" name="REPLY-ALL"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#REPLY-ALL!">REPLY-ALL!</a></h3>
+                  <h3><a class="funcname" href="#REPLY-ALL">REPLY-ALL</a></h3>
                   <span class="funcargs">(STATUS TEXT &amp;KEY FILE LATITUDE LONGITUDE PLACE-ID POSSIBLY-SENSITIVE)</span>
                 </code>
               </header>
@@ -2090,11 +2114,11 @@ This function is DESTRUCTIVE.</pre>
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="REPORT!"/>
+              <a class="anchor" name="REPORT-USER"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#REPORT!">REPORT!</a></h3>
+                  <h3><a class="funcname" href="#REPORT-USER">REPORT-USER</a></h3>
                   <span class="funcargs">(USER)</span>
                 </code>
               </header>
@@ -2102,11 +2126,11 @@ This function is DESTRUCTIVE.</pre>
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="RETWEET!"/>
+              <a class="anchor" name="RETWEET"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#RETWEET!">RETWEET!</a></h3>
+                  <h3><a class="funcname" href="#RETWEET">RETWEET</a></h3>
                   <span class="funcargs">(STATUS)</span>
                 </code>
               </header>
@@ -2176,11 +2200,11 @@ See SIGNED-REQUEST. Returns values according to DRAKMA:HTTP-REQUEST with :WANT-S
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="STREAM!"/>
+              <a class="anchor" name="START-STREAM"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#STREAM!">STREAM!</a></h3>
+                  <h3><a class="funcname" href="#START-STREAM">START-STREAM</a></h3>
                   <span class="funcargs">(FILTER HANDLER-FUNCTION &amp;REST ARGS &amp;KEY STALL-WARNINGS FILTER-LEVEL LANGUAGE
  COUNT (FILTER-LEVEL NONE) LOCATIONS TRACK FOLLOW REPLIES (WITH FOLLOW)
  &amp;ALLOW-OTHER-KEYS)</span>
@@ -2191,11 +2215,11 @@ FILTER can be of type USER, LOCATION, GEOMETRY, STRING, NULL or :USER, :SITE, :S
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="SUBSCRIBE!"/>
+              <a class="anchor" name="SUBSCRIBE-TO-LIST"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#SUBSCRIBE!">SUBSCRIBE!</a></h3>
+                  <h3><a class="funcname" href="#SUBSCRIBE-TO-LIST">SUBSCRIBE-TO-LIST</a></h3>
                   <span class="funcargs">(LIST)</span>
                 </code>
               </header>
@@ -2218,11 +2242,11 @@ responses into an alist.</pre>
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="TWEET!"/>
+              <a class="anchor" name="TWEET"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#TWEET!">TWEET!</a></h3>
+                  <h3><a class="funcname" href="#TWEET">TWEET</a></h3>
                   <span class="funcargs">(TEXT &amp;KEY FILE REPLY-TO LATITUDE LONGITUDE PLACE-ID POSSIBLY-SENSITIVE)</span>
                 </code>
               </header>
@@ -2230,11 +2254,11 @@ responses into an alist.</pre>
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="UNBLOCK!"/>
+              <a class="anchor" name="UNBLOCK-USER"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#UNBLOCK!">UNBLOCK!</a></h3>
+                  <h3><a class="funcname" href="#UNBLOCK-USER">UNBLOCK-USER</a></h3>
                   <span class="funcargs">(USER)</span>
                 </code>
               </header>
@@ -2242,11 +2266,11 @@ responses into an alist.</pre>
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="UNFAVORITE!"/>
+              <a class="anchor" name="UNFAVORITE"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#UNFAVORITE!">UNFAVORITE!</a></h3>
+                  <h3><a class="funcname" href="#UNFAVORITE">UNFAVORITE</a></h3>
                   <span class="funcargs">(STATUS)</span>
                 </code>
               </header>
@@ -2254,11 +2278,11 @@ responses into an alist.</pre>
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="UNFOLLOW!"/>
+              <a class="anchor" name="UNFOLLOW-USER"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#UNFOLLOW!">UNFOLLOW!</a></h3>
+                  <h3><a class="funcname" href="#UNFOLLOW-USER">UNFOLLOW-USER</a></h3>
                   <span class="funcargs">(USER)</span>
                 </code>
               </header>
@@ -2266,11 +2290,11 @@ responses into an alist.</pre>
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="UNLIST!"/>
+              <a class="anchor" name="UNLIST-USER"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#UNLIST!">UNLIST!</a></h3>
+                  <h3><a class="funcname" href="#UNLIST-USER">UNLIST-USER</a></h3>
                   <span class="funcargs">(LIST USER)</span>
                 </code>
               </header>
@@ -2278,11 +2302,11 @@ responses into an alist.</pre>
             </article>
           </li><li id="template">
             <article>
-              <a class="anchor" name="UNSUBSCRIBE!"/>
+              <a class="anchor" name="UNSUBSCRIBE-FROM-LIST"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
                 <code>
-                  <h3><a class="funcname" href="#UNSUBSCRIBE!">UNSUBSCRIBE!</a></h3>
+                  <h3><a class="funcname" href="#UNSUBSCRIBE-FROM-LIST">UNSUBSCRIBE-FROM-LIST</a></h3>
                   <span class="funcargs">(LIST)</span>
                 </code>
               </header>
