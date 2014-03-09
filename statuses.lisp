@@ -123,9 +123,12 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/oembed"
 According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweeters/ids"
   (cursor-collect :ids *statuses/retweeters/ids* :parameters (prepare* id)))
 
+;; Fixme
 (defparameter *http-url-regex* (cl-ppcre:create-scanner "http://[\\w\\d\\-.]+\\.\\w{2,}(/[\\w\\d\\-%+?=&@#.;/]*)?"))
 (defparameter *https-url-regex* (cl-ppcre:create-scanner "https://[\\w\\d\\-.]+\\.\\w{2,}(/[\\w\\d\\-%+?=&@#.;/]*)?"))
 (defun compute-status-length (status-text)
+  "Computes the final status length by shortening the URLs within the tweet according to twitter's current URL shortening configurations.
+If the configuration has not been fetched before, this function call will result in an api call."
   (let* ((config (help/configuration))
          (http-url (make-string (short-url-length config) :initial-element #\X))
          (https-url (make-string (short-url-length-https config) :initial-element #\X)))
@@ -136,11 +139,16 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweeters/i
       http-url))))
 
 (defun direct-mention-p (status)
+  "Returns T if the status is a direct mention of the currently identified user.
+To qualify as a direct mention, the mention has to appear before any other text in the tweet."
+  ;; Fixme
   (when (entities status)
     (when-let ((mentions (cdr (assoc :user-mentions (entities status)))))
       (string-equal (screen-name (account/self)) (screen-name (first mentions))))))
 
 (defun mention-p (status)
+  "Returns T if the status is mentioning the currently identified user.
+Simply checks the status entities for a user-mention that matches to the currently identified user."
   (when (entities status)
     (when-let ((mentions (cdr (assoc :user-mentions (entities status)))))
       (member (screen-name (account/self)) mentions
