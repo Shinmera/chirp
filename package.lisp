@@ -505,27 +505,27 @@
    #:*connection-values*)
   ;; generics.lisp
   (:export
-   #:block!
-   #:unblock!
-   #:follow!
-   #:unfollow!
-   #:report!
-   #:message!
-   #:tweet!
-   #:mention!
-   #:delete!
-   #:reply!
-   #:reply-all!
-   #:retweet!
-   #:favorite!
-   #:unfavorite!
-   #:list!
-   #:unlist!
-   #:subscribe!
-   #:unsubscribe!
-   #:stream!
-   #:fetch-user!
-   #:map-timeline!)
+   #:fetch-user
+   #:list-user
+   #:unlist-user
+   #:subscribe-to-list
+   #:unsubscribe-from-list
+   #:block-user
+   #:unblock-user
+   #:follow-user
+   #:unfollow-user
+   #:report-user
+   #:message-user
+   #:mention-user
+   #:tweet
+   #:reply
+   #:reply-all
+   #:retweet
+   #:favorite
+   #:unfavorite
+   #:delete-object
+   #:start-stream
+   #:map-timeline)
   ;; help.lisp
   (:export
    #:*cached-languages*
