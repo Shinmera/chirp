@@ -36,9 +36,10 @@ According to spec https://dev.twitter.com/docs/platform-objects/tweets"))
   status)
 
 (define-make-* (status parameters)
-  :id :text :source :filter-level :scopes
+  :id :source :filter-level :scopes
   :possibly-sensitive :retweeted :favorited :truncated
   :withheld-copyright :withheld-in-countries :withheld-scope
+  (:text (xml-decode (cdr (assoc :text parameters))))
   (:counts `((:favorites . ,(cdr (assoc :favorites parameters)))
              (:retweets . ,(cdr (assoc :retweets parameters)))))
   (:in-reply-to (when (cdr (assoc :in-reply-to-status-id parameters))

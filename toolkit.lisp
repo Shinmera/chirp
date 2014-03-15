@@ -119,6 +119,16 @@ According to spec https://dev.twitter.com/docs/auth/percent-encoding-parameters"
                     (write-char char out))
                    (t (format out "%~2,'0x" (char-code char)))))))
 
+(defun xml-decode (string)
+  "Transforms &lt; &gt; &amp; into their proper characters."
+  (cl-ppcre:regex-replace-all
+   "&amp;"
+   (cl-ppcre:regex-replace-all
+    "&gt;"
+    (cl-ppcre:regex-replace-all "&lt;" string "<")
+    ">")
+   "&"))
+
 (defun hmac (string keystring)
   "Returns a base-64 encoded string of the HMAC digest of the given STRING
 using the KEYSTRING as HMAC key. The encoding of *external-format* is used 
