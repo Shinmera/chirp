@@ -7,7 +7,7 @@
 (in-package #:org.tymoonnext.chirp)
 
 (defvar *statuses/retweets* "https://api.twitter.com/1.1/statuses/retweets/~a.json")
-(defvar *statuses/show* "https://api.twitter.com/1.1/statuses/show.json")
+(defvar *statuses/show* "https://api.twitter.com/1.1/statuses/show/~a.json")
 (defvar *statuses/destroy* "https://api.twitter.com/1.1/statuses/destroy/~a.json")
 (defvar *statuses/retweet* "https://api.twitter.com/1.1/statuses/retweet/~a.json")
 (defvar *statuses/update* "https://api.twitter.com/1.1/statuses/update.json")
@@ -30,7 +30,8 @@ According to spec https://dev.twitter.com/docs/platform-objects/tweets"))
 
 (defmethod print-object ((status status) stream)
   (print-unreadable-object (status stream :type T)
-    (format stream "~a #~d" (screen-name (user status)) (id status))
+    (when (user status) (format stream "~a " (screen-name (user status))))
+    (format stream "#~d" (id status))
     (when (in-reply-to status) (format stream " @~a" (cdr (assoc :screen-name (in-reply-to status)))))
     (when (retweeted-status status) (format stream " RT~a" (retweeted-status status))))
   status)
@@ -65,14 +66,14 @@ According to spec https://dev.twitter.com/docs/platform-objects/tweets"))
   :author-name :author-url :provider-url :provider-name
   (:cache-age (parse-when-param :cache-age #'local-time:unix-to-timestamp)))
 
-(defun statuses/retweets (id &key (count 100) (trim-user T))
+(defun statuses/retweets (id &key (count 100) trim-user)
   "Returns a collection of the 100 most recent retweets of the tweet specified by the id parameter.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweets/%3Aid"
   (assert (<= count 100) () "Count must be less than or equal to 100.")
   (mapcar #'make-status (signed-request (format NIL *statuses/retweets* id) :parameters (prepare* count trim-user) :method :GET)))
 
-(defun statuses/show (id &key (trim-user T) include-my-retweet (include-entities T))
+(defun statuses/show (id &key trim-user include-my-retweet (include-entities T))
   "Returns a single Tweet, specified by the id parameter. The Tweet's author will also be embedded within the tweet.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/show/%3Aid"
