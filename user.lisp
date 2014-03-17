@@ -60,6 +60,12 @@ According to spec https://dev.twitter.com/docs/platform-objects/users"))
              (:sidebar-border . ,(cdr (assoc :profile-sidebar-border-color parameters)))
              (:sidebar-fill . ,(cdr (assoc :profile-sidebar-fill-color parameters))))))
 
+(defmethod initialize-instance :after ((user user) &rest rest)
+  (declare (ignore rest))
+  ;; The status object does not contain the user reference. Fix.
+  (when (status user)
+    (setf (user (status user)) user)))
+
 (defclass* banner ()
   (size width height url)
   (:documentation "Class representation of a banner as returned by users/profile-banner."))
