@@ -131,9 +131,9 @@ According to spec https://dev.twitter.com/docs/auth/percent-encoding-parameters"
   "Transforms & < > into their proper entities."
   (flet ((r (search replace string)
            (cl-ppcre:regex-replace-all search string replace)))
-    (r "&" "&amp;"
+    (r "<" "&lt;"
        (r ">" "&gt;"
-          (r "<" "&lt;" string)))))
+          (r "&" "&amp;" string)))))
 
 (defun hmac (string keystring)
   "Returns a base-64 encoded string of the HMAC digest of the given STRING
