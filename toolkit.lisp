@@ -121,13 +121,19 @@ According to spec https://dev.twitter.com/docs/auth/percent-encoding-parameters"
 
 (defun xml-decode (string)
   "Transforms &lt; &gt; &amp; into their proper characters."
-  (cl-ppcre:regex-replace-all
-   "&amp;"
-   (cl-ppcre:regex-replace-all
-    "&gt;"
-    (cl-ppcre:regex-replace-all "&lt;" string "<")
-    ">")
-   "&"))
+  (flet ((r (search replace string)
+           (cl-ppcre:regex-replace-all search string replace)))
+    (r "&amp;" "&"
+       (r "&gt;" ">"
+          (r "&lt;" "<" string)))))
+
+(defun xml-encode (string)
+  "Transforms & < > into their proper entities."
+  (flet ((r (search replace string)
+           (cl-ppcre:regex-replace-all search string replace)))
+    (r "&" "&amp;"
+       (r ">" "&gt;"
+          (r "<" "&lt;" string)))))
 
 (defun hmac (string keystring)
   "Returns a base-64 encoded string of the HMAC digest of the given STRING
