@@ -22,8 +22,7 @@
   dm)
 
 (define-make-* (direct-message parameters)
-  :id
-  (:text (xml-decode (cdr (assoc :text parameters))))
+  :id :text
   (:recipient (parse-when-param :recipient #'make-user))
   (:sender (parse-when-param :sender #'make-user))
   (:created-at (parse-when-param :created-at #'parse-twitter-time))
