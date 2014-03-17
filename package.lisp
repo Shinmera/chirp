@@ -554,6 +554,10 @@
   ;; statuses.lisp
   (:export
    #:compute-status-length
+   #:replace-entity
+   #:text-with-expanded-urls
+   #:text-with-markup
+   #:retweet-p
    #:direct-mention-p
    #:mention-p)
   ;; toolkit.lisp
