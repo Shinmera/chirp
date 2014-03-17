@@ -19,7 +19,7 @@
   <body>
     <header>
       <img src="chirp-logo.png" alt="Chirp"/>
-      <h1>v0.1.0</h1>
+      <h1>v0.2.0</h1>
     </header>
     <div id="content">
       <article>
@@ -37,7 +37,7 @@
         </p>
         <code class="line">(<a href="#INITIATE-AUTHENTICATION">chirp:initiate-authentication</a> :api-key "&lt;app api key&gt;" :api-secret "&lt;app api secret&gt;")</code>
         <p>
-          You may use the following keys for testing purposes: API-KEY: <code>D1pMCK17gI10bQ6orBPS0w</code> API-SECRET: <code>BfkvKNRRMoBPkEtDYAAOPW4s2G9U8Z7u3KAf0dBUA</code>. These are for the CL-CHIRP twitter application. You should not use these for anything other than the testing of chirp, as it may pose a security risk.
+          You may use the following keys for testing purposes: API-KEY: <code>D1pMCK17gI10bQ6orBPS0w</code> API-SECRET: <code>BfkvKNRRMoBPkEtDYAAOPW4s2G9U8Z7u3KAf0dBUA</code>. These are for the CL-CHIRP twitter application. You should not use these for anything other than the testing of Chirp, as it may pose a security risk.
         </p>
         <p>
           If the first OAuth step is successful, it should return an URL that you have to visit. This will then prompt you to authorize the application and present a PIN. Copy this pin and complete the authentication process:
@@ -62,7 +62,7 @@
         </p>
         <code class="line">(<a href="#STREAM/USER">chirp:stream/user</a> #'(lambda (message) (when message (format T "~&amp;STREAM: ~a~%" message)) T))</code>
         <p>
-          Do note that chirp does not concern itself with threading. As such, processing stream objects in the background is up to you.
+          Do note that Chirp does not concern itself with threading. As such, processing stream objects in the background is up to you.
         </p>
         <p>
           Using the various convenience methods, a simple bot can be assembled with relative ease:
@@ -76,7 +76,19 @@
              (when (and (typep message '<a href="#STATUS">chirp:status</a>) (<a href="#DIRECT-MENTION-P">chirp:direct-mention-p</a> message))
                (<a href="#REPLY">chirp:reply</a> message "Chirp chirp!"))
              T))</code></pre>
-        <p></p>
+        <p>One thing to note is that twitter XML entity encodes certain things like status texts. I frankly don't know why it does that since it's a JSON api. Chirp does not automatically decode these entities, as the twitter entities (like hashtags, urls, etc) contain position markers that depend on the encoded string. Decoding it screws over these positions. However, Chirp offers a couple of functions to make handling of entities or decoding easier:</p>
+        <code class="line">(<a href="#XML-DECODE">chirp:xml-decode</a> (<a href="#TEXT">chirp:text</a> status))</code><br />
+        <code class="line">(<a href="#TEXT-WITH-EXPANDED-URLS">chirp:text-with-expanded-urls</a> status)</code><br />
+        <code class="line">(<a href="#TEXT-WITH-MARKUP">chirp:text-with-markup</a> status)</code><br />
+        <code class="line">(<a href="#REPLACE-ENTITY">chirp:replace-entity</a> :urls #'expanded-url)</code>
+        <p>Especially the last two can be very useful for preparing the text for a web-interface.</p>
+        <p>Chirp's symbols are separated into three packages (and unified in <code>CHIRP</code>) so that you may selectively <code>USE</code> what you need.
+          <ul style="list-style:none">
+            <li><code><a href="#CHIRP-API">CHIRP-API</a></code> contains all the direct Twitter API call mapping functions.</li>
+            <li><code><a href="#CHIRP-EXTRA">CHIRP-EXTRA</a></code> contains the various helper functions that make dealing with the API easier.</li>
+            <li><code><a href="#CHIRP-OBJECTS">CHIRP-OBJECTS</a></code> contains all accessor and class symbols. You probably want to <code>USE</code> this package if you work with the objects a lot. </li>
+          </ul>
+        </p>
       </article>
       <article>
         <header><h2>Other Guff</h2></header>
@@ -86,7 +98,7 @@
         </p>
       </article>
       <article>
-        <header><h2>Chirp-API Package Index</h2></header>
+        <header><h2><a name="CHIRP-API" href="#CHIRP-API">Chirp-API Package Index</a></h2></header>
         <ul id="docs-api" class="docs">
           <li id="template">
             <article>
@@ -106,12 +118,12 @@
         </ul>
       </article>
       <article>
-        <header><h2>Chirp-Extra Package Index</h2></header>
+        <header><h2><a name="CHIRP-EXTRA" href="#CHIRP-EXTRA">Chirp-Extra Package Index</a></h2></header>
         <ul id="docs-extra" class="docs">
         </ul>
       </article>
       <article>
-        <header><h2>Chirp-Objects Package Index</h2></header>
+        <header><h2><a name="CHIRP-OBJECTS" href="#CHIRP-OBJECTS">Chirp-Objects Package Index</a></h2></header>
         <ul id="docs-objects" class="docs">
         </ul>
       </article>

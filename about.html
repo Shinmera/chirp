@@ -19,7 +19,7 @@
   <body>
     <header>
       <img src="chirp-logo.png" alt="Chirp"/>
-      <h1>v0.1.0</h1>
+      <h1>v0.2.0</h1>
     </header>
     <div id="content">
       <article>
@@ -37,7 +37,7 @@
         </p>
         <code class="line">(<a href="#INITIATE-AUTHENTICATION">chirp:initiate-authentication</a> :api-key "&lt;app api key&gt;" :api-secret "&lt;app api secret&gt;")</code>
         <p>
-          You may use the following keys for testing purposes: API-KEY: <code>D1pMCK17gI10bQ6orBPS0w</code> API-SECRET: <code>BfkvKNRRMoBPkEtDYAAOPW4s2G9U8Z7u3KAf0dBUA</code>. These are for the CL-CHIRP twitter application. You should not use these for anything other than the testing of chirp, as it may pose a security risk.
+          You may use the following keys for testing purposes: API-KEY: <code>D1pMCK17gI10bQ6orBPS0w</code> API-SECRET: <code>BfkvKNRRMoBPkEtDYAAOPW4s2G9U8Z7u3KAf0dBUA</code>. These are for the CL-CHIRP twitter application. You should not use these for anything other than the testing of Chirp, as it may pose a security risk.
         </p>
         <p>
           If the first OAuth step is successful, it should return an URL that you have to visit. This will then prompt you to authorize the application and present a PIN. Copy this pin and complete the authentication process:
@@ -62,7 +62,7 @@
         </p>
         <code class="line">(<a href="#STREAM/USER">chirp:stream/user</a> #'(lambda (message) (when message (format T "~&amp;STREAM: ~a~%" message)) T))</code>
         <p>
-          Do note that chirp does not concern itself with threading. As such, processing stream objects in the background is up to you.
+          Do note that Chirp does not concern itself with threading. As such, processing stream objects in the background is up to you.
         </p>
         <p>
           Using the various convenience methods, a simple bot can be assembled with relative ease:
@@ -76,7 +76,19 @@
              (when (and (typep message '<a href="#STATUS">chirp:status</a>) (<a href="#DIRECT-MENTION-P">chirp:direct-mention-p</a> message))
                (<a href="#REPLY">chirp:reply</a> message "Chirp chirp!"))
              T))</code></pre>
-        <p/>
+        <p>One thing to note is that twitter XML entity encodes certain things like status texts. I frankly don't know why it does that since it's a JSON api. Chirp does not automatically decode these entities, as the twitter entities (like hashtags, urls, etc) contain position markers that depend on the encoded string. Decoding it screws over these positions. However, Chirp offers a couple of functions to make handling of entities or decoding easier:</p>
+        <code class="line">(<a href="#XML-DECODE">chirp:xml-decode</a> (<a href="#TEXT">chirp:text</a> status))</code><br/>
+        <code class="line">(<a href="#TEXT-WITH-EXPANDED-URLS">chirp:text-with-expanded-urls</a> status)</code><br/>
+        <code class="line">(<a href="#TEXT-WITH-MARKUP">chirp:text-with-markup</a> status)</code><br/>
+        <code class="line">(<a href="#REPLACE-ENTITY">chirp:replace-entity</a> :urls #'expanded-url)</code>
+        <p>Especially the last two can be very useful for preparing the text for a web-interface.</p>
+        <p>Chirp's symbols are separated into three packages (and unified in <code>CHIRP</code>) so that you may selectively <code>USE</code> what you need.
+          <ul style="list-style:none">
+            <li><code><a href="#CHIRP-API">CHIRP-API</a></code> contains all the direct Twitter API call mapping functions.</li>
+            <li><code><a href="#CHIRP-EXTRA">CHIRP-EXTRA</a></code> contains the various helper functions that make dealing with the API easier.</li>
+            <li><code><a href="#CHIRP-OBJECTS">CHIRP-OBJECTS</a></code> contains all accessor and class symbols. You probably want to <code>USE</code> this package if you work with the objects a lot. </li>
+          </ul>
+        </p>
       </article>
       <article>
         <header><h2>Other Guff</h2></header>
@@ -86,7 +98,7 @@
         </p>
       </article>
       <article>
-        <header><h2>Chirp-API Package Index</h2></header>
+        <header><h2><a name="CHIRP-API" href="#CHIRP-API">Chirp-API Package Index</a></h2></header>
         <ul id="docs-api" class="docs"><li id="template">
             <article>
               <a class="anchor" name="ACCOUNT/REMOVE-PROFILE-BANNER"/>
@@ -1162,7 +1174,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweeters/i
                 <span class="functype">EXTERNAL FUNCTION</span>
                 <code>
                   <h3><a class="funcname" href="#STATUSES/RETWEETS">STATUSES/RETWEETS</a></h3>
-                  <span class="funcargs">(ID &amp;KEY (COUNT 100) (TRIM-USER T))</span>
+                  <span class="funcargs">(ID &amp;KEY (COUNT 100) TRIM-USER)</span>
                 </code>
               </header>
               <pre class="funcdesc">Returns a collection of the 100 most recent retweets of the tweet specified by the id parameter.
@@ -1191,7 +1203,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweets_of_
                 <span class="functype">EXTERNAL FUNCTION</span>
                 <code>
                   <h3><a class="funcname" href="#STATUSES/SHOW">STATUSES/SHOW</a></h3>
-                  <span class="funcargs">(ID &amp;KEY (TRIM-USER T) INCLUDE-MY-RETWEET (INCLUDE-ENTITIES T))</span>
+                  <span class="funcargs">(ID &amp;KEY TRIM-USER INCLUDE-MY-RETWEET (INCLUDE-ENTITIES T))</span>
                 </code>
               </header>
               <pre class="funcdesc">Returns a single Tweet, specified by the id parameter. The Tweet's author will also be embedded within the tweet.
@@ -1513,7 +1525,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/users/suggestions/%3A
           </li></ul>
       </article>
       <article>
-        <header><h2>Chirp-Extra Package Index</h2></header>
+        <header><h2><a name="CHIRP-EXTRA" href="#CHIRP-EXTRA">Chirp-Extra Package Index</a></h2></header>
         <ul id="docs-extra" class="docs"><li id="template">
             <article>
               <a class="anchor" name="*ACCESS-LEVELS*"/>
@@ -1718,7 +1730,8 @@ Sets the *OAUTH-TOKEN* and *OAUTH-TOKEN-SECRET* to their respective values.</pre
                   <span class="funcargs">(STATUS-TEXT)</span>
                 </code>
               </header>
-              <pre class="funcdesc"></pre>
+              <pre class="funcdesc">Computes the final status length by shortening the URLs within the tweet according to twitter's current URL shortening configurations.
+If the configuration has not been fetched before, this function call will result in an api call.</pre>
             </article>
           </li><li id="template">
             <article>
@@ -1804,7 +1817,8 @@ If no additional data is available, NIL is returned instead.</pre>
                   <span class="funcargs">(STATUS)</span>
                 </code>
               </header>
-              <pre class="funcdesc"></pre>
+              <pre class="funcdesc">Returns T if the status is a direct mention of the currently identified user.
+To qualify as a direct mention, the mention has to appear before any other text in the tweet.</pre>
             </article>
           </li><li id="template">
             <article>
@@ -1981,7 +1995,8 @@ See the individual STATUSES/* functions for further reference.</pre>
                   <span class="funcargs">(STATUS)</span>
                 </code>
               </header>
-              <pre class="funcdesc"></pre>
+              <pre class="funcdesc">Returns T if the status is mentioning the currently identified user.
+Simply checks the status entities for a user-mention that matches to the currently identified user.</pre>
             </article>
           </li><li id="template">
             <article>
@@ -2090,6 +2105,23 @@ This function is DESTRUCTIVE.</pre>
             </article>
           </li><li id="template">
             <article>
+              <a class="anchor" name="REPLACE-ENTITY"/>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3><a class="funcname" href="#REPLACE-ENTITY">REPLACE-ENTITY</a></h3>
+                  <span class="funcargs">(STATUS ENTITY-TYPE REPLACEMENT-FUNCTION &amp;OPTIONAL (TEXT (TEXT STATUS)))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Replaces the regions as marked by the entities with the result of the replacement function.
+
+STATUS               --- A status object or any object with entities.
+ENTITY-TYPE          --- A keyword for the entity to replace. Either :USER-MENTIONS :URLS :SYMBOLS :HASHTAGS :MEDIA
+REPLACEMENT-FUNCTION --- A function with one argument; the entity object currently being replaced.
+TEXT                 --- The text to replace in. The sequence is not modified.</pre>
+            </article>
+          </li><li id="template">
+            <article>
               <a class="anchor" name="REPLY"/>
               <header>
                 <span class="functype">EXTERNAL GENERIC</span>
@@ -2135,6 +2167,19 @@ This function is DESTRUCTIVE.</pre>
                 </code>
               </header>
               <pre class="funcdesc">Retweets the given status as per STATUSES/RETWEET. Returns the new STATUS object.</pre>
+            </article>
+          </li><li id="template">
+            <article>
+              <a class="anchor" name="RETWEET-P"/>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3><a class="funcname" href="#RETWEET-P">RETWEET-P</a></h3>
+                  <span class="funcargs">(STATUS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Returns T if the status is a retweet.
+To qualify as a retweet, the tweet has to either contain a RETWEETED-STATUS, or start with "RT".</pre>
             </article>
           </li><li id="template">
             <article>
@@ -2224,6 +2269,41 @@ FILTER can be of type USER, LOCATION, GEOMETRY, STRING, NULL or :USER, :SITE, :S
                 </code>
               </header>
               <pre class="funcdesc">Subscribes to the given list as per LISTS/SUBSCRIBERS/CREATE. Returns a new USER-LIST object.</pre>
+            </article>
+          </li><li id="template">
+            <article>
+              <a class="anchor" name="TEXT-WITH-EXPANDED-URLS"/>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3><a class="funcname" href="#TEXT-WITH-EXPANDED-URLS">TEXT-WITH-EXPANDED-URLS</a></h3>
+                  <span class="funcargs">(STATUS)</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Replaces the shortened links with the resolved entity urls if possible.</pre>
+            </article>
+          </li><li id="template">
+            <article>
+              <a class="anchor" name="TEXT-WITH-MARKUP"/>
+              <header>
+                <span class="functype">EXTERNAL FUNCTION</span>
+                <code>
+                  <h3><a class="funcname" href="#TEXT-WITH-MARKUP">TEXT-WITH-MARKUP</a></h3>
+                  <span class="funcargs">(STATUS &amp;KEY APPEND-MEDIA (URL-CLASS status-url) (MENTION-CLASS status-mention)
+        (HASHTAG-CLASS status-hashtag) (MEDIA-CLASS status-media)
+        (MEDIA-IMAGE-CLASS status-media-image))</span>
+                </code>
+              </header>
+              <pre class="funcdesc">Transforms the text into a HTML-ready form.
+This includes the following changes related to entities:
+  URLS          -&gt; &lt;a href="URL" title="EXPANDED-URL"&gt;DISPLAY-URL&lt;/a&gt;
+  USER-MENTIONS -&gt; &lt;a href="http://twitter.com/SCREEN-NAME" title="NAME"&gt;@SCREEN-NAME&lt;/a&gt;
+  HASHTAGS      -&gt; &lt;a href="http://twitter.com/search?q=%23HASHTAG"&gt;#HASHTAG&lt;/a&gt;
+  MEDIA         -&gt; &lt;a href="URL" title="EXPANDED-URL"&gt;DISPLAY-URL&lt;/a&gt;
+The tweet status text is also correctly escaped with entities for &lt;, &gt;, &amp;.
+If APPEND-MEDIA is non-NIL, an &lt;img&gt; tag with the related SRC and ALT attributes is appended to the text if a media entity exists.
+APPEND-MEDIA can be one of :LARGE :MEDIUM :SMALL :THUMB, which sets the proper width and height attributes and loads the respective image.
+The size defaults to :THUMB.</pre>
             </article>
           </li><li id="template">
             <article>
@@ -2343,7 +2423,7 @@ See HELP/LANGUAGES.</pre>
           </li></ul>
       </article>
       <article>
-        <header><h2>Chirp-Objects Package Index</h2></header>
+        <header><h2><a name="CHIRP-OBJECTS" href="#CHIRP-OBJECTS">Chirp-Objects Package Index</a></h2></header>
         <ul id="docs-objects" class="docs"><li id="template">
             <article>
               <a class="anchor" name="ADDRESS"/>
