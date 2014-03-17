@@ -569,6 +569,8 @@
    #:to-keyword
    #:from-keyword
    #:url-encode
+   #:xml-encode
+   #:xml-decode
    #:hmac
    #:prepare
    #:prepare*
