@@ -164,6 +164,13 @@ This function is DESTRUCTIVE."
                                     `(cons ,(from-keyword a) ,a)))
                             parameter-names))))
 
+(defun flatten-sublists (alist)
+  (loop with list = ()
+        for (type . elements) in alist
+        do (loop for val in elements
+                 do (push (cons type val) list))
+        finally (return list)))
+
 (defun serialize-object (object)
   "Turns all object slots into an ALIST.
 Requires CLOSER-MOP to be installed."

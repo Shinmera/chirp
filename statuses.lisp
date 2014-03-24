@@ -147,18 +147,50 @@ STATUS               --- A status object or any object with entities.
 ENTITY-TYPE          --- A keyword for the entity to replace. Either :USER-MENTIONS :URLS :SYMBOLS :HASHTAGS :MEDIA
 REPLACEMENT-FUNCTION --- A function with one argument; the entity object currently being replaced.
 TEXT                 --- The text to replace in. The sequence is not modified."
-  (let ((text text))
-    (loop for entity in (cdr (assoc entity-type (entities status)))
-          do (setf text (concatenate 'string
-                                     (subseq text 0 (start entity))
-                                     (funcall replacement-function entity)
-                                     (subseq text (end entity)))))
-    text))
+  (let ((result (make-string-output-stream)))
+    (loop with last = 0
+          for entity in (cdr (assoc entity-type (entities status)))
+          do (write-string (subseq text last (start entity)) result)
+             (write-string (funcall replacement-function entity) result)
+             (setf last (end entity)))
+    (get-output-stream-string result)))
+
+(defun replace-entities (status replacement-functions &optional (text (text status)))
+  "Replaces the regions as marked by the entities with the result of the replacement function.
+
+STATUS                --- A status object or any object with entities.
+REPLACEMENT-FUNCTIONS --- A plist of entity-types as keys and functions with one argument as the value. Keys should
+                          be one of :USER-MENTIONS :URLS :SYMBOLS :HASHTAGS :MEDIA. Functions should take one argument,
+                          the entity to replace and return a string value to replace it with.
+TEXT                  --- The text to replace in. The sequence is not modified."
+  (let ((entities (sort (flatten-sublists (entities status)) #'< :key #'(lambda (ent) (start (cdr ent))))))
+    (let ((result (make-string-output-stream)))
+      (loop with last = 0
+            for (type . entity) in entities
+            do (when-let ((func (getf replacement-functions type)))
+                 (write-string (subseq text last (start entity)) result)
+                 (write-string (funcall func entity) result)                 
+                 (setf last (end entity))))
+      (get-output-stream-string result))))
+
+(defmacro with-replaced-entities ((status &optional (entityvar 'entity) (text `(text ,status))) &body replacements)
+  "Shorthand macro for replacing multiple entities.
+
+STATUS       --- The status object
+ENTITYVAR    --- The variable to use in the replacement functions.
+TEXT         --- The text to pass to REPLACE-ENTITIES
+REPLACEMENTS ::= (TYPE FORM*)*
+TYPE         --- An entity type. Should be one of :USER-MENTIONS :URLS :SYMBOLS :HASHTAGS :MEDIA."
+  `(replace-entities
+    ,status
+    (list ,@(loop for (type . body) in replacements
+                  append (list type `#'(lambda (,entityvar) ,@body))))
+    ,text))
 
 (defun text-with-expanded-urls (status)
   "Replaces the shortened links with the resolved entity urls if possible."
-  (replace-entity status :media #'expanded-url
-    (replace-entity status :urls #'expanded-url)))
+  (replace-entities status (list :media #'expanded-url
+                                 :urls #'expanded-url)))
 
 (defun text-with-markup (status &key append-media (url-class "status-url") (mention-class "status-mention")
                                   (hashtag-class "status-hashtag") (media-class "status-media") (media-image-class "status-media-image"))
@@ -172,32 +204,33 @@ The tweet status text is also correctly escaped with entities for <, >, &.
 If APPEND-MEDIA is non-NIL, an <img> tag with the related SRC and ALT attributes is appended to the text if a media entity exists.
 APPEND-MEDIA can be one of :LARGE :MEDIUM :SMALL :THUMB, which sets the proper width and height attributes and loads the respective image.
 The size defaults to :THUMB."
-  (let ((text (text status)))
-    (setf text
-          (replace-entity status :urls
-            #'(lambda (entity) (format NIL "<a href=\"~a\" title=\"~a\" class=\"~a\">~a</a>"
-                                       (url entity) (expanded-url entity) url-class (display-url entity)))
-            (replace-entity status :user-mentions
-              #'(lambda (entity) (format NIL "<a href=\"http://twitter.com/~a\" title=\"~a\" class=\"~a\">~a</a>"
-                                         (screen-name entity) (name entity) mention-class (screen-name entity)))
-              (replace-entity status :hashtags
-                #'(lambda (entity) (format NIL "<a href=\"http://twitter.com/search?q=~a\" class=\"~a\">~a</a>"
-                                           (text entity) hashtag-class (text entity)))
-                (replace-entity status :media
-                  #'(lambda (entity) (format NIL "<a href=\"~a\" title=\"~a\" class=\"~a\">~a</a>"
-                                             (url entity) (expanded-url entity) media-class (display-url entity)))
-                  text)))))
-    (when append-media
-      (unless (member append-media '(:LARGE :MEDIUM :SMALL :THUMB))
-        (setf append-media :THUMB))
-      (dolist (entity (cdr (assoc :media (entities status))))
-        (let ((size (cdr (assoc append-media (sizes entity)))))
-          (setf text (format NIL "~a <a href=\"~a\" title=\"~a\" class=\"~a\"><img src=\"~a:~a\" alt=\"~a\" width=\"~a\" height=\"~a\" /></a>"
-                             text
-                             (url entity) (expanded-url entity) media-image-class
-                             (media-url-https entity) (string-downcase append-media) (media-type entity)
-                             (width size) (height size))))))
-    text))
+  (macrolet ((ent-func (entityvar string &rest vars)
+               `#'(lambda (,entityvar) (format NIL ,string ,@vars))))
+    (let ((text
+            (with-replaced-entities (status)
+              (:urls
+               (format NIL "<a href=\"~a\" title=\"~a\" class=\"~a\">~a</a>"
+                       (url entity) (expanded-url entity) url-class (display-url entity)))
+              (:user-mentions
+               (format NIL "<a href=\"http://twitter.com/~a\" title=\"~a\" class=\"~a\">~a</a>"
+                         (screen-name entity) (name entity) mention-class (screen-name entity)))
+              (:hashtags
+               (format NIL "<a href=\"http://twitter.com/search?q=~a\" class=\"~a\">~a</a>"
+                         (text entity) hashtag-class (text entity)))
+              (:media
+               (format NIL "<a href=\"~a\" title=\"~a\" class=\"~a\">~a</a>"
+                         (url entity) (expanded-url entity) media-class (display-url entity))))))
+      (when append-media
+        (unless (member append-media '(:LARGE :MEDIUM :SMALL :THUMB))
+          (setf append-media :THUMB))
+        (dolist (entity (cdr (assoc :media (entities status))))
+          (let ((size (cdr (assoc append-media (sizes entity)))))
+            (setf text (format NIL "~a <a href=\"~a\" title=\"~a\" class=\"~a\"><img src=\"~a:~a\" alt=\"~a\" width=\"~a\" height=\"~a\" /></a>"
+                               text
+                               (url entity) (expanded-url entity) media-image-class
+                               (media-url-https entity) (string-downcase append-media) (media-type entity)
+                               (width size) (height size))))))
+      text)))
 
 (defun retweet-p (status)
   "Returns T if the status is a retweet.

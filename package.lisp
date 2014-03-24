@@ -555,6 +555,8 @@
   (:export
    #:compute-status-length
    #:replace-entity
+   #:replace-entities
+   #:with-replaced-entities
    #:text-with-expanded-urls
    #:text-with-markup
    #:retweet-p
