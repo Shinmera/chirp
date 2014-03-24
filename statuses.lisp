@@ -152,7 +152,8 @@ TEXT                 --- The text to replace in. The sequence is not modified."
           for entity in (cdr (assoc entity-type (entities status)))
           do (write-string (subseq text last (start entity)) result)
              (write-string (funcall replacement-function entity) result)
-             (setf last (end entity)))
+             (setf last (end entity))
+          finally (write-string (subseq text last) result))
     (get-output-stream-string result)))
 
 (defun replace-entities (status replacement-functions &optional (text (text status)))
@@ -170,7 +171,8 @@ TEXT                  --- The text to replace in. The sequence is not modified."
             do (when-let ((func (getf replacement-functions type)))
                  (write-string (subseq text last (start entity)) result)
                  (write-string (funcall func entity) result)                 
-                 (setf last (end entity))))
+                 (setf last (end entity)))
+            finally (write-string (subseq text last) result))
       (get-output-stream-string result))))
 
 (defmacro with-replaced-entities ((status &optional (entityvar 'entity) (text `(text ,status))) &body replacements)
