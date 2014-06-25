@@ -242,20 +242,22 @@ down automatically after a single request."
              (apply (symbol-function (ht-symb name)) params)))
     (let ((server (ht-func "START" (make-instance (ht-symb "EASY-ACCEPTOR") :port *server-port*)))
           (standard-output *standard-output*))
-      (flet ((dispatcher (request)
-               (unless (cl-ppcre:scan  "favicon\.ico$" (ht-func "SCRIPT-NAME" request))
-                 (lambda (&rest args)
-                   (declare (ignore args))
-                   (unwind-protect
-                        (progn
-                          (complete-authentication
-                           (ht-func "GET-PARAMETER" "oauth_verifier")
-                           (ht-func "GET-PARAMETER" "oauth_token"))
-                          (format standard-output "CHIRP-OAUTH: Authentication completed."))
-                     (format standard-output "CHIRP-OAUTH: Shutting down server.")
-                     (ht-func "STOP" server))))))
-        (push #'dispatcher (symbol-value (ht-symb "*DISPATCH-TABLE*")))
-        (oauth/authenticate (format NIL "http://localhost:~d/callback" *server-port*))))))
+      (handler-bind
+          ((error #'(lambda (err) (declare (ignore err)) (ht-func "STOP" server))))
+        (flet ((dispatcher (request)
+                 (unless (cl-ppcre:scan  "favicon\.ico$" (ht-func "SCRIPT-NAME" request))
+                   (lambda (&rest args)
+                     (declare (ignore args))
+                     (unwind-protect
+                          (progn
+                            (complete-authentication
+                             (ht-func "GET-PARAMETER" "oauth_verifier")
+                             (ht-func "GET-PARAMETER" "oauth_token"))
+                            (format standard-output "CHIRP-OAUTH: Authentication completed."))
+                       (format standard-output "CHIRP-OAUTH: Shutting down server.")
+                       (ht-func "STOP" server))))))
+          (push #'dispatcher (symbol-value (ht-symb "*DISPATCH-TABLE*")))
+          (oauth/authenticate (format NIL "http://localhost:~d/callback" *server-port*)))))))
 
 (defun initiate-authentication (&key (method :PIN) (api-key *oauth-api-key*) (api-secret *oauth-api-secret*))
   "Starts the authentication process and returns an URL that the user has to visit.
