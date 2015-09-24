@@ -81,14 +81,14 @@ According to spec https://dev.twitter.com/docs/platform-objects/users"))
   (:height (cdr (assoc :h (cdr parameters))))
   (:url (cdr (assoc :url (cdr parameters)))))
 
-(defun users/lookup (&key screen-names user-ids include-entities)
+(defun users/lookup (&key screen-name user-id include-entities)
   "Returns fully-hydrated user objects for up to 100 users per request, as specified by the lists passed to the user_id and/or screen_name parameters.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/users/lookup"
-  (assert (or screen-names user-ids) () "Either SCREEN-NAMES or USER-IDS are required.")
-  (setf user-ids (format NIL "~{~a~^,~}" user-ids))
-  (setf screen-names (format NIL "~{~a~^,~}" screen-names))
-  (map-cursor #'make-user NIL *users/lookup* :parameters (prepare* user-ids screen-names include-entities) :method :POST))
+  (assert (or screen-name user-id) () "Either SCREEN-NAME or USER-ID are required.")
+  (setf user-id (format NIL "~{~a~^,~}" user-id))
+  (setf screen-name (format NIL "~{~a~^,~}" screen-name))
+  (mapcar #'make-user (signed-request *users/lookup* :parameters (prepare* user-id screen-name include-entities) :method :POST)))
 
 (defun users/show (&key screen-name user-id include-entities)
   "Returns a variety of information about the user specified by the required user_id or screen_name parameter. The author's most recent Tweet will be returned inline when possible.
