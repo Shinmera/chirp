@@ -35,6 +35,7 @@
                (:file "friends")
                (:file "favorites")
                (:file "saved-searches")
+               (:file "search")
                (:file "lists")
                (:file "stream")
                (:file "generics"))
