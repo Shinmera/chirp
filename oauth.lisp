@@ -198,7 +198,7 @@ According to spec https://dev.twitter.com/docs/auth/implementing-sign-twitter"
 
 (defun pin-request-token ()
   "Query for a PIN based request token.
-Seee CALLBACK-REQUEST-TOKEN.
+See CALLBACK-REQUEST-TOKEN.
 
 According to spec https://dev.twitter.com/docs/auth/pin-based-authorization"
   (oauth/request-token "oob"))
