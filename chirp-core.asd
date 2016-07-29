@@ -44,4 +44,5 @@
                :local-time
                :cl-base64
                :cl-ppcre
-               :alexandria))
+               :alexandria
+               :babel))
