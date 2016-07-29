@@ -24,7 +24,7 @@
                     (cons (car param) (second param))
                     param)))
 
-(defun perform-request (uri &key method parameters additional-headers form-data want-stream)
+(defun perform-request (uri &key method parameters additional-headers form-data want-stream force-binary)
   (let ((params (quri:make-uri :query (parameters->string parameters)))
         (uri (quri:uri uri)))
     (multiple-value-bind (body return-code headers uri)
@@ -32,7 +32,8 @@
                          :method method
                          :headers additional-headers
                          :content (when form-data (purify-form-data parameters))
-                         :want-stream want-stream)
+                         :want-stream want-stream
+                         :force-binary force-binary)
       (list body return-code (convert-received-headers headers) uri))))
 
 (defun open-request (uri &rest args)
