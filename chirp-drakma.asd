@@ -6,11 +6,13 @@
 
 (in-package #:cl-user)
 
-(asdf:defsystem chirp
+(asdf:defsystem chirp-drakma
   :version "0.2.0"
   :license "Artistic"
   :author "Nicolas Hafner <shinmera@tymoon.eu>"
   :maintainer "Nicolas Hafner <shinmera@tymoon.eu>"
-  :description "Chirp Twitter client featuring full API coverage."
+  :description "Chirp Twitter client using Drakma as backend."
   :serial T
-  :depends-on (:chirp-drakma))
+  :components ((:file "drakma"))
+  :depends-on (:chirp-core
+               :drakma))

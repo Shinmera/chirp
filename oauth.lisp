@@ -89,20 +89,6 @@ Simply generates a signature and appends the proper parameter."
   (format NIL "OAuth ~{~/chirp::authorization-format-parameter/~^, ~}"
           (sort parameters #'string< :key #'car)))
 
-(defun parse-body (body headers)
-  (let ((type (cdr (assoc :content-type headers))))
-    (cond ((or (string= type "application/json;charset=utf-8")
-               (string= type "application/json; charset=utf-8"))
-           (yason:parse body :object-as :alist :object-key-fn #'to-keyword))
-          ((or (string= type "text/plain;charset=utf-8")
-               (string= type "text/plain; charset=utf-8")
-               (string= type "text/html;charset=utf-8")
-               (string= type "text/html; charset=utf-8"))
-           body)
-          (T
-           (warn "Do not know how to handle content type: ~a" type)
-           body))))
-
 (defun create-authorization-header (method request-url oauth-parameters parameters)
   (assert (not (null *oauth-api-key*)) (*oauth-api-key*)
           'oauth-parameter-missing :parameter '*oauth-api-key*)
@@ -121,26 +107,32 @@ Simply generates a signature and appends the proper parameter."
          (oauth-parameters (make-signed method request-url oauth-parameters parameters)))
     `(("Authorization" . ,(create-authorization-header-value oauth-parameters)))))
 
+(defun parse-body (body headers)
+  (let ((type (cdr (assoc :content-type headers))))
+    (cond ((search "application/json" type)
+           (yason:parse body :object-as :alist :object-key-fn #'to-keyword))
+          ((or (search "text/plain" type)
+               (search "text/html" type))
+           body)
+          (T
+           (warn "Do not know how to handle content type: ~a" type)
+           body))))
+
 (defun request-wrapper (uri &rest drakma-params)
-  (let ((drakma:*text-content-types* (cons '("application" . "json") (cons '("text" . "json") drakma:*text-content-types*))))
-    (let* ((vals (multiple-value-list (apply #'drakma:http-request uri
-                                             :external-format-in *external-format*
-                                             :external-format-out *external-format*
-                                             :url-encoder #'url-encode
-                                             drakma-params)))
-           (body (parse-body (nth 0 vals) (nth 2 vals))))
-      (setf (nth 0 vals) body)
-      (if (= (nth 1 vals) 200)
-          (progn
-            (when-let ((access (cdr (assoc :x-access-level (nth 2 vals)))))
-              (setf *cached-access* (find-symbol (string-upcase access) "KEYWORD")))
-            (values-list vals))
-          (error 'oauth-request-error
-                 :body body :status (second vals) :headers (third vals)
-                 :url uri
-                 :method (getf drakma-params :method)
-                 :parameters (getf drakma-params :parameters)
-                 :sent-headers (getf drakma-params :additional-headers))))))
+  (let* ((vals (apply #'perform-request uri drakma-params))
+         (body (parse-body (nth 0 vals) (nth 2 vals))))
+    (setf (nth 0 vals) body)
+    (if (= (nth 1 vals) 200)
+        (progn
+          (when-let ((access (cdr (assoc :x-access-level (nth 2 vals)))))
+            (setf *cached-access* (find-symbol (string-upcase access) "KEYWORD")))
+          (values-list vals))
+        (error 'oauth-request-error
+               :body body :status (second vals) :headers (third vals)
+               :url uri
+               :method (getf drakma-params :method)
+               :parameters (getf drakma-params :parameters)
+               :sent-headers (getf drakma-params :additional-headers)))))
 
 (defun signed-request (request-url &key parameters oauth-parameters additional-headers (method :POST) drakma-params)
   "Issue a signed request against the API.
@@ -180,8 +172,8 @@ According to spec https://dev.twitter.com/docs/uploading-media"
 (defun signed-stream-request (request-url &key parameters oauth-parameters additional-headers (method :POST) drakma-params)
   "Issue a signed data request against the API.
 See SIGNED-REQUEST. Returns values according to DRAKMA:HTTP-REQUEST with :WANT-STREAM T"
-  (apply #'drakma:http-request request-url
-         :method method :parameters parameters :want-stream T
+  (apply #'open-request request-url
+         :method method :parameters parameters
          :additional-headers (append additional-headers
                                      (create-authorization-header method request-url oauth-parameters parameters))
          drakma-params))
