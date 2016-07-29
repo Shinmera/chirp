@@ -36,4 +36,4 @@
       (list body return-code (convert-received-headers headers) uri))))
 
 (defun open-request (uri &rest args)
-  (apply #'perform-request uri :want-stream T args))
+  (first (apply #'perform-request uri :want-stream T args)))

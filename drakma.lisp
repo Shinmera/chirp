@@ -15,4 +15,4 @@
                                 params))))
 
 (defun open-request (uri &rest params)
-  (apply #'perform-request uri :want-stream T :close NIL params))
+  (first (apply #'perform-request uri :want-stream T :close NIL params)))
