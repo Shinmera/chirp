@@ -152,7 +152,8 @@ This function is DESTRUCTIVE."
             (setf (car pair) (from-keyword (car pair)))
             (setf (cdr pair) (typecase (cdr pair)
                                (string (cdr pair))
-                               (boolean "true") 
+                               (boolean "true")
+                               (symbol (string-downcase (cdr pair)))
                                (t (write-to-string (cdr pair))))))
         (delete () parameters :key #'cdr)))
 
