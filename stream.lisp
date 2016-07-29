@@ -246,6 +246,34 @@ According to spec https://dev.twitter.com/docs/streaming-apis/messages"))
 (defun trim-whitespace (string)
   (string-trim '(#\Tab #\Newline #\Linefeed #\Page #\Return #\Space) string))
 
+(defun read-line-bytes (stream &optional buffer)
+  (let ((octets (or buffer (make-array 4096 :adjustable T :element-type '(unsigned-byte 8))))
+        (i 0))
+    (block NIL
+      (labels ((process-byte (byte)
+                 (case byte
+                   (13 (let ((next (read-byte stream NIL NIL)))
+                         (case next
+                           ((NIL 10) (return))
+                           (T
+                            (setf (aref octets i) byte)
+                            (incf i)
+                            (process-byte next)))))
+                   (T (setf (aref octets i) byte)
+                    (incf i)))))
+        (loop for byte = (read-byte stream NIL NIL)
+              while byte
+              do (process-byte byte))))
+    (babel:octets-to-string octets :end i :encoding *external-format*)))
+
+(defun process-stream-inner (stream handler-function)
+  (let ((octets (make-array 4096 :adjustable T :element-type '(unsigned-byte 8))))
+    (unwind-protect
+         (loop for line = (read-line-bytes stream octets)
+               for object = (parse-stream-line (trim-whitespace line))
+               while (funcall handler-function object))
+      (close stream))))
+
 (defun stream/user (handler-function &key stall-warnings (filter-level :NONE) language (with :USER) replies count)
   "Streams messages for a single user, as described in User streams.
 Each line is parsed into an appropriate object (NIL for empty lines) and passed to the handler function.
@@ -260,12 +288,9 @@ https://dev.twitter.com/docs/streaming-apis/messages"
   (when count (assert (< -150000 count 150000) () "COUNT must be NIL or between -150000 and 150000."))
   (when language (assert (valid-language-p language) () "~a is not a supported language." language))
   (when replies (setf replies "all"))
-  (let ((stream (signed-stream-request *stream/user* :parameters (prepare* stall-warnings filter-level language with replies count) :method :GET)))
-    (unwind-protect
-         (loop for line = (read-line stream)
-               for object = (parse-stream-line (trim-whitespace line))
-               while (funcall handler-function object))
-      (close stream))))
+  (process-stream-inner (signed-stream-request *stream/user* :parameters (prepare* stall-warnings filter-level language with replies count) :method :GET
+                                               :drakma-params (list :force-binary T))
+                        handler-function))
 
 (defun stream/site (handler-function follow &key stall-warnings (filter-level :NONE) language (with :FOLLOW) replies count)
   "Streams messages for a set of users, as described in Site streams.
@@ -280,12 +305,9 @@ https://dev.twitter.com/docs/streaming-apis/messages"
   (when count (assert (< -150000 count 150000) () "COUNT must be NIL or between -150000 and 150000."))
   (when language (assert (valid-language-p language) () "~a is not a supported language." language))
   (when replies (setf replies "all"))
-  (let ((stream (signed-stream-request *stream/site* :parameters (prepare* follow stall-warnings filter-level language with replies count) :method :GET)))
-    (unwind-protect
-         (loop for line = (read-line stream)
-               for object = (parse-stream-line (trim-whitespace line))
-               while (funcall handler-function object))
-      (close stream))))
+  (process-stream-inner (signed-stream-request *stream/site* :parameters (prepare* follow stall-warnings filter-level language with replies count) :method :GET
+                                                             :drakma-params (list :force-binary T))
+                        handler-function))
 
 (defun stream/statuses/filter (handler-function &key follow track locations stall-warnings (filter-level :NONE) language count)
   "Returns public statuses that match one or more filter predicates. Multiple parameters may be specified which allows most clients to use a single connection to the Streaming API. Both GET and POST requests are supported, but GET requests with too many parameters may cause the request to be rejected for excessive URL length. Use a POST request to avoid long URLs.
@@ -299,12 +321,9 @@ https://dev.twitter.com/docs/streaming-apis/messages"
   (assert (member filter-level '(:NONE :LOW :MEDIUM)) () "FILTER-LEVEL must be one of (:NONE :LOW :MEDIUM).")
   (when count (assert (< -150000 count 150000) () "COUNT must be NIL or between -150000 and 150000."))
   (when language (assert (valid-language-p language) () "~a is not a supported language." language))
-  (let ((stream (signed-stream-request *stream/statuses/filter* :parameters (prepare* follow track locations stall-warnings filter-level language count) :method :GET)))
-    (unwind-protect
-         (loop for line = (read-line stream)
-               for object = (parse-stream-line (trim-whitespace line))
-               while (funcall handler-function object))
-      (close stream))))
+  (process-stream-inner (signed-stream-request *stream/statuses/filter* :parameters (prepare* follow track locations stall-warnings filter-level language count) :method :GET
+                                                                        :drakma-params (list :force-binary T))
+                        handler-function))
 
 (defun stream/statuses/sample (handler-function &key stall-warnings (filter-level :NONE) language count)
   "Returns a small random sample of all public statuses. The Tweets returned by the default access level are the same, so if two different clients connect to this endpoint, they will see the same Tweets.
@@ -314,12 +333,9 @@ https://dev.twitter.com/docs/streaming-apis/messages"
   (assert (member filter-level '(:NONE :LOW :MEDIUM)) () "FILTER-LEVEL must be one of (:NONE :LOW :MEDIUM).")
   (when count (assert (< -150000 count 150000) () "COUNT must be NIL or between -150000 and 150000."))
   (when language (assert (valid-language-p language) () "~a is not a supported language." language))
-  (let ((stream (signed-stream-request *stream/statuses/sample* :parameters (prepare* stall-warnings filter-level language count) :method :GET)))
-    (unwind-protect
-         (loop for line = (read-line stream)
-               for object = (parse-stream-line (trim-whitespace line))
-               while (funcall handler-function object))
-      (close stream))))
+  (process-stream-inner (signed-stream-request *stream/statuses/sample* :parameters (prepare* stall-warnings filter-level language count) :method :GET
+                                                                        :drakma-params (list :force-binary T))
+                        handler-function))
 
 (defun stream/statuses/firehose (handler-function &key stall-warnings (filter-level :NONE) language count)
   "Returns all public statuses. Few applications require this level of access. Creative use of a combination of other resources and various access levels can satisfy nearly every application use case.
@@ -330,9 +346,6 @@ https://dev.twitter.com/docs/streaming-apis/messages"
   (assert (member filter-level '(:NONE :LOW :MEDIUM)) () "FILTER-LEVEL must be one of (:NONE :LOW :MEDIUM).")
   (when count (assert (< -150000 count 150000) () "COUNT must be NIL or between -150000 and 150000."))
   (when language (assert (valid-language-p language) () "~a is not a supported language." language))
-  (let ((stream (signed-stream-request *stream/statuses/sample* :parameters (prepare* count stall-warnings filter-level language) :method :GET)))
-    (unwind-protect
-         (loop for line = (read-line stream)
-               for object = (parse-stream-line (trim-whitespace line))
-               while (funcall handler-function object))
-      (close stream))))
+  (process-stream-inner (signed-stream-request *stream/statuses/firehose* :parameters (prepare* count stall-warnings filter-level language) :method :GET
+                                                                          :drakma-params (list :force-binary T))
+                        handler-function))
