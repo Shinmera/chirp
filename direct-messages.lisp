@@ -28,27 +28,27 @@
   (:created-at (parse-when-param :created-at #'parse-twitter-time))
   (:entities (parse-when-param :entities #'make-entities)))
 
-(defun direct-messages (&key since-id max-id (count 20) (include-entities T) skip-status)
+(defun direct-messages (&key since-id max-id (count 20) (include-entities T) skip-status (full-text T))
   "Returns the 20 most recent direct messages sent to the authenticating user. Includes detailed information about the sender and recipient user. You can request up to 200 direct messages per call, up to a maximum of 800 incoming DMs.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/direct_messages"
   (assert (<= count 200) () "COUNT has to be less than 200.")
   (unless include-entities (setf include-entities "false"))
-  (mapcar #'make-direct-message (signed-request *direct-messages/* :parameters (prepare* since-id max-id count include-entities skip-status) :method :GET)))
+  (mapcar #'make-direct-message (signed-request *direct-messages/* :parameters (prepare* since-id max-id count include-entities skip-status full-text) :method :GET)))
 
-(defun direct-messages/sent (&key since-id max-id (count 20) (page 0) (include-entities T))
+(defun direct-messages/sent (&key since-id max-id (count 20) (page 0) (include-entities T) (full-text T))
   "Returns the 20 most recent direct messages sent by the authenticating user. Includes detailed information about the sender and recipient user. You can request up to 200 direct messages per call, up to a maximum of 800 outgoing DMs.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/direct_messages/sent"
   (assert (<= count 200) () "COUNT has to be less than 200.")
   (unless include-entities (setf include-entities "false"))
-  (mapcar #'make-direct-message (signed-request *direct-messages/sent* :parameters (prepare* since-id max-id count page include-entities) :method :GET)))
+  (mapcar #'make-direct-message (signed-request *direct-messages/sent* :parameters (prepare* since-id max-id count page include-entities full-text) :method :GET)))
 
-(defun direct-messages/show (id)
+(defun direct-messages/show (id &key (full-text T))
   "Returns a single direct message, specified by an id parameter. Like the direct-messages request, this method will include the user objects of the sender and recipient.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/direct_messages/show"
-  (make-direct-message (signed-request *direct-messages/show* :parameters (prepare* id) :method :GET)))
+  (make-direct-message (signed-request *direct-messages/show* :parameters (prepare* id full-text) :method :GET)))
 
 (defun direct-messages/destroy (id &key (include-entities T))
   "Destroys the direct message specified in the required ID parameter. The authenticating user must be the recipient of the specified direct message.
