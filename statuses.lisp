@@ -164,16 +164,16 @@ REPLACEMENT-FUNCTIONS --- A plist of entity-types as keys and functions with one
                           be one of :USER-MENTIONS :URLS :SYMBOLS :HASHTAGS :MEDIA. Functions should take one argument,
                           the entity to replace and return a string value to replace it with.
 TEXT                  --- The text to replace in. The sequence is not modified."
-  (let ((entities (sort (flatten-sublists (entities status)) #'< :key #'(lambda (ent) (start (cdr ent))))))
-    (let ((result (make-string-output-stream)))
+  (let ((entities (remove-duplicates (sort (flatten-sublists (entities status)) #'< :key (lambda (ent) (start (cdr ent))))
+                                     :key (lambda (ent) (start (cdr ent))))))
+    (with-output-to-string (result)
       (loop with last = 0
             for (type . entity) in entities
             do (when-let ((func (getf replacement-functions type)))
-                 (write-string (subseq text last (start entity)) result)
-                 (write-string (funcall func entity) result)                 
+                 (write-string text result :start last :end (start entity))
+                 (write-string (funcall func entity) result)
                  (setf last (end entity)))
-            finally (write-string (subseq text last) result))
-      (get-output-stream-string result))))
+            finally (write-string (subseq text last) result)))))
 
 (defmacro with-replaced-entities ((status &optional (entityvar 'entity) (text `(text ,status))) &body replacements)
   "Shorthand macro for replacing multiple entities.
