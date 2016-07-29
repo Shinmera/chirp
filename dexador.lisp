@@ -32,8 +32,7 @@
                          :method method
                          :headers additional-headers
                          :content (when form-data (purify-form-data parameters))
-                         :want-stream want-stream
-                         :verbose T)
+                         :want-stream want-stream)
       (list body return-code (convert-received-headers headers) uri))))
 
 (defun open-request (uri &rest args)
