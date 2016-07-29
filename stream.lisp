@@ -235,6 +235,7 @@ According to spec https://dev.twitter.com/docs/streaming-apis/messages"))
           ((p :friends) (make-stream-friends object))
           ((p :recipient) (make-direct-message object))
           ((p :text) (make-status object))
+          ((p :direct-message) (make-direct-message (p :direct-message)))
           (T (make-instance 'stream-unknown :data object)))))
 
 (defun parse-stream-line (line)
