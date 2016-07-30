@@ -247,8 +247,8 @@ According to spec https://dev.twitter.com/docs/streaming-apis/messages"))
   (string-trim '(#\Tab #\Newline #\Linefeed #\Page #\Return #\Space) string))
 
 (defun read-line-bytes (stream &optional buffer)
-  (let ((octets (or buffer (make-array 4096 :adjustable T :element-type '(unsigned-byte 8))))
-        (i 0))
+  (let ((octets (or buffer (make-array 4096 :fill-pointer 0 :element-type '(unsigned-byte 8)))))
+    (setf (fill-pointer octets) 0)
     (block NIL
       (labels ((process-byte (byte)
                  (case byte
@@ -256,18 +256,16 @@ According to spec https://dev.twitter.com/docs/streaming-apis/messages"))
                          (case next
                            ((NIL 10) (return))
                            (T
-                            (setf (aref octets i) byte)
-                            (incf i)
+                            (vector-push-extend byte octets)
                             (process-byte next)))))
-                   (T (setf (aref octets i) byte)
-                    (incf i)))))
+                   (T (vector-push-extend byte octets)))))
         (loop for byte = (read-byte stream NIL NIL)
               while byte
               do (process-byte byte))))
-    (babel:octets-to-string octets :end i :encoding *external-format*)))
+    (babel:octets-to-string octets :end (fill-pointer octets) :encoding *external-format*)))
 
 (defun process-stream-inner (stream handler-function)
-  (let ((octets (make-array 4096 :adjustable T :element-type '(unsigned-byte 8))))
+  (let ((octets (make-array 4096 :adjustable T :fill-pointer 0 :element-type '(unsigned-byte 8))))
     (unwind-protect
          (loop for line = (read-line-bytes stream octets)
                for object = (parse-stream-line (trim-whitespace line))
