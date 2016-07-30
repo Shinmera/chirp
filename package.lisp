@@ -111,6 +111,7 @@
    #:non-username-paths
    #:max-media-per-upload
    #:characters-reserved-per-media
+   #:dm-text-character-limit
    
    #:language
    #:name

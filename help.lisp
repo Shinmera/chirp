@@ -16,7 +16,8 @@
 
 (defclass* configuration ()
   (photo-size-limit photo-sizes short-url-length short-url-length-https
-   non-username-paths max-media-per-upload characters-reserved-per-media)
+   non-username-paths max-media-per-upload characters-reserved-per-media
+   dm-text-character-limit)
   (:documentation "Class representation of the twitter configuration object.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/help/configuration"))
@@ -24,6 +25,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/help/configuration"))
 (define-make-* (configuration parameters)
   :photo-size-limit :short-url-length :short-url-length-https
   :non-username-paths :max-media-per-upload :characters-reserved-per-media
+  :dm-text-character-limit
   (:photo-sizes (loop for (type . params) in (cdr (assoc :photo-sizes parameters))
                       collect (cons type (make-entity type params)))))
 
