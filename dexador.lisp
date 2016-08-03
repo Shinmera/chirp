@@ -28,12 +28,15 @@
   (let ((params (quri:make-uri :query (parameters->string parameters)))
         (uri (quri:uri uri)))
     (multiple-value-bind (body return-code headers uri)
-        (dexador:request (if form-data uri (quri:merge-uris params uri))
-                         :method method
-                         :headers additional-headers
-                         :content (when form-data (purify-form-data parameters))
-                         :want-stream want-stream
-                         :force-binary force-binary)
+        (handler-bind ((dexador:http-request-failed (lambda (err)
+                                                      (declare (ignore err))
+                                                      (invoke-restart 'dexador:ignore-and-continue))))
+          (dexador:request (if form-data uri (quri:merge-uris params uri))
+                           :method method
+                           :headers additional-headers
+                           :content (when form-data (purify-form-data parameters))
+                           :want-stream want-stream
+                           :force-binary force-binary))
       (list body return-code (convert-received-headers headers) uri))))
 
 (defun open-request (uri &rest args)
