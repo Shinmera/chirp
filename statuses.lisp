@@ -189,13 +189,15 @@ TYPE         --- An entity type. Should be one of :USER-MENTIONS :URLS :SYMBOLS 
                   append (list type `#'(lambda (,entityvar) ,@body))))
     ,text))
 
-(defun text-with-expanded-urls (status)
+(defun text-with-expanded-urls (status &optional (text (text status)))
   "Replaces the shortened links with the resolved entity urls if possible."
   (replace-entities status (list :media #'expanded-url
-                                 :urls #'expanded-url)))
+                                 :urls #'expanded-url)
+                    text))
 
 (defun text-with-markup (status &key append-media (url-class "status-url") (mention-class "status-mention")
-                                  (hashtag-class "status-hashtag") (media-class "status-media") (media-image-class "status-media-image"))
+                                     (hashtag-class "status-hashtag") (media-class "status-media") (media-image-class "status-media-image")
+                                     (text (text status)))
   "Transforms the text into a HTML-ready form.
 This includes the following changes related to entities:
   URLS          -> <a href=\"URL\" title=\"EXPANDED-URL\">DISPLAY-URL</a>
@@ -209,7 +211,7 @@ The size defaults to :THUMB."
   (macrolet ((ent-func (entityvar string &rest vars)
                `#'(lambda (,entityvar) (format NIL ,string ,@vars))))
     (let ((text
-            (with-replaced-entities (status)
+            (with-replaced-entities (status entity text)
               (:urls
                (format NIL "<a href=\"~a\" title=\"~a\" class=\"~a\">~a</a>"
                        (url entity) (expanded-url entity) url-class (display-url entity)))
