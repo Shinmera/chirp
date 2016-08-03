@@ -159,12 +159,13 @@ TEXT                 --- The text to replace in. The sequence is not modified."
 (defun replace-entities (status replacement-functions &optional (text (text status)))
   "Replaces the regions as marked by the entities with the result of the replacement function.
 
-STATUS                --- A status object or any object with entities.
+STATUS                --- A status object or any object with entities, or a list of entities.
 REPLACEMENT-FUNCTIONS --- A plist of entity-types as keys and functions with one argument as the value. Keys should
                           be one of :USER-MENTIONS :URLS :SYMBOLS :HASHTAGS :MEDIA. Functions should take one argument,
                           the entity to replace and return a string value to replace it with.
 TEXT                  --- The text to replace in. The sequence is not modified."
-  (let ((entities (remove-duplicates (sort (flatten-sublists (entities status)) #'< :key (lambda (ent) (start (cdr ent))))
+  (let ((entities (remove-duplicates (sort (flatten-sublists (if (listp status) status (entities status)))
+                                           #'< :key (lambda (ent) (start (cdr ent))))
                                      :key (lambda (ent) (start (cdr ent))))))
     (with-output-to-string (result)
       (loop with last = 0
@@ -178,7 +179,7 @@ TEXT                  --- The text to replace in. The sequence is not modified."
 (defmacro with-replaced-entities ((status &optional (entityvar 'entity) (text `(text ,status))) &body replacements)
   "Shorthand macro for replacing multiple entities.
 
-STATUS       --- The status object
+STATUS       --- A status object or any object with entities, or a list of entities.
 ENTITYVAR    --- The variable to use in the replacement functions.
 TEXT         --- The text to pass to REPLACE-ENTITIES
 REPLACEMENTS ::= (TYPE FORM*)*
@@ -227,7 +228,7 @@ The size defaults to :THUMB."
       (when append-media
         (unless (member append-media '(:LARGE :MEDIUM :SMALL :THUMB))
           (setf append-media :THUMB))
-        (dolist (entity (cdr (assoc :media (entities status))))
+        (dolist (entity (cdr (assoc :media (if (listp status) status (entities status)))))
           (let ((size (cdr (assoc append-media (sizes entity)))))
             (setf text (format NIL "~a <a href=\"~a\" title=\"~a\" class=\"~a\"><img src=\"~a:~a\" alt=\"~a\" width=\"~a\" height=\"~a\" /></a>"
                                text
