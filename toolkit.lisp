@@ -117,7 +117,7 @@ According to spec https://dev.twitter.com/docs/auth/percent-encoding-parameters"
                         (char<= #\A char #\Z)
                         (find char "-._~" :test #'char=))
                     (write-char char out))
-                   (t (format out "%~2,'0x" (char-code char)))))))
+                   (t (format out "~:@(%~2,'0x~)" (char-code char)))))))
 
 (defun xml-decode (string)
   "Transforms &lt; &gt; &amp; into their proper characters."
