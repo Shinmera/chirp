@@ -16,8 +16,8 @@
 (defvar *lists/members/show* "https://api.twitter.com/1.1/lists/members/show.json")
 (defvar *lists/members/create* "https://api.twitter.com/1.1/lists/members/create.json")
 (defvar *lists/members/create-all* "https://api.twitter.com/1.1/lists/members/create_all.json")
-(defvar *lists/members/destroy* "https://api.twitter.com/1.1/lists/destroy.json")
-(defvar *lists/members/destroy-all* "https://api.twitter.com/1.1/lists/destroy_all.json")
+(defvar *lists/members/destroy* "https://api.twitter.com/1.1/lists/members/destroy.json")
+(defvar *lists/members/destroy-all* "https://api.twitter.com/1.1/lists/members/destroy_all.json")
 (defvar *lists/subscribers* "https://api.twitter.com/1.1/lists/subscribers.json")
 (defvar *lists/subscribers/show* "https://api.twitter.com/1.1/lists/subscribers/show.json")
 (defvar *lists/subscribers/create* "https://api.twitter.com/1.1/lists/subscribers/create.json")
@@ -122,12 +122,13 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/lists/members/create
                (<= (length screen-names) 100)) () "A maximum of 100 users can be supplied by USER-IDS or SCREEN-NAMES.")
   (signed-request *lists/members/create-all* :parameters (prepare* (user-id . user-ids) (screen-name . screen-names) list-id slug owner-screen-name owner-id) :method :POST))
 
-(defun lists/members/destroy (&key list-id slug owner-screen-name owner-id)
-  "Unsubscribes the authenticated user from the specified list.
+(defun lists/members/destroy (&key user-id screen-name list-id slug owner-screen-name owner-id)
+  "Removes the specified member from the list. The authenticated user must be the list's owner to remove members from the list.
 
-According to spec https://dev.twitter.com/docs/api/1.1/post/lists/subscribers/destroy"
+According to spec https://dev.twitter.com/docs/api/1.1/post/lists/members/destroy"
   (assert (or list-id (and slug (or owner-screen-name owner-id))) () "Either LIST-ID or SLUG and OWNER-SCREEN-NAME or OWNER-ID are required.")
-  (signed-request *lists/members/destroy* :parameters (prepare* list-id slug owner-screen-name owner-id) :method :POST))
+  (assert (or user-id screen-name) () "Either SCREEN-NAME or USER-ID are required.")
+  (signed-request *lists/members/destroy* :parameters (prepare* user-id screen-name list-id slug owner-screen-name owner-id) :method :POST))
 
 (defun lists/members/destroy-all (&key user-ids screen-names list-id slug owner-screen-name owner-id)
   "Removes multiple members from a list, by specifying a comma-separated list of member ids or screen names. The authenticated user must own the list to be able to remove members from it. Note that lists can't have more than 500 members, and you are limited to removing up to 100 members to a list at a time with this method.
