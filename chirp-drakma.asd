@@ -4,8 +4,6 @@
  Author: Nicolas Hafner <shinmera@tymoon.eu>
 |#
 
-(in-package #:cl-user)
-
 (asdf:defsystem chirp-drakma
   :version "0.2.0"
   :license "Artistic"

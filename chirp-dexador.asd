@@ -4,7 +4,7 @@
  Author: Nicolas Hafner <shinmera@tymoon.eu>
 |#
 
-(in-package #:cl-user)
+
 
 (asdf:defsystem chirp-dexador
   :version "0.2.0"
