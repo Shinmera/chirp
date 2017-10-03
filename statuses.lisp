@@ -40,8 +40,8 @@ According to spec https://dev.twitter.com/docs/platform-objects/tweets"))
   :id :text :source :filter-level :scopes
   :possibly-sensitive :retweeted :favorited :truncated
   :withheld-copyright :withheld-in-countries :withheld-scope
-  (:counts `((:favorites . ,(cdr (assoc :favorites parameters)))
-             (:retweets . ,(cdr (assoc :retweets parameters)))))
+  (:counts `((:favorites . ,(cdr (assoc :favorite-count parameters)))
+             (:retweets . ,(cdr (assoc :retweet-count parameters)))))
   (:in-reply-to (when (cdr (assoc :in-reply-to-status-id parameters))
                   `((:id . ,(cdr (assoc :in-reply-to-status-id parameters)))
                     (:user-id . ,(cdr (assoc :in-reply-to-user-id parameters)))
