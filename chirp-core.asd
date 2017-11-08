@@ -35,7 +35,8 @@
                (:file "search")
                (:file "lists")
                (:file "stream")
-               (:file "generics"))
+               (:file "generics")
+               (:file "collections"))
   :depends-on (:yason
                :split-sequence
                :uuid
