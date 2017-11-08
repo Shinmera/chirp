@@ -92,8 +92,14 @@ According to spec https://developer.twitter.com/en/docs/tweets/curate-a-collecti
                                                       :method :GET)))
 
 (defun collections/create (name &key description url timeline-order)
-  "https://developer.twitter.com/en/docs/tweets/curate-a-collection/api-reference/post-collections-create"
-  
+  "https://developer.twitter.com/en/docs/tweets/curate-a-collection/api-reference/post-collections-create
+
+timeline-order:
+  curation_reverse_chron : order added (default)
+  tweet_chron            : oldest first
+  tweet_reverse_chron    : most recent first
+"
+
   (make-collection (signed-request *collections/create*
                                    :parameters (prepare* name description url timeline-order)
                                    :method :POST)))

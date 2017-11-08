@@ -348,7 +348,19 @@
    #:size
    #:width
    #:height
-   #:url))
+   #:url)
+  ;; collections.lisp
+  (:export
+   #:id
+   #:collection-type
+   #:visibility
+   #:order
+   #:associated-url
+   #:url
+   #:users
+   #:tweets
+   #:user-id
+   #:name))
 
 (defpackage #:chirp-api
   (:nicknames #:org.tymoonnext.chirp.api)
@@ -485,7 +497,19 @@
    #:users/contributees
    #:users/contributors
    #:users/profile-banner
-   #:users/report-spam))
+   #:users/report-spam)
+  ;; collections.lisp
+  (:export
+   #:collections/entries
+   #:collections/list
+   #:collections/show
+   #:collections/create
+   #:collections/destroy
+   #:collections/add
+   #:collections/curate
+   #:collections/move
+   #:collections/remove
+   #:collections/update))
 
 (defpackage #:chirp-extra
   (:nicknames #:org.tymoonnext.chirp.extra)
