@@ -16,7 +16,8 @@ slots that are only a symbol. Slot lists are still treated the same."
      ,(mapcar #'(lambda (def)
                   (if (listp def)
                       def
-                      (list (intern (format NIL "%~a" def))
+                      (list (let ((*print-case* (readtable-case *readtable*)))
+                              (intern (format NIL "%~a" def)))
                             :initarg (intern (string def) "KEYWORD")
                             :accessor def
                             :initform NIL)))
@@ -32,7 +33,8 @@ class-slot assignment:
 ATOM  ==> ATOM (cdr (assoc ATOM parametervar))
 CONS  ==> CAR (cdr (assoc CDR parametervar))
 LIST  ==> LIST-ITEMS"
-  `(defun ,(intern (format NIL "MAKE-~a" class)) (,parametervar)
+  `(defun ,(let ((*print-case* (readtable-case *readtable*)))
+             (intern (format NIL "~a-~a" 'make class))) (,parametervar)
      (make-instance
       ',class
       ,@(loop with forms = ()
