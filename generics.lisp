@@ -228,7 +228,7 @@ FILTER can be of type USER, LOCATION, GEOMETRY, STRING, NULL or :USER, :SITE, :S
 
 (defun %map-timeline (timelinefun handlerfun cooldown timelineargs)
   (assert (numberp cooldown) () "COOLDOWN must be a number.")
-  (setf timelineargs (remf timelineargs :cooldown))
+  (remf timelineargs :cooldown)
   (loop with last-id = NIL
         for data = (nreverse (apply timelinefun timelineargs))
           then (nreverse (apply timelinefun :since-id last-id timelineargs))
