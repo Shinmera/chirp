@@ -7,7 +7,7 @@
 (in-package #:org.tymoonnext.chirp)
 
 (defun perform-request (uri &rest params)
-  (let ((drakma:*text-content-types* (cons '("application" . "json") (cons '("text" . "json") drakma:*text-content-types*))))
+  (let ((drakma:*text-content-types* (cons '("application" . "octet-stream") (cons '("application" . "json") (cons '("text" . "json") drakma:*text-content-types*)))))
     (multiple-value-list (apply #'drakma:http-request uri
                                 :external-format-in *external-format*
                                 :external-format-out *external-format*

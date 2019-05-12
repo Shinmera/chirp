@@ -109,7 +109,9 @@ Simply generates a signature and appends the proper parameter."
 
 (defun parse-body (body headers)
   (let ((type (cdr (assoc :content-type headers))))
-    (cond ((search "application/json" type)
+    (cond ((or
+             (search "application/json" type)
+             (search "application/octet-stream" type))
            (yason:parse body :object-as :alist :object-key-fn #'to-keyword))
           ((or (search "text/plain" type)
                (search "text/html" type))
