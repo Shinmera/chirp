@@ -120,7 +120,9 @@ Simply generates a signature and appends the proper parameter."
 
 (defun request-wrapper (uri &rest drakma-params)
   (let* ((vals (apply #'perform-request uri drakma-params))
-         (body (parse-body (nth 0 vals) (nth 2 vals))))
+         (body (if (getf drakma-params :force-binary)
+                   (nth 0 vals)
+                   (parse-body (nth 0 vals) (nth 2 vals)))))
     (setf (nth 0 vals) body)
     (if (= (nth 1 vals) 200)
         (progn

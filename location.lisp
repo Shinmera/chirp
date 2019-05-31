@@ -73,17 +73,22 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/geo/search"
                            (string contained-within)
                            (location (id contained-within))
                            (null)))
-  (let ((data (signed-request *geo/search* :parameters (prepare
-                                                        (append
-                                                         (parse-geo-attributes attributes)
-                                                         `(("lat" . ,latitude)
-                                                           ("long" . ,longitude)
-                                                           ("query" . ,query)
-                                                           ("ip" . ,ip)
-                                                           ("accuracy" . ,accuracy)
-                                                           ("granularity" . ,granularity)
-                                                           ("max_results" . ,max-results)
-                                                           ("contained_within" . ,contained-within)))) :method :GET)))
+  ;; KLUDGE: Twitter sends application/octet-stream content-type for this endpoint for some reason.
+  (let* ((data (signed-request *geo/search* :parameters (prepare
+                                                         (append
+                                                          (parse-geo-attributes attributes)
+                                                          `(("lat" . ,latitude)
+                                                            ("long" . ,longitude)
+                                                            ("query" . ,query)
+                                                            ("ip" . ,ip)
+                                                            ("accuracy" . ,accuracy)
+                                                            ("granularity" . ,granularity)
+                                                            ("max_results" . ,max-results)
+                                                            ("contained_within" . ,contained-within))))
+                                            :method :GET
+                                            :drakma-params '(:force-binary T)))
+         (data (parse-body (babel:octets-to-string data :encoding :utf-8)
+                           '((:content-type . "application/json")))))
     (mapcar #'make-location (cdr (assoc :places (cdr (assoc :result data)))))))
 
 (defun geo/similar-places (latitude longitude name &key contained-within attributes)
