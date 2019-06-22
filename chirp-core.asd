@@ -8,7 +8,7 @@
 
 (asdf:defsystem chirp-core
   :version "0.2.0"
-  :license "Artistic"
+  :license "zlib"
   :author "Nicolas Hafner <shinmera@tymoon.eu>"
   :maintainer "Nicolas Hafner <shinmera@tymoon.eu>"
   :description "Core component of the chirp twitter client, excluding the backend."

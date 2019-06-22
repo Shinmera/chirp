@@ -8,7 +8,7 @@
 
 (asdf:defsystem chirp
   :version "0.2.0"
-  :license "Artistic"
+  :license "zlib"
   :author "Nicolas Hafner <shinmera@tymoon.eu>"
   :maintainer "Nicolas Hafner <shinmera@tymoon.eu>"
   :description "Chirp Twitter client featuring full API coverage."

@@ -6,7 +6,7 @@
 
 (asdf:defsystem chirp-drakma
   :version "0.2.0"
-  :license "Artistic"
+  :license "zlib"
   :author "Nicolas Hafner <shinmera@tymoon.eu>"
   :maintainer "Nicolas Hafner <shinmera@tymoon.eu>"
   :description "Chirp Twitter client using Drakma as backend."
