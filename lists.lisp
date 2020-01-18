@@ -48,13 +48,13 @@
 According to spec https://dev.twitter.com/docs/api/1.1/get/lists/list"
   (mapcar #'make-user-list (signed-request *lists/list* :parameters (prepare* user-id screen-name reverse) :method :GET)))
 
-(defun lists/statuses (&key list-id slug owner-screen-name owner-id since-id max-id (count 20) (include-entities T) include-rts)
+(defun lists/statuses (&key list-id slug owner-screen-name owner-id since-id max-id (count 20) (include-entities T) include-rts (tweet_mode "extended"))
   "Returns a timeline of tweets authored by members of the specified list. Retweets are included by default. Use the include_rts=false parameter to omit retweets.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/lists/statuses"
   (assert (or list-id (and slug (or owner-screen-name owner-id))) () "Either LIST-ID or SLUG and OWNER-SCREEN-NAME or OWNER-ID are required.")
   (unless include-entities (setf include-entities "false"))
-  (mapcar #'make-status (signed-request *lists/statuses* :parameters (prepare* list-id slug owner-screen-name owner-id since-id max-id count include-entities include-rts) :method :GET)))
+  (mapcar #'make-status (signed-request *lists/statuses* :parameters (prepare* list-id slug owner-screen-name owner-id since-id max-id count include-entities include-rts tweet_mode) :method :GET)))
 
 (defun lists/show (&key list-id slug owner-screen-name owner-id)
   "Returns the specified list. Private lists will only be shown if the authenticated user owns the specified list.

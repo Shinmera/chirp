@@ -20,7 +20,7 @@
 (define-make-* (search-metadata)
   :max-id :since-id :refresh-url :next-results (:result-count . :count) :completed-in :query)
 
-(defun search/tweets (query &key latitude longitude radius locale language (result-type :mixed) (count 15) until since-id max-id (include-entities T))
+(defun search/tweets (query &key latitude longitude radius locale language (result-type :mixed) (count 15) until since-id max-id (include-entities T) (tweet_mode "extended"))
   "Returns a collection of relevant Tweets matching a specified query and some search metadata as a second value.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/search/tweets"
@@ -36,7 +36,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/search/tweets"
   (unless include-entities (setf include-entities "false"))
   (let* ((geocode (when latitude (format NIL "~a,~a,~a" latitude longitude radius)))
          (data (signed-request *search/tweets*
-                               :parameters (prepare* (q . query) geocode locale language result-type count until since-id max-id include-entities)
+                               :parameters (prepare* (q . query) geocode locale language result-type count until since-id max-id include-entities tweet_mode)
                                :method :GET)))
     (values (mapcar #'make-status (cdr (assoc :statuses data)))
             (make-search-metadata (cdr (assoc :search-metadata data))))))
