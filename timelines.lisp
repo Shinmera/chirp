@@ -21,7 +21,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/mentions_tim
                                         :parameters (prepare* count since-id max-id trim-user include-entities contributor-details)
                                         :method :GET)))
 
-(defun statuses/user-timeline (&key user-id screen-name (count 20) since-id max-id trim-user exclude-replies (include-entities T) contributor-details (include-rts T))
+(defun statuses/user-timeline (&key user-id screen-name (count 20) since-id max-id trim-user exclude-replies (include-entities T) contributor-details (include-rts T) (tweet_mode "extended"))
   "Returns a collection of the most recent Tweets posted by the user indicated by the screen_name or user_id parameters.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/user_timeline"
@@ -30,7 +30,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/user_timelin
   (unless include-rts (setf include-rts "false"))
   (unless include-entities (setf include-entities "false"))
   (mapcar #'make-status (signed-request *statuses/user-timeline*
-                                        :parameters (prepare* user-id screen-name count since-id max-id trim-user exclude-replies include-entities contributor-details include-rts)
+                                        :parameters (prepare* user-id screen-name count since-id max-id trim-user exclude-replies include-entities contributor-details include-rts tweet_mode)
                                         :method :GET)))
 
 (defun statuses/home-timeline (&key (count 20) since-id max-id trim-user exclude-replies (include-entities T) contributor-details)

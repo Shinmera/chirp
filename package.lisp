@@ -38,6 +38,7 @@
    #:direct-message
    #:id
    #:text
+   #:full-text
    #:recipient
    #:sender
    #:created-at
