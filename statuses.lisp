@@ -16,7 +16,7 @@
 (defvar *statuses/retweeters/ids* "https://api.twitter.com/1.1/statuses/retweeters/ids.json")
 
 (defclass* status ()
-  (id text entities created-at
+  (id text full-text display-text-range entities created-at
    user contributors source
    coordinates place
    retweeted-status filter-level scopes
@@ -37,7 +37,7 @@ According to spec https://dev.twitter.com/docs/platform-objects/tweets"))
   status)
 
 (define-make-* (status parameters)
-  :id :text :source :filter-level :scopes
+  :id :text :full-text :display-text-range :source :filter-level :scopes
   :possibly-sensitive :retweeted :favorited :truncated
   :withheld-copyright :withheld-in-countries :withheld-scope
   (:counts `((:favorites . ,(cdr (assoc :favorite-count parameters)))
@@ -65,12 +65,12 @@ According to spec https://dev.twitter.com/docs/platform-objects/tweets"))
   :author-name :author-url :provider-url :provider-name
   (:cache-age (parse-when-param :cache-age #'local-time:unix-to-timestamp)))
 
-(defun statuses/retweets (id &key (count 100) trim-user)
+(defun statuses/retweets (id &key (count 100) trim-user tweet-mode)
   "Returns a collection of the 100 most recent retweets of the tweet specified by the id parameter.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweets/%3Aid"
   (assert (<= count 100) () "Count must be less than or equal to 100.")
-  (mapcar #'make-status (signed-request (format NIL *statuses/retweets* id) :parameters (prepare* count trim-user) :method :GET)))
+  (mapcar #'make-status (signed-request (format NIL *statuses/retweets* id) :parameters (prepare* count trim-user tweet-mode) :method :GET)))
 
 (defun statuses/show (id &key trim-user include-my-retweet (include-entities T))
   "Returns a single Tweet, specified by the id parameter. The Tweet's author will also be embedded within the tweet.

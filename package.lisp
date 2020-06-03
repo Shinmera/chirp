@@ -194,6 +194,8 @@
    #:status
    #:id
    #:text
+   #:full-text
+   #:display-text-range
    #:entities
    #:created-at
    #:user
