@@ -72,12 +72,12 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/retweets/%3A
   (assert (<= count 100) () "Count must be less than or equal to 100.")
   (mapcar #'make-status (signed-request (format NIL *statuses/retweets* id) :parameters (prepare* count trim-user tweet-mode) :method :GET)))
 
-(defun statuses/show (id &key trim-user include-my-retweet (include-entities T))
+(defun statuses/show (id &key trim-user include-my-retweet (include-entities T) tweet-mode)
   "Returns a single Tweet, specified by the id parameter. The Tweet's author will also be embedded within the tweet.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/statuses/show/%3Aid"
   (unless include-entities (setf include-entities "false"))
-  (make-status (signed-request (format NIL *statuses/show* id) :parameters (prepare* trim-user include-my-retweet include-entities) :method :GET)))
+  (make-status (signed-request (format NIL *statuses/show* id) :parameters (prepare* trim-user include-my-retweet include-entities tweet-mode) :method :GET)))
 
 (defun statuses/destroy (id &key trim-user)
   "Destroys the status specified by the required ID parameter. The authenticating user must be the author of the specified status. Returns the destroyed status if successful.
