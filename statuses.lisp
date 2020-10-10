@@ -16,7 +16,7 @@
 (defvar *statuses/retweeters/ids* "https://api.twitter.com/1.1/statuses/retweeters/ids.json")
 
 (defclass* status ()
-  (id text full-text display-text-range entities created-at
+  (id text full-text display-text-range entities extended-entities created-at
    user contributors source
    coordinates place
    retweeted-status filter-level scopes
@@ -52,6 +52,7 @@ According to spec https://dev.twitter.com/docs/platform-objects/tweets"))
   (:user (parse-when-param :user #'make-user))
   (:retweeted-status (parse-when-param :retweeted-status #'make-status))
   (:entities (parse-when-param :entities #'make-entities))
+  (:extended-entities (parse-when-param :extended-entities #'make-entities))
   (:created-at (parse-when-param :created-at #'parse-twitter-time)))
 
 (defclass* oembed ()
