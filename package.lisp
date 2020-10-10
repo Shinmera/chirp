@@ -197,6 +197,7 @@
    #:full-text
    #:display-text-range
    #:entities
+   #:extended-entities
    #:created-at
    #:user
    #:contributors
