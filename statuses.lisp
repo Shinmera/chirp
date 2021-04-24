@@ -96,11 +96,11 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/retweet/%3A
   "Updates the authenticating user's current status, also known as tweeting.
 
 According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/update"
-  (let* ((media (loop for media in (if (listp media) media (list media))
-                      collect (etypecase media
-                                ((string pathname) (id (media/upload media)))
-                                (media (id media))
-                                (integer media))))
+  (let* ((media (loop for part in (if (listp media) media (list media))
+                      collect (etypecase part
+                                ((or string pathname) (id (media/upload part)))
+                                (media (id part))
+                                (integer part))))
          (parameters (prepare* status (in-reply-to-status-id . reply-to) (lat . latitude)
                                (long . longitude) place-id display-coordinates trim-user
                                (possibly-sensitive . (if sensitive "false" "true"))

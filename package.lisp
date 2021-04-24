@@ -171,6 +171,16 @@
    #:target-method
    #:target-parameters
    #:target-headers)
+  ;; media.lisp
+  (:export
+   #:media
+   #:id
+   #:id-string
+   #:size
+   #:expires-after-secs
+   #:image
+   #:video
+   #:processing-info)
   ;; saved-searches.lisp
   (:export
    #:saved-search
@@ -444,6 +454,13 @@
    #:geo/reverse-geocode
    #:geo/search
    #:geo/similar-places)
+  ;; media.lisp
+  (:export
+   #:media/upload
+   #:media/upload/init
+   #:media/upload/append
+   #:media/upload/status
+   #:media/upload/finalize)
   ;; oauth.lisp
   (:export   
    #:oauth/request-token

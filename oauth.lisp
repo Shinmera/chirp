@@ -124,7 +124,7 @@ Simply generates a signature and appends the proper parameter."
                    (nth 0 vals)
                    (parse-body (nth 0 vals) (nth 2 vals)))))
     (setf (nth 0 vals) body)
-    (if (= (nth 1 vals) 200)
+    (if (<= 200 (nth 1 vals) 299)
         (progn
           (when-let ((access (cdr (assoc :x-access-level (nth 2 vals)))))
             (setf *cached-access* (find-symbol (string-upcase access) "KEYWORD")))
@@ -154,9 +154,9 @@ According to spec https://dev.twitter.com/docs/auth/authorizing-request"
   (mapc #'(lambda (param)
             (setf (cdr param)
                   (list (etypecase (cdr param)
-                          (pathname (cdr param))
-                          ((array (unsigned-byte 8) (*)) (cdr param)))
-                        :content-type "application/octet-stream")))
+                          ((or pathname stream (array (unsigned-byte 8) (*))) (cdr param)))
+                        :content-type "application/octet-stream"
+                        :filename "payload")))
         parameters))
 
 (defun signed-data-request (request-url &key data-parameters parameters oauth-parameters additional-headers (method :POST) drakma-params)

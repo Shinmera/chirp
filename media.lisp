@@ -11,14 +11,14 @@
 (defvar *media/subtitles/create* "https://upload.twitter.com/1.1/media/subtitles/create.json")
 (defvar *media/subtitles/delete* "https://upload.twitter.com/1.1/media/subtitles/delete.json")
 
-(defclass* media ()
+(defclass* media-object ()
   (id id-string size expires-after-secs image video processing-info))
 
-(defmethod print-object ((media media) stream)
-  (print-unreadable-object (status stream :type T)
+(defmethod print-object ((media media-object) stream)
+  (print-unreadable-object (media stream :type T)
     (format stream "~a" (id media))))
 
-(define-make-* (media parameters)
+(define-make-* (media-object parameters)
   :size :expires-after-secs :image :video :processing-info
   (:id (cdr (assoc :media-id parameters)))
   (:id-string (cdr (assoc :media-id-string parameters))))
@@ -60,20 +60,23 @@
             for segment from 0
             for read = (read-sequence buffer stream)
             do (decf length read)
-               (media/upload/append media buffer segment))
+               (let ((buffer (if (= read (length buffer))
+                                 buffer
+                                 (make-array read :element-type '(unsigned-byte 8) :displaced-to buffer))))
+                 (media/upload/append media buffer segment)))
       (media/upload/finalize media))))
 
 (defun media/upload/init (total-bytes media-type &key category additional-owners)
-  (make-media (signed-request *media/upload* :parameters (prepare* (command . "INIT") total-bytes media-type (media-category . category) (additional-owners . (when additional-owners (format NIL "~{~a~^,~}" additional-owners))))
-                                             :method :post)))
+  (make-media-object (signed-request *media/upload* :parameters (prepare* (command . "INIT") total-bytes media-type (media-category . category) (additional-owners . (when additional-owners (format NIL "~{~a~^,~}" additional-owners))))
+                                                    :method :post)))
 
 (defun media/upload/append (media payload segment)
-  (make-media (signed-data-request *media/upload* :data-parameters `(("media" . ,payload))
-                                                  :parameters (prepare* (command . "APPEND") (media-id . (id media)) (segment-index . segment))
-                                                  :method :post)))
+  (make-media-object (signed-data-request *media/upload* :data-parameters `(("media" . ,payload))
+                                                         :parameters (prepare* (command . "APPEND") (media-id . (id media)) (segment-index . segment))
+                                                         :method :post)))
 
 (defun media/upload/status (media)
-  (make-media (signed-request *media/upload* :parameters (prepare* (command . "STATUS") (media-id . (id media))) :method :get)))
+  (make-media-object (signed-request *media/upload* :parameters (prepare* (command . "STATUS") (media-id . (id media))) :method :get)))
 
 (defun media/upload/finalize (media)
-  (make-media (signed-request *media/upload* :parameters (prepare* (command . "FINALIZE") (media-id . (id media))) :method :post)))
+  (make-media-object (signed-request *media/upload* :parameters (prepare* (command . "FINALIZE") (media-id . (id media))) :method :post)))
