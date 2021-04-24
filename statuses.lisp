@@ -110,6 +110,8 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/update"
 (defun statuses/update-with-media (status media &key possibly-sensitive reply-to latitude longitude place-id display-coordinates trim-user)
   "Updates the authenticating user's current status and attaches media for upload. In other words, it creates a Tweet with a picture attached. MEDIA is either a pathname, usb-8 array or a base64-encoded string, or a list thereof.
 
+This endpoint is deprecated. Please use statuses/update with the :media argument,  instead.
+
 According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/update_with_media"
   (setf media (mapcar #'(lambda (medium) `("media[]". ,medium))
                       (if (listp media) media (list media))))
