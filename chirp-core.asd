@@ -26,6 +26,7 @@
                (:file "account")
                (:file "blocks")
                (:file "suggestions")
+               (:file "media")
                (:file "statuses")
                (:file "timelines")
                (:file "direct-messages")
