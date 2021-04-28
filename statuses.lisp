@@ -92,7 +92,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/destroy/%3A
 According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/retweet/%3Aid"
   (make-status (signed-request (format NIL *statuses/retweet* id) :parameters (prepare* trim-user) :method :POST)))
 
-(defun statuses/update (status &key reply-to latitude longitude place-id display-coordinates trim-user media sensitive)
+(defun statuses/update (status &key reply-to latitude longitude place-id display-coordinates trim-user media possibly-sensitive)
   "Updates the authenticating user's current status, also known as tweeting.
 
 According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/update"
@@ -103,7 +103,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/post/statuses/update"
                                 (integer part))))
          (parameters (prepare* status (in-reply-to-status-id . reply-to) (lat . latitude)
                                (long . longitude) place-id display-coordinates trim-user
-                               (possibly-sensitive . (if sensitive "false" "true"))
+                               (possibly-sensitive . (if possibly-sensitive "true" "false"))
                                (media-ids . (when media (format NIL "~{~a~^,~}" media))))))
     (make-status (signed-request *statuses/update* :parameters parameters :method :POST))))
 
