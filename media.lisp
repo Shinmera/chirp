@@ -70,7 +70,7 @@
            (media/upload/finalize media))))
       ((vector (unsigned-byte 8))
        (let* ((start (or start 0))
-              (end (or end (length vector)))
+              (end (or end (length payload)))
               (length (- end start))
               (media (media/upload/init length media-type :category category :additional-owners additional-owners))
               (i 0))
@@ -87,9 +87,9 @@
                                                     :method :post)))
 
 (defun media/upload/append (media payload segment)
-  (make-media-object (signed-data-request *media/upload* :data-parameters `(("media" . ,payload))
-                                                         :parameters (prepare* (command . "APPEND") (media-id . (id media)) (segment-index . segment))
-                                                         :method :post)))
+  (signed-data-request *media/upload* :data-parameters `(("media" . ,payload))
+                                      :parameters (prepare* (command . "APPEND") (media-id . (id media)) (segment-index . segment))
+                                      :method :post))
 
 (defun media/upload/status (media)
   (make-media-object (signed-request *media/upload* :parameters (prepare* (command . "STATUS") (media-id . (id media))) :method :get)))
