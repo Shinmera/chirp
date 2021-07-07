@@ -12,27 +12,7 @@
 (defvar *help/tos* "https://api.twitter.com/1.1/help/tos.json")
 (defvar *application/rate-limit-status* "https://api.twitter.com/1.1/application/rate_limit_status.json")
 (defvar *cached-languages* ())
-(defvar *cached-configuration*
-  (make-instance 'configuration
-                 :photo-size-limit 3145728
-                 :short-url-length 23
-                 :short-url-length-https 23
-                 :non-username-paths '("about" "account" "accounts" "activity" "all" "announcements" "anywhere" "api_rules"
-                                       "api_terms" "apirules" "apps" "auth" "badges" "blog" "business" "buttons" "contacts"
-                                       "devices" "direct_messages" "download" "downloads" "edit_announcements" "faq"
-                                       "favorites" "find_sources" "find_users" "followers" "following" "friend_request"
-                                       "friendrequest" "friends" "goodies" "help" "home" "i" "im_account" "inbox"
-                                       "invitations" "invite" "jobs" "list" "login" "logo" "logout" "me" "mentions"
-                                       "messages" "mockview" "newtwitter" "notifications" "nudge" "oauth" "phoenix_search"
-                                       "positions" "privacy" "public_timeline" "related_tweets" "replies"
-                                       "retweeted_of_mine" "retweets" "retweets_by_others" "rules" "saved_searches"
-                                       "search" "sent" "sessions" "settings" "share" "signup" "signin" "similar_to"
-                                       "statistics" "terms" "tos" "translate" "trends" "tweetbutton" "twttr"
-                                       "update_discoverability" "users" "welcome" "who_to_follow" "widgets" "zendesk_auth"
-                                       "media_signup")
-                 :max-media-per-upload 1
-                 :characters-reserved-per-media 24
-                 :dm-text-character-limit 10000))
+(defvar *cached-configuration* ())
 
 (defclass* configuration ()
   (photo-size-limit photo-sizes short-url-length short-url-length-https
@@ -48,6 +28,28 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/help/configuration"))
   :dm-text-character-limit
   (:photo-sizes (loop for (type . params) in (cdr (assoc :photo-sizes parameters))
                       collect (cons type (make-entity type params)))))
+
+(setf *cached-configuration*
+      (make-instance 'configuration
+                     :photo-size-limit 3145728
+                     :short-url-length 23
+                     :short-url-length-https 23
+                     :non-username-paths '("about" "account" "accounts" "activity" "all" "announcements" "anywhere" "api_rules"
+                                           "api_terms" "apirules" "apps" "auth" "badges" "blog" "business" "buttons" "contacts"
+                                           "devices" "direct_messages" "download" "downloads" "edit_announcements" "faq"
+                                           "favorites" "find_sources" "find_users" "followers" "following" "friend_request"
+                                           "friendrequest" "friends" "goodies" "help" "home" "i" "im_account" "inbox"
+                                           "invitations" "invite" "jobs" "list" "login" "logo" "logout" "me" "mentions"
+                                           "messages" "mockview" "newtwitter" "notifications" "nudge" "oauth" "phoenix_search"
+                                           "positions" "privacy" "public_timeline" "related_tweets" "replies"
+                                           "retweeted_of_mine" "retweets" "retweets_by_others" "rules" "saved_searches"
+                                           "search" "sent" "sessions" "settings" "share" "signup" "signin" "similar_to"
+                                           "statistics" "terms" "tos" "translate" "trends" "tweetbutton" "twttr"
+                                           "update_discoverability" "users" "welcome" "who_to_follow" "widgets" "zendesk_auth"
+                                           "media_signup")
+                     :max-media-per-upload 1
+                     :characters-reserved-per-media 24
+                     :dm-text-character-limit 10000))
 
 (defclass* language ()
   (name code status)
