@@ -89,8 +89,7 @@ According to spec https://dev.twitter.com/docs/api/1.1/get/application/rate_limi
   "Returns the current configuration used by Twitter including twitter.com slugs which are not usernames, maximum photo resolutions, and t.co URL lengths.
 
 According to spec https://dev.twitter.com/docs/api/1.1/get/help/configuration"
-  (or (unless refresh-cache *cached-configuration*)
-      (setf *cached-configuration* (make-configuration (signed-request *help/configuration* :method :GET)))))
+  *cached-configuration*)
 
 (defun help/languages (&key refresh-cache)
   "Returns the list of languages supported by Twitter along with their ISO 639-1 code. The ISO 639-1 code is the two letter value to use if you include lang with any of your requests.
