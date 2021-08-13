@@ -287,5 +287,5 @@ Sets the *OAUTH-TOKEN* and *OAUTH-TOKEN-SECRET* to their respective values."
 access level."
   (unless *cached-access*
     ;; Use some other call that is commonly required at some point anyway.
-    (help/configuration :refresh-cache T))
+    (help/languages :refresh-cache T))
   *cached-access*)
