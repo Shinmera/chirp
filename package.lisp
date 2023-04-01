@@ -4,6 +4,15 @@
  Author: Nicolas Hafner <shinmera@tymoon.eu>
 |#
 
+(format *error-output* "~&
+┌───────────────────────────────────────────────────────────────────┐
+│ !!       Twitter is an alt-right recruitment platform          !! │
+│You should not support its existence by continuing to use it in any│
+│fashion. This library in particular will not be updated any further│
+│and may be intentionally broken in the near future.                │
+└───────────────────────────────────────────────────────────────────┘
+")
+
 (in-package #:cl-user)
 (defpackage #:chirp-objects
   (:nicknames #:org.tymoonnext.chirp.objects)

@@ -1,3 +1,6 @@
+# Twitter has become an alt-right recruitment platform and as such should not be supported
+This library will now nag on load and will may be broken intentionally in the near future.
+
 ## How To
 Load Chirp through Quicklisp or ASDF:
 
@@ -59,4 +62,3 @@ Chirp's symbols are separated into three packages (and unified in `CHIRP`) so th
  * `CHIRP-API` contains all the direct Twitter API call mapping functions.
  * `CHIRP-EXTRA` contains the various helper functions that make dealing with the API easier.
  * `CHIRP-OBJECTS` contains all accessor and class symbols. You probably want to `USE` this package if you work with the objects a lot.
-
