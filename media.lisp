@@ -1,9 +1,3 @@
-#|
- This file is a part of Chirp
- (c) 2014 Shirakumo http://tymoon.eu (shinmera@tymoon.eu)
- Author: Nicolas Hafner <shinmera@tymoon.eu>
-|#
-
 (in-package #:org.tymoonnext.chirp)
 
 (defvar *media/upload* "https://upload.twitter.com/1.1/media/upload.json")
